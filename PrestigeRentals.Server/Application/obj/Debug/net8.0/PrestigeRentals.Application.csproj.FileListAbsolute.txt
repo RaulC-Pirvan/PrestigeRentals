@@ -1,0 +1,15 @@
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\bin\Debug\net8.0\PrestigeRentals.Application.deps.json
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\bin\Debug\net8.0\PrestigeRentals.Application.dll
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\bin\Debug\net8.0\PrestigeRentals.Application.pdb
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\bin\Debug\net8.0\PrestigeRentals.Domain.dll
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\bin\Debug\net8.0\PrestigeRentals.Domain.pdb
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\PrestigeRentals.Application.csproj.AssemblyReference.cache
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\PrestigeRentals.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\PrestigeRentals.Application.AssemblyInfoInputs.cache
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\PrestigeRentals.Application.AssemblyInfo.cs
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\PrestigeRentals.Application.csproj.CoreCompileInputs.cache
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\Prestige.403C772D.Up2Date
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\PrestigeRentals.Application.dll
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\refint\PrestigeRentals.Application.dll
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\PrestigeRentals.Application.pdb
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Application\obj\Debug\net8.0\ref\PrestigeRentals.Application.dll

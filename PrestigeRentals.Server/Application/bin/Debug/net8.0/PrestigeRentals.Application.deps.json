@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "PrestigeRentals.Application/1.0.0": {
+        "dependencies": {
+          "PrestigeRentals.Domain": "1.0.0"
+        },
+        "runtime": {
+          "PrestigeRentals.Application.dll": {}
+        }
+      },
+      "PrestigeRentals.Domain/1.0.0": {
+        "runtime": {
+          "PrestigeRentals.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "PrestigeRentals.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "PrestigeRentals.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
