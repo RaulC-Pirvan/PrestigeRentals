@@ -6,10 +6,10 @@
     "version": "v1"
   },
   "paths": {
-    "/Product/GetAllProducts": {
+    "/Products/GetAllProducts": {
       "get": {
         "tags": [
-          "Product"
+          "Products"
         ],
         "responses": {
           "200": {

@@ -9,6 +9,6 @@ namespace PrestigeRentals.Application.Interfaces
 {
     public interface IProductService
     {
-        IEnumerable<Product> GetAllProducts();
+        Task<IEnumerable<Product>> GetAllProducts();
     }
 }

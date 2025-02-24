@@ -1,6 +1,7 @@
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\bin\Debug\net8.0\PrestigeRentals.Domain.deps.json
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\bin\Debug\net8.0\PrestigeRentals.Domain.dll
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\bin\Debug\net8.0\PrestigeRentals.Domain.pdb
+C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.csproj.AssemblyReference.cache
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.AssemblyInfoInputs.cache
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.AssemblyInfo.cs
@@ -9,3 +10,16 @@ C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\ne
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\refint\PrestigeRentals.Domain.dll
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.pdb
 C:\Users\Raul\Desktop\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\ref\PrestigeRentals.Domain.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\bin\Debug\net8.0\PrestigeRentals.Domain.deps.json
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\bin\Debug\net8.0\PrestigeRentals.Domain.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\bin\Debug\net8.0\PrestigeRentals.Domain.pdb
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.csproj.AssemblyReference.cache
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.AssemblyInfoInputs.cache
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.AssemblyInfo.cs
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.csproj.CoreCompileInputs.cache
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.sourcelink.json
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\refint\PrestigeRentals.Domain.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\PrestigeRentals.Domain.pdb
+C:\PrestigeRentals\PrestigeRentals.Server\Domain\obj\Debug\net8.0\ref\PrestigeRentals.Domain.dll

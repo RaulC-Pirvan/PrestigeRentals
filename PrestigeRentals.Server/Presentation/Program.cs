@@ -1,6 +1,7 @@
 using System.Reflection;
 using PrestigeRentals.Application.Interfaces;
 using PrestigeRentals.Application.Services;
+using PrestigeRentals.Infrastructure;
 using Microsoft.OpenApi.Models;
 
 namespace Presentation
@@ -37,6 +38,8 @@ namespace Presentation
                 });
             });
 
+            builder.Services.AddInfrastructure(builder.Configuration);
+
             var app = builder.Build();
 
             // Enable Swagger in development
@@ -61,3 +64,4 @@ namespace Presentation
         }
     }
 }
+

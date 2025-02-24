@@ -1,8 +1,8 @@
 [
   {
-    "ContainingType": "PrestigeRentals.Presentation.Controllers.ProductController",
-    "Method": "Get",
-    "RelativePath": "Product/GetAllProducts",
+    "ContainingType": "PrestigeRentals.Presentation.Controllers.ProductsController",
+    "Method": "GetAllProducts",
+    "RelativePath": "Products/GetAllProducts",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PrestigeRentals.Presentation")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cdfe548f7e6d584e6ad10a9d70772e51ca5d2c4e")]
 [assembly: System.Reflection.AssemblyProductAttribute("PrestigeRentals.Presentation")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PrestigeRentals.Presentation")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

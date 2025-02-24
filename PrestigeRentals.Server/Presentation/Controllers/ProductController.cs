@@ -5,22 +5,23 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace PrestigeRentals.Presentation.Controllers
 {
-    [Route("[controller]/")]
     [ApiController]
-    public class ProductController : ControllerBase
+    [Route("[controller]/GetAllProducts")]
+    public class ProductsController : ControllerBase
     {
         private readonly IProductService _productService;
 
-        public ProductController(IProductService productService)
+        public ProductsController(IProductService productService)
         {
             _productService = productService;
         }
 
-        [HttpGet("GetAllProducts")]
-        [SwaggerOperation(Summary = "Gets all products", Description = "Fetches a list of all products from the system")]
-        public ActionResult<IEnumerable<Product>> Get()
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Product>>> GetAllProducts()
         {
-            return Ok(_productService.GetAllProducts());
+            var products = await _productService.GetAllProducts();
+            return Ok(products);
         }
+
     }
 }
