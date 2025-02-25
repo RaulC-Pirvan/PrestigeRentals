@@ -29,6 +29,12 @@ namespace PrestigeRentals.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
                     b.Property<decimal>("EngineSize")
                         .HasColumnType("numeric");
 

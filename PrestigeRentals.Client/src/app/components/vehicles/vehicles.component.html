@@ -1,0 +1,75 @@
+<div class="wrapper">
+    <div class="container">
+        <h2>Vehicles List</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Make</th>
+                    <th>Model</th>
+                    <th>Engine Size</th>
+                    <th>Fuel Type</th>
+                    <th>Transmission</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let vehicle of vehicles">
+                    <td>{{ vehicle.id }}</td>
+                    <td>{{ vehicle.make }}</td>
+                    <td>{{ vehicle.model }}</td>
+                    <td>{{ vehicle.engineSize }}</td>
+                    <td>{{ vehicle.fuelType }}</td>
+                    <td>{{ vehicle.transmission }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <div class="container">
+        <h3>Add Vehicle</h3>
+        <form (ngSubmit)="addVehicle()">
+            <input type="text" [(ngModel)]="newVehicle.make" name="make" placeholder="Make" required />
+            <input type="text" [(ngModel)]="newVehicle.model" name="model" placeholder="Model" required />
+            <input type="text" [(ngModel)]="newVehicle.fuelType" name="fuelType" placeholder="Fuel Type" required />
+            <input type="text" [(ngModel)]="newVehicle.transmission" name="transmission" placeholder="Transmission" required />
+            <input type="number" [(ngModel)]="newVehicle.engineSize" name="engineSize" placeholder="Engine Size" required />
+            <button type="submit">Add</button>
+        </form>
+    </div>
+    
+    <div class="container">
+        <h3>Enter Vehicle ID</h3>
+        <form>
+            <input type="number" [(ngModel)]="vehicleId" name="vehicleId" placeholder="Enter Vehicle ID" required />
+            <button type="button" (click)="getVehicleById()">Get Vehicle</button>
+            <button type="button" (click)="vehicleId !== null ? deleteVehicle(vehicleId) : null">Delete Vehicle</button>
+        </form>
+        
+        <div *ngIf="selectedVehicle">
+            <h3>Vehicle Details</h3>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Make</th>
+                        <th>Model</th>
+                        <th>Engine Size</th>
+                        <th>Fuel Type</th>
+                        <th>Transmission</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ selectedVehicle.id }}</td>
+                        <td>{{ selectedVehicle.make }}</td>
+                        <td>{{ selectedVehicle.model }}</td>
+                        <td>{{ selectedVehicle.engineSize }}</td>
+                        <td>{{ selectedVehicle.fuelType }}</td>
+                        <td>{{ selectedVehicle.transmission }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+   

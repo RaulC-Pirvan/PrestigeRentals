@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
@@ -21,5 +22,9 @@ namespace PrestigeRentals.Domain.Entities
         public string FuelType {  get; set; }
         [Required]
         public string Transmission {  get; set; }
+        [Required]
+        public bool Active { get; set; } = true;
+        [Required]
+        public bool Deleted { get; set; } = false;
     }
 }

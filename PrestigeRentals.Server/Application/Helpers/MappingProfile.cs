@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using PrestigeRentals.Application.DTO;
+using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Domain.Entities;
 
 namespace PrestigeRentals.Application.Helpers
@@ -14,7 +15,8 @@ namespace PrestigeRentals.Application.Helpers
         public MappingProfile()
         {
             #region Vehicle
-            CreateMap<CreateVehicleDTO, Vehicle>();
+            CreateMap<Vehicle, VehicleDTO>();
+            CreateMap<VehicleRequest, Vehicle>();
             #endregion
         }
     }

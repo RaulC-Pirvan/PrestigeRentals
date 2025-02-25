@@ -286,10 +286,10 @@ C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\staticwe
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.PrestigeRentals.Presentation.props
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.PrestigeRentals.Presentation.props
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\staticwebassets.pack.json
-C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\Prestige.7494F6BB.Up2Date
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\PrestigeRentals.Presentation.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\refint\PrestigeRentals.Presentation.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\PrestigeRentals.Presentation.pdb
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\PrestigeRentals.Presentation.genruntimeconfig.cache
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\ref\PrestigeRentals.Presentation.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Presentation\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

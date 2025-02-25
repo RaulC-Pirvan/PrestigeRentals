@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ProductListComponent } from './components/product-list/product-list.component';
+import { VehiclesComponent } from "./components/vehicles/vehicles.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ProductListComponent],
+  imports: [RouterOutlet, VehiclesComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'PrestigeRentals.Client';
+  title = 'PrestigeRentals';
 }

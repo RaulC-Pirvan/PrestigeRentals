@@ -24,4 +24,9 @@
     <ProjectReference Include="..\Domain\PrestigeRentals.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="Persistence\" />
+  </ItemGroup>
+
 </Project>
