@@ -1,8 +1,10 @@
 using System.Reflection;
-using PrestigeRentals.Application.Interfaces;
-using PrestigeRentals.Application.Services;
 using PrestigeRentals.Infrastructure;
 using Microsoft.OpenApi.Models;
+using PrestigeRentals.Application.Services;
+using AutoMapper;
+using PrestigeRentals.Application.Helpers;
+using PrestigeRentals.Application.Services.Interfaces;
 
 namespace Presentation
 {
@@ -12,9 +14,15 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            MapperConfiguration mapperConfiguration = new(configuration => configuration.AddProfile<MappingProfile>());
+            mapperConfiguration.CompileMappings();
+
             // Add services to the container
             builder.Services.AddControllers();
-            builder.Services.AddScoped<IProductService, ProductService>();
+
+            builder.Services.AddScoped<IVehicleService, VehicleService>();
+
+            builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
 
             // Configure Swagger
             builder.Services.AddSwaggerGen(c =>

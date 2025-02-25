@@ -7,12 +7,28 @@
       "RelativeMoniker": "D:0:0:{4A10FD2F-E4A7-4895-8523-4A18D584F40A}|Presentation\\PrestigeRentals.Presentation.csproj|solutionrelative:presentation\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A10FD2F-E4A7-4895-8523-4A18D584F40A}|Presentation\\PrestigeRentals.Presentation.csproj|c:\\prestigerentals\\prestigerentals.server\\presentation\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{4A10FD2F-E4A7-4895-8523-4A18D584F40A}|Presentation\\PrestigeRentals.Presentation.csproj|solutionrelative:presentation\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+      "AbsoluteMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|c:\\prestigerentals\\prestigerentals.server\\application\\services\\vehicleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|solutionrelative:application\\services\\vehicleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{4A10FD2F-E4A7-4895-8523-4A18D584F40A}|Presentation\\PrestigeRentals.Presentation.csproj|c:\\prestigerentals\\prestigerentals.server\\presentation\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{4A10FD2F-E4A7-4895-8523-4A18D584F40A}|Presentation\\PrestigeRentals.Presentation.csproj|solutionrelative:presentation\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|c:\\prestigerentals\\prestigerentals.server\\application\\services\\interfaces\\ivehicleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|solutionrelative:application\\services\\interfaces\\ivehicleservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{4A10FD2F-E4A7-4895-8523-4A18D584F40A}|Presentation\\PrestigeRentals.Presentation.csproj|c:\\prestigerentals\\prestigerentals.server\\presentation\\controllers\\vehiclecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{4A10FD2F-E4A7-4895-8523-4A18D584F40A}|Presentation\\PrestigeRentals.Presentation.csproj|solutionrelative:presentation\\controllers\\vehiclecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{9D440D01-B1FA-45C8-B262-B2FB8A0D95C0}|Domain\\PrestigeRentals.Domain.csproj|c:\\prestigerentals\\prestigerentals.server\\domain\\entities\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{9D440D01-B1FA-45C8-B262-B2FB8A0D95C0}|Domain\\PrestigeRentals.Domain.csproj|solutionrelative:domain\\entities\\vehicle.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|c:\\prestigerentals\\prestigerentals.server\\application\\helpers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|solutionrelative:application\\helpers\\mappingprofile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|c:\\prestigerentals\\prestigerentals.server\\application\\dto\\createvehicledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|solutionrelative:application\\dto\\createvehicledto.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -21,9 +37,34 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-          "DockedWidth": 197,
-          "SelectedChildIndex": 0,
+          "DockedWidth": 211,
+          "SelectedChildIndex": 2,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "IVehicleService.cs",
+              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\Services\\Interfaces\\IVehicleService.cs",
+              "RelativeDocumentMoniker": "Application\\Services\\Interfaces\\IVehicleService.cs",
+              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\Services\\Interfaces\\IVehicleService.cs",
+              "RelativeToolTip": "Application\\Services\\Interfaces\\IVehicleService.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-25T13:30:14.352Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "MappingProfile.cs",
+              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\Helpers\\MappingProfile.cs",
+              "RelativeDocumentMoniker": "Application\\Helpers\\MappingProfile.cs",
+              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\Helpers\\MappingProfile.cs",
+              "RelativeToolTip": "Application\\Helpers\\MappingProfile.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-25T12:49:56.493Z"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 0,
@@ -32,34 +73,59 @@
               "RelativeDocumentMoniker": "Presentation\\Program.cs",
               "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Program.cs",
               "RelativeToolTip": "Presentation\\Program.cs",
-              "ViewState": "AgIAAAMAAAAAAAAAAAAAADwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-24T11:52:19.59Z",
+              "WhenOpened": "2025-02-25T11:54:58.691Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "appsettings.json",
-              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\appsettings.json",
-              "RelativeDocumentMoniker": "Presentation\\appsettings.json",
-              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\appsettings.json",
-              "RelativeToolTip": "Presentation\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAdAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-02-24T11:46:10.358Z"
+              "DocumentIndex": 4,
+              "Title": "Vehicle.cs",
+              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\Entities\\Vehicle.cs",
+              "RelativeDocumentMoniker": "Domain\\Entities\\Vehicle.cs",
+              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\Entities\\Vehicle.cs",
+              "RelativeToolTip": "Domain\\Entities\\Vehicle.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-25T11:53:13.282Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ProductController.cs",
-              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\ProductController.cs",
-              "RelativeDocumentMoniker": "Presentation\\Controllers\\ProductController.cs",
-              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\ProductController.cs",
-              "RelativeToolTip": "Presentation\\Controllers\\ProductController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAJAAAAAAAAAA==",
+              "DocumentIndex": 3,
+              "Title": "VehicleController.cs",
+              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\VehicleController.cs",
+              "RelativeDocumentMoniker": "Presentation\\Controllers\\VehicleController.cs",
+              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\VehicleController.cs",
+              "RelativeToolTip": "Presentation\\Controllers\\VehicleController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAADEAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-24T11:41:54.449Z"
+              "WhenOpened": "2025-02-25T11:49:00.551Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "CreateVehicleDTO.cs",
+              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\DTO\\CreateVehicleDTO.cs",
+              "RelativeDocumentMoniker": "Application\\DTO\\CreateVehicleDTO.cs",
+              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\DTO\\CreateVehicleDTO.cs",
+              "RelativeToolTip": "Application\\DTO\\CreateVehicleDTO.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-25T11:46:56.003Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "VehicleService.cs",
+              "DocumentMoniker": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\Services\\VehicleService.cs",
+              "RelativeDocumentMoniker": "Application\\Services\\VehicleService.cs",
+              "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\Services\\VehicleService.cs",
+              "RelativeToolTip": "Application\\Services\\VehicleService.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-25T12:11:45.541Z",
+              "EditorCaption": ""
             }
           ]
         }

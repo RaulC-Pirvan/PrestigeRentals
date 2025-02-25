@@ -151,6 +151,7 @@ C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Prestige
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\PrestigeRentals.Presentation.runtimeconfig.json
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\PrestigeRentals.Presentation.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\PrestigeRentals.Presentation.pdb
+C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\AutoMapper.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Humanizer.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Build.Locator.dll
@@ -170,8 +171,11 @@ C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsof
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.DependencyModel.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.Logging.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.Extensions.Primitives.dll
 C:\PrestigeRentals\PrestigeRentals.Server\Presentation\bin\Debug\net8.0\Microsoft.OpenApi.dll

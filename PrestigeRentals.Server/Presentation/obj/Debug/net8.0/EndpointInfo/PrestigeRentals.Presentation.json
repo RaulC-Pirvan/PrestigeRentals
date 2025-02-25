@@ -6,40 +6,46 @@
     "version": "v1"
   },
   "paths": {
-    "/Products/GetAllProducts": {
+    "/api/Vehicle/Vehicles": {
       "get": {
         "tags": [
-          "Products"
+          "Vehicle"
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Product"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Product"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Product"
-                  }
-                }
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Vehicle/Vehicle": {
+      "post": {
+        "tags": [
+          "Vehicle"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleDTO"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleDTO"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVehicleDTO"
               }
             }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -47,20 +53,28 @@
   },
   "components": {
     "schemas": {
-      "Product": {
+      "CreateVehicleDTO": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "name": {
+          "make": {
             "type": "string",
             "nullable": true
           },
-          "price": {
+          "model": {
+            "type": "string",
+            "nullable": true
+          },
+          "engineSize": {
             "type": "number",
             "format": "double"
+          },
+          "fuelType": {
+            "type": "string",
+            "nullable": true
+          },
+          "transmission": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
