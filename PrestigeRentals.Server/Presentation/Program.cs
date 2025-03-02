@@ -21,6 +21,7 @@ namespace Presentation
             builder.Services.AddControllers();
 
             builder.Services.AddScoped<IVehicleService, VehicleService>();
+            builder.Services.AddScoped<IVehicleOptionsService, VehicleOptionsService>();
 
             builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
 

@@ -13,10 +13,13 @@ namespace PrestigeRentals.Infrastructure.Persistence
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<VehicleOptions> VehicleOptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<VehicleOptions>().HasIndex(vo => vo.VehicleId).IsUnique();
         }
     }
 }

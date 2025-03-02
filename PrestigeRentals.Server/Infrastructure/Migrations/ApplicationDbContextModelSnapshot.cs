@@ -58,6 +58,54 @@ namespace PrestigeRentals.Infrastructure.Migrations
 
                     b.ToTable("Vehicles");
                 });
+
+            modelBuilder.Entity("PrestigeRentals.Domain.Entities.VehicleOptions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("CruiseControl")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Deleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("HeadsUpDisplay")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("HillAssist")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Navigation")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("VehicleId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("VehicleId")
+                        .IsUnique();
+
+                    b.ToTable("VehicleOptions");
+                });
+
+            modelBuilder.Entity("PrestigeRentals.Domain.Entities.VehicleOptions", b =>
+                {
+                    b.HasOne("PrestigeRentals.Domain.Entities.Vehicle", "Vehicle")
+                        .WithMany()
+                        .HasForeignKey("VehicleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Vehicle");
+                });
 #pragma warning restore 612, 618
         }
     }

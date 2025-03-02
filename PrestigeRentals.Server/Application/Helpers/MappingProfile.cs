@@ -17,6 +17,7 @@ namespace PrestigeRentals.Application.Helpers
             #region Vehicle
             CreateMap<Vehicle, VehicleDTO>();
             CreateMap<VehicleRequest, Vehicle>();
+            CreateMap<VehicleOptionsDTO, VehicleOptions>();
             #endregion
         }
     }

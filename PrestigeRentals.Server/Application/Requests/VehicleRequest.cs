@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using PrestigeRentals.Application.DTO;
 
 namespace PrestigeRentals.Application.Requests
 {
@@ -16,6 +17,5 @@ namespace PrestigeRentals.Application.Requests
         public decimal EngineSize { get; set; }
         public string FuelType { get; set; }
         public string Transmission { get; set; }
-
     }
 }

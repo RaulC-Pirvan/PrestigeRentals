@@ -16,11 +16,13 @@ namespace PrestigeRentals.Presentation.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
+        private readonly IVehicleOptionsService _vehicleOptionsService;
 
 
-        public VehicleController(IVehicleService vehicleService)
+        public VehicleController(IVehicleService vehicleService, IVehicleOptionsService vehicleOptionsService)
         {
             _vehicleService = vehicleService;
+            _vehicleOptionsService = vehicleOptionsService;
         }
 
         [HttpGet("Vehicles")]
