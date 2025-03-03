@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace PrestigeRentals.Domain.Entities
@@ -14,6 +15,7 @@ namespace PrestigeRentals.Domain.Entities
         public int Id { get; set; }
         [ForeignKey("VehicleId")]
         public int VehicleId { get; set; }
+        [JsonIgnore]
         public Vehicle Vehicle { get; set; }
         [Required]
         public bool Navigation { get; set; } = false;
