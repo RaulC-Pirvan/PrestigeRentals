@@ -36,6 +36,7 @@ namespace PrestigeRentals.Application.Services
         public async Task<bool> DeleteVehicle(int vehicleId)
         {
             bool isVehicleExists = await IsVehicleExists(vehicleId);
+
             if (isVehicleExists)
             {
                 Vehicle vehicle = await GetVehicleByID(vehicleId);
@@ -60,6 +61,7 @@ namespace PrestigeRentals.Application.Services
         public async Task<ActionResult?> AddVehicle(VehicleRequest vehicleRequest)
         {
             Vehicle mappedVehicle = _mapper.Map<Vehicle>(vehicleRequest);
+
             _dbContext.Vehicles.Add(mappedVehicle);
             await _dbContext.SaveChangesAsync();
 
@@ -69,6 +71,7 @@ namespace PrestigeRentals.Application.Services
         public async Task<VehicleDTO> UpdateVehicle(int vehicleId, VehicleRequest vehicleRequest)
         {
             Vehicle vehicle = await GetVehicleByID(vehicleId);
+
             if (vehicle != null)
             {
                 vehicle.Make = vehicleRequest.Make ?? vehicle.Make;
@@ -81,7 +84,7 @@ namespace PrestigeRentals.Application.Services
             _dbContext.Entry(vehicle).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
-            var vehicleDTO = _mapper.Map<VehicleDTO>(vehicle);
+            VehicleDTO vehicleDTO = _mapper.Map<VehicleDTO>(vehicle);
 
             return vehicleDTO;
         }

@@ -21,9 +21,10 @@ namespace PrestigeRentals.Application.Services
             _dbContext = dbContext;
         }
 
-        public async Task<VehicleOptions> CreateVehicleOptions(int vehicleId,VehicleOptionsRequest vehicleOptionsRequest)
+        public async Task<VehicleOptions> AddVehicleOptions(int vehicleId,VehicleOptionsRequest vehicleOptionsRequest)
         {
             VehicleOptions vehicleOptions = new VehicleOptions()
+
             {
                 VehicleId = vehicleId,
                 Navigation = vehicleOptionsRequest.Navigation,
@@ -46,7 +47,8 @@ namespace PrestigeRentals.Application.Services
         
         public async Task<VehicleOptions> UpdateVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest)
         {
-            var existingOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.Id == vehicleId);
+            VehicleOptions existingOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.Id == vehicleId);
+
             if (existingOptions == null)
             {
                 return null;
@@ -67,12 +69,14 @@ namespace PrestigeRentals.Application.Services
         private async Task<bool> IsVehicleOptionsExists(int vehicleId)
         {
             bool isVehicleOptionsExists = await _dbContext.VehicleOptions.AnyAsync(vo => vo.VehicleId == vehicleId && vo.Active && !vo.Deleted);
+
             return isVehicleOptionsExists;
         }
 
         public async Task<bool> DeleteVehicleOptions(int vehicleId)
         {
-            var isVehicleOptionsExists = await IsVehicleOptionsExists(vehicleId);
+            bool isVehicleOptionsExists = await IsVehicleOptionsExists(vehicleId);
+
             if(isVehicleOptionsExists)
             {
                 VehicleOptions vehicleOptions = await GetOptionsByVehicleId(vehicleId);

@@ -11,7 +11,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
 {
     public interface IVehicleOptionsService
     {
-        Task<VehicleOptions> CreateVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest);
+        Task<VehicleOptions> AddVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest);
         Task<VehicleOptions> GetOptionsByVehicleId(int vehicleId);
         Task<VehicleOptions> UpdateVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest);
         Task<bool> DeleteVehicleOptions(int vehicleId);

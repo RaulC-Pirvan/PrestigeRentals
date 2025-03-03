@@ -24,7 +24,8 @@ namespace PrestigeRentals.Presentation.Controllers
         {
             try
             {
-                var addVehicleOptionsOperation = await _vehicleOptionsService.CreateVehicleOptions(vehicleId, vehicleOptionsRequest);
+                VehicleOptions? addVehicleOptionsOperation = await _vehicleOptionsService.AddVehicleOptions(vehicleId, vehicleOptionsRequest);
+
                 if (addVehicleOptionsOperation == null)
                 {
                     return BadRequest("Error");
@@ -44,6 +45,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 VehicleOptions vehicleOptions = await _vehicleOptionsService.GetOptionsByVehicleId(vehicleId);
+
                 if (vehicleOptions == null)
                     return NotFound("Vehicle not found.");
                 return Ok(vehicleOptions);
@@ -58,7 +60,7 @@ namespace PrestigeRentals.Presentation.Controllers
         [HttpPut("{vehicleId}")]
         public async Task<IActionResult> UpdateVehicleOptions(int vehicleId, [FromBody] VehicleOptionsRequest vehicleOptionsRequest)
         {
-            var updatedOptions = await _vehicleOptionsService.UpdateVehicleOptions(vehicleId, vehicleOptionsRequest);
+            VehicleOptions? updatedOptions = await _vehicleOptionsService.UpdateVehicleOptions(vehicleId, vehicleOptionsRequest);
 
             if (updatedOptions == null)
                 return NotFound("Vehicle options not found.");
@@ -69,7 +71,7 @@ namespace PrestigeRentals.Presentation.Controllers
         [HttpDelete("{vehicleId}")]
         public async Task<IActionResult> DeleteVehicleOptions(int vehicleId)
         {
-            var success = await _vehicleOptionsService.DeleteVehicleOptions(vehicleId);
+            bool success = await _vehicleOptionsService.DeleteVehicleOptions(vehicleId);
 
             if (!success)
                 return NotFound("Vehicle options not found.");

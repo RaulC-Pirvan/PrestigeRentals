@@ -16,13 +16,11 @@ namespace PrestigeRentals.Presentation.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
-        private readonly IVehicleOptionsService _vehicleOptionsService;
 
 
-        public VehicleController(IVehicleService vehicleService, IVehicleOptionsService vehicleOptionsService)
+        public VehicleController(IVehicleService vehicleService)
         {
             _vehicleService = vehicleService;
-            _vehicleOptionsService = vehicleOptionsService;
         }
 
         [HttpGet("Vehicles")]
@@ -46,7 +44,8 @@ namespace PrestigeRentals.Presentation.Controllers
         {
             try
             {
-                var addVehicleOperation = await _vehicleService.AddVehicle(vehicleRequest);
+                ActionResult? addVehicleOperation = await _vehicleService.AddVehicle(vehicleRequest);
+
                 if (addVehicleOperation != null)
                 {
                     return BadRequest("Error");
@@ -67,6 +66,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 Vehicle vehicle = await _vehicleService.GetVehicleByID(vehicleId);
+
                 if (vehicle == null)
                     return NotFound("Vehicle not found.");
                 return Ok(vehicle);
@@ -84,6 +84,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isVehicleDeleted = await _vehicleService.DeleteVehicle(vehicleId);
+
                 if(isVehicleDeleted == true)
                     return Ok("Success");
                 return BadRequest("Error");
@@ -101,6 +102,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 VehicleDTO vehicleDTO = await _vehicleService.UpdateVehicle(vehicleId, vehicleRequest);
+
                 if(vehicleDTO == null)
                     return BadRequest("Error");
                 return Ok(vehicleDTO);
