@@ -10,7 +10,7 @@ using PrestigeRentals.Infrastructure.Persistence;
 
 namespace PrestigeRentals.Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/vehicle")]
     [ApiController]
 
     public class VehicleController : ControllerBase
@@ -23,7 +23,7 @@ namespace PrestigeRentals.Presentation.Controllers
             _vehicleService = vehicleService;
         }
 
-        [HttpGet("Vehicles")]
+        [HttpGet("")]
         public async Task<IActionResult> GetAllVehicles()
         {
             try
@@ -39,7 +39,7 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-        [HttpPost("Vehicle")]
+        [HttpPost("")]
         public async Task<IActionResult> AddVehicle([FromBody, Required] VehicleRequest vehicleRequest)
         {
             try
@@ -60,7 +60,7 @@ namespace PrestigeRentals.Presentation.Controllers
         }
 
 
-        [HttpGet("Vehicle/{vehicleId}")]
+        [HttpGet("{vehicleId}")]
         public async Task<ActionResult<Vehicle>> GetVehicleByID(int vehicleId)
         {
             try
@@ -78,7 +78,7 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-        [HttpDelete("Vehicle/{vehicleId}")]
+        [HttpDelete("{vehicleId}")]
         public async Task<ActionResult> DeleteVehicle(int vehicleId)
         {
             try
@@ -96,7 +96,7 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-        [HttpPut("Vehicle/{vehicleId}")]
+        [HttpPut("{vehicleId}")]
         public async Task<ActionResult<VehicleDTO>> UpdateVehicle(int vehicleId, [FromBody, Required] VehicleRequest vehicleRequest)
         {
             try

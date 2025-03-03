@@ -6,7 +6,7 @@
     "version": "v1"
   },
   "paths": {
-    "/api/Vehicle/Vehicles": {
+    "/api/vehicle": {
       "get": {
         "tags": [
           "Vehicle"
@@ -16,9 +16,7 @@
             "description": "OK"
           }
         }
-      }
-    },
-    "/api/Vehicle/Vehicle": {
+      },
       "post": {
         "tags": [
           "Vehicle"
@@ -50,7 +48,7 @@
         }
       }
     },
-    "/api/Vehicle/Vehicle/{vehicleId}": {
+    "/api/vehicle/{vehicleId}": {
       "get": {
         "tags": [
           "Vehicle"
@@ -169,7 +167,7 @@
         }
       }
     },
-    "/api/VehicleOptions/{vehicleId}": {
+    "/api/vehicle/{vehicleId}/options": {
       "post": {
         "tags": [
           "VehicleOptions"

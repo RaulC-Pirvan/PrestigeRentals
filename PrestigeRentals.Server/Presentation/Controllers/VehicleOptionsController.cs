@@ -8,7 +8,7 @@ using PrestigeRentals.Domain.Entities;
 namespace PrestigeRentals.Presentation.Controllers
 {
 
-    [Route("api/[controller]")]
+    [Route("api/vehicle")]
     [ApiController]
     public class VehicleOptionsController : ControllerBase
     {
@@ -19,7 +19,7 @@ namespace PrestigeRentals.Presentation.Controllers
             _vehicleOptionsService = vehicleOptionsService;
         }
 
-        [HttpPost("{vehicleId}")]
+        [HttpPost("{vehicleId}/options")]
         public async Task<IActionResult> CreateVehicleOptions(int vehicleId, [FromBody] VehicleOptionsRequest vehicleOptionsRequest)
         {
             try
@@ -39,7 +39,7 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-        [HttpGet("{vehicleId}")]
+        [HttpGet("{vehicleId}/options")]
         public async Task<IActionResult> GetVehicleOptions(int vehicleId)
         {
             try
@@ -57,7 +57,7 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-        [HttpPut("{vehicleId}")]
+        [HttpPut("{vehicleId}/options")]
         public async Task<IActionResult> UpdateVehicleOptions(int vehicleId, [FromBody] VehicleOptionsRequest vehicleOptionsRequest)
         {
             VehicleOptions? updatedOptions = await _vehicleOptionsService.UpdateVehicleOptions(vehicleId, vehicleOptionsRequest);
@@ -68,7 +68,7 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(updatedOptions);
         }
 
-        [HttpDelete("{vehicleId}")]
+        [HttpDelete("{vehicleId}/options")]
         public async Task<IActionResult> DeleteVehicleOptions(int vehicleId)
         {
             bool success = await _vehicleOptionsService.DeleteVehicleOptions(vehicleId);
