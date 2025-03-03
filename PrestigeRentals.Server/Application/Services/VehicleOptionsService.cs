@@ -42,7 +42,7 @@ namespace PrestigeRentals.Application.Services
         public async Task<VehicleOptions> GetOptionsByVehicleId(int vehicleId)
         {
 
-            return await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
+            return await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId && vo.Active && !vo.Deleted);
         }
         
         public async Task<VehicleOptions> UpdateVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest)
