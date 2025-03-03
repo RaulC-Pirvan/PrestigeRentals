@@ -47,7 +47,7 @@ namespace PrestigeRentals.Application.Services
         
         public async Task<VehicleOptions> UpdateVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest)
         {
-            VehicleOptions existingOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.Id == vehicleId);
+            VehicleOptions existingOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
 
             if (existingOptions == null)
             {

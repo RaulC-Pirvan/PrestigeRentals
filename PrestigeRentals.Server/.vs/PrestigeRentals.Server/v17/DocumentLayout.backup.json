@@ -36,7 +36,7 @@
               "RelativeDocumentMoniker": "Presentation\\Controllers\\VehicleOptionsController.cs",
               "ToolTip": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\VehicleOptionsController.cs",
               "RelativeToolTip": "Presentation\\Controllers\\VehicleOptionsController.cs",
-              "ViewState": "AgIAADIAAAAAAAAAAAAwwEUAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABMAAAAAAAAAAAAgwDQAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-03T08:25:03.618Z",
               "EditorCaption": ""
@@ -51,8 +51,7 @@
               "RelativeToolTip": "Presentation\\Controllers\\VehicleController.cs",
               "ViewState": "AgIAABYAAAAAAAAAAAAgwA8AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T08:15:54.653Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-03T08:15:54.653Z"
             },
             {
               "$type": "Document",
@@ -64,8 +63,7 @@
               "RelativeToolTip": "Application\\Services\\VehicleOptionsService.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACwAAAB2AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T05:28:06.96Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-03T05:28:06.96Z"
             },
             {
               "$type": "Document",
@@ -77,8 +75,7 @@
               "RelativeToolTip": "Application\\Services\\VehicleService.cs",
               "ViewState": "AgIAAAYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T05:28:06.435Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-03-03T05:28:06.435Z"
             }
           ]
         }
