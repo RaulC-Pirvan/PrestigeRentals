@@ -13,7 +13,7 @@ namespace PrestigeRentals.Infrastructure.Persistence
         public ApplicationDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-            optionsBuilder.UseNpgsql("Host = db; Port = 5432; Database = PrestigeRentals; Username = postgres; Password = root");
+            optionsBuilder.UseNpgsql("Host = localhost; Port = 5432; Database = PrestigeRentals; Username = postgres; Password = root");
 
             return new ApplicationDbContext(optionsBuilder.Options);
         }
