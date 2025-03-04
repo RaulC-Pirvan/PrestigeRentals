@@ -13,11 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PrestigeRentals.Domain")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-<<<<<<< Updated upstream
 [assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+797a1c5f38f5e4d179560d36d72a5523797f90cc")]
-=======
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4dde3ea8142e93cdfd0197f203107ccb9f134084")]
->>>>>>> Stashed changes
 [assembly: System.Reflection.AssemblyProductAttribute("PrestigeRentals.Domain")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PrestigeRentals.Domain")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

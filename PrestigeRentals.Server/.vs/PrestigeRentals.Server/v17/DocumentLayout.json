@@ -3,7 +3,6 @@
   "WorkspaceRootPath": "D:\\PrestigeRentals\\PrestigeRentals.Server\\",
   "Documents": [
     {
-<<<<<<< Updated upstream
       "AbsoluteMoniker": "D:0:0:{D0CD6109-CF62-4AC1-88E9-9FFA8E60DC31}|Infrastructure\\PrestigeRentals.Infrastructure.csproj|d:\\prestigerentals\\prestigerentals.server\\infrastructure\\persistence\\designtimedbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{D0CD6109-CF62-4AC1-88E9-9FFA8E60DC31}|Infrastructure\\PrestigeRentals.Infrastructure.csproj|solutionrelative:infrastructure\\persistence\\designtimedbcontextfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -12,8 +11,6 @@
       "RelativeMoniker": "D:0:0:{D0CD6109-CF62-4AC1-88E9-9FFA8E60DC31}|Infrastructure\\PrestigeRentals.Infrastructure.csproj|solutionrelative:infrastructure\\persistence\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-=======
->>>>>>> Stashed changes
       "AbsoluteMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|d:\\prestigerentals\\prestigerentals.server\\application\\services\\vehicleoptionsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{57F9A79B-ED13-407F-8439-81C1FB5A3C38}|Application\\PrestigeRentals.Application.csproj|solutionrelative:application\\services\\vehicleoptionsservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -81,21 +78,6 @@
             {
               "$type": "Document",
               "DocumentIndex": 4,
-<<<<<<< Updated upstream
-=======
-              "Title": "VehicleOptionsController.cs",
-              "DocumentMoniker": "D:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\VehicleOptionsController.cs",
-              "RelativeDocumentMoniker": "Presentation\\Controllers\\VehicleOptionsController.cs",
-              "ToolTip": "D:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\VehicleOptionsController.cs",
-              "RelativeToolTip": "Presentation\\Controllers\\VehicleOptionsController.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAwwD4AAABeAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-03-03T08:25:03.618Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
->>>>>>> Stashed changes
               "Title": "VehicleController.cs",
               "DocumentMoniker": "D:\\PrestigeRentals\\PrestigeRentals.Server\\Presentation\\Controllers\\VehicleController.cs",
               "RelativeDocumentMoniker": "Presentation\\Controllers\\VehicleController.cs",
@@ -114,11 +96,7 @@
               "RelativeDocumentMoniker": "Application\\Services\\VehicleOptionsService.cs",
               "ToolTip": "D:\\PrestigeRentals\\PrestigeRentals.Server\\Application\\Services\\VehicleOptionsService.cs",
               "RelativeToolTip": "Application\\Services\\VehicleOptionsService.cs",
-<<<<<<< Updated upstream
               "ViewState": "AgIAADsAAAAAAAAAAAAIwDEAAABzAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAEEAAAAAAAAAAAAIwDEAAABzAAAAAAAAAA==",
->>>>>>> Stashed changes
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-03-03T05:28:06.96Z",
               "EditorCaption": ""
