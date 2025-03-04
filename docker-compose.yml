@@ -9,6 +9,6 @@
     ports:
       - "5432:5432"
     volumes:
-      - G:/My Drive/PrestigeRentalsData:/var/lib/postgresql/data
+      - /g/My Drive/PrestigeRentalsData:/var/lib/postgresql/data
 volumes:
   pg_data:
