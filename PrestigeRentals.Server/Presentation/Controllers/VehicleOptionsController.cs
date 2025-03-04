@@ -19,8 +19,26 @@ namespace PrestigeRentals.Presentation.Controllers
             _vehicleOptionsService = vehicleOptionsService;
         }
 
+        [HttpGet("{vehicleId}/options")]
+        public async Task<IActionResult> GetVehicleOptions(int vehicleId)
+        {
+            try
+            {
+                VehicleOptions vehicleOptions = await _vehicleOptionsService.GetOptionsByVehicleId(vehicleId);
+
+                if (vehicleOptions == null)
+                    return NotFound("Vehicle options not found.");
+                return Ok(vehicleOptions);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
         [HttpPost("{vehicleId}/options")]
-        public async Task<IActionResult> CreateVehicleOptions(int vehicleId, [FromBody] VehicleOptionsRequest vehicleOptionsRequest)
+        public async Task<IActionResult> AddVehicleOptions(int vehicleId, [FromBody] VehicleOptionsRequest vehicleOptionsRequest)
         {
             try
             {
@@ -39,16 +57,53 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-        [HttpGet("{vehicleId}/options")]
-        public async Task<IActionResult> GetVehicleOptions(int vehicleId)
+        [HttpPatch("{vehicleId}/options/set-inactive")]
+        public async Task<ActionResult> DeactivateVehicleOptions(int vehicleId)
         {
             try
             {
-                VehicleOptions vehicleOptions = await _vehicleOptionsService.GetOptionsByVehicleId(vehicleId);
+                bool isVehicleOptionsDeactivated = await _vehicleOptionsService.DeactivateVehicleOptions(vehicleId);
 
-                if (vehicleOptions == null)
-                    return NotFound("Vehicle not found.");
-                return Ok(vehicleOptions);
+                if (isVehicleOptionsDeactivated)
+                    return Ok("Vehicle options deactivated successfully.");
+                return BadRequest("Error: Vehicle options could not be deactivated.");
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+
+        }
+
+        [HttpPatch("{vehicleId}/options/set-active")]
+        public async Task<ActionResult> ActivateVehicleOptions(int vehicleId)
+        {
+            try
+            {
+                bool isVehicleOptionsActivated = await _vehicleOptionsService.ActivateVehicleOptions(vehicleId);
+
+                if (isVehicleOptionsActivated)
+                    return Ok("Vehicle options activated successfully.");
+                return BadRequest("Error: Vehicle options could not be found.");
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpDelete("{vehicleId}/options")]
+        public async Task<ActionResult> DeleteVehicleOptions(int vehicleId)
+        {
+            try
+            {
+                bool isVehicleOptionsDeleted = await _vehicleOptionsService.DeleteVehicleOptions(vehicleId);
+
+                if (isVehicleOptionsDeleted)
+                    return Ok("Vehicle options deleted successfully.");
+                return BadRequest("Error: Vehicle could not be deleted");
             }
 
             catch (Exception ex)
@@ -68,15 +123,6 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(updatedOptions);
         }
 
-        [HttpDelete("{vehicleId}/options")]
-        public async Task<IActionResult> DeleteVehicleOptions(int vehicleId)
-        {
-            bool success = await _vehicleOptionsService.DeleteVehicleOptions(vehicleId);
 
-            if (!success)
-                return NotFound("Vehicle options not found.");
-
-            return Ok(success);
-        }
     }
 }

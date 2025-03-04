@@ -12,9 +12,11 @@ namespace PrestigeRentals.Application.Services.Interfaces
 {
     public interface IVehicleService
     {
-        Task<List<Vehicle>> GetAllVehicles();
+        Task<List<Vehicle>> GetAllVehicles(bool? onlyActive = false);
         Task<ActionResult?> AddVehicle(VehicleRequest vehicleRequest);
         Task<Vehicle> GetVehicleByID(int vehicleId);
+        Task<bool> DeactivateVehicle(int vehicleId);
+        Task<bool> ActivateVehicle(int vehicleId);
         Task<bool> DeleteVehicle(int vehicleId);
         Task<VehicleDTO> UpdateVehicle(int vehicleId, VehicleRequest vehicleRequest);
     }

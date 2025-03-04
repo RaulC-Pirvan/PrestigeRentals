@@ -24,13 +24,31 @@ namespace PrestigeRentals.Presentation.Controllers
         }
 
         [HttpGet("")]
-        public async Task<IActionResult> GetAllVehicles()
+        public async Task<IActionResult> GetAllVehicles(bool? onlyActive = false)
         {
             try
             {
-                List<Vehicle> vehicles = await _vehicleService.GetAllVehicles();
+                List<Vehicle> vehicles = await _vehicleService.GetAllVehicles(onlyActive);
 
                 return Ok(vehicles);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpGet("{vehicleId}")]
+        public async Task<ActionResult<Vehicle>> GetVehicleByID(int vehicleId)
+        {
+            try
+            {
+                Vehicle vehicle = await _vehicleService.GetVehicleByID(vehicleId);
+
+                if (vehicle == null)
+                    return NotFound("Vehicle not found.");
+                return Ok(vehicle);
             }
 
             catch (Exception ex)
@@ -59,19 +77,36 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-
-        [HttpGet("{vehicleId}")]
-        public async Task<ActionResult<Vehicle>> GetVehicleByID(int vehicleId)
+        [HttpPatch("{vehicleId}/set-inactive")]
+        public async Task<ActionResult> DeactivateVehicle(int vehicleId)
         {
             try
             {
-                Vehicle vehicle = await _vehicleService.GetVehicleByID(vehicleId);
+                bool isVehicleDeactivated = await _vehicleService.DeactivateVehicle(vehicleId);
 
-                if (vehicle == null)
-                    return NotFound("Vehicle not found.");
-                return Ok(vehicle);
+                if(isVehicleDeactivated == true)
+                    return Ok("Vehicle deactivated successfully.");
+                return BadRequest("Error: Vehicle could not be deactivated.");
             }
 
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPatch("{vehicleId}/set-active")]
+        public async Task<ActionResult> ActivateVehicle(int vehicleId)
+        {
+            try
+            {
+                bool isVehicleActivated = await _vehicleService.ActivateVehicle(vehicleId);
+
+                if (isVehicleActivated)
+                    return Ok("Vehicle activated successfully.");
+                return BadRequest("Error: Vehicle could not be activated.");
+            }
+            
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -85,9 +120,9 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 bool isVehicleDeleted = await _vehicleService.DeleteVehicle(vehicleId);
 
-                if(isVehicleDeleted == true)
-                    return Ok("Success");
-                return BadRequest("Error");
+                if (isVehicleDeleted)
+                    return Ok("Vehicle deleted successfully.");
+                return BadRequest("Error: Vehicle could not be deleted.");
             }
 
             catch (Exception ex)

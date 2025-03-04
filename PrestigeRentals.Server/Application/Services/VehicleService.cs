@@ -21,23 +21,23 @@ namespace PrestigeRentals.Application.Services
 
         public async Task<Vehicle> GetVehicleByID(int vehicleId)
         {
-            Vehicle vehicle = await _dbContext.Vehicles.Where(v => v.Id == vehicleId && v.Active && !v.Deleted).FirstOrDefaultAsync();
+            Vehicle vehicle = await _dbContext.Vehicles.Where(v => v.Id == vehicleId).FirstOrDefaultAsync();
 
             return vehicle;
         }
 
-        private async Task<bool> IsVehicleExists(int vehicleId)
+        private async Task<bool> IsVehicleAlive(int vehicleId)
         {
-            bool isVehicleExists = await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && v.Active && !v.Deleted);
+            bool isVehicleAlive = await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && v.Active && !v.Deleted);
 
-            return isVehicleExists;
+            return isVehicleAlive;
         }
 
-        public async Task<bool> DeleteVehicle(int vehicleId)
+        public async Task<bool> DeactivateVehicle(int vehicleId)
         {
-            bool isVehicleExists = await IsVehicleExists(vehicleId);
+            bool isVehicleAlive = await IsVehicleAlive(vehicleId);
 
-            if (isVehicleExists)
+            if (isVehicleAlive)
             {
                 Vehicle vehicle = await GetVehicleByID(vehicleId);
                 vehicle.Active = false;
@@ -53,9 +53,46 @@ namespace PrestigeRentals.Application.Services
             return false;
         }
 
-        public async Task<List<Vehicle>> GetAllVehicles()
+        public async Task<bool> ActivateVehicle(int vehicleId)
         {
-            return await _dbContext.Vehicles.Where(v => v.Active && !v.Deleted).ToListAsync();
+            bool isVehicleDead = await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && !v.Active && v.Deleted);
+
+            if (isVehicleDead)
+            {
+                Vehicle vehicle = await GetVehicleByID(vehicleId);
+                vehicle.Active = true;
+                vehicle.Deleted = false;
+
+                var vehicleEntry = _dbContext.Entry(vehicle);
+                vehicleEntry.State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteVehicle(int vehicleId)
+        {
+            Vehicle vehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.Id == vehicleId);
+
+            if(vehicle != null)
+            {
+                _dbContext.Vehicles.Remove(vehicle);
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<List<Vehicle>> GetAllVehicles(bool? onlyActive = false)
+        {
+            if(onlyActive.HasValue && onlyActive.Value)
+                return await _dbContext.Vehicles.Where(v => v.Active && !v.Deleted).ToListAsync();
+            return await _dbContext.Vehicles.ToListAsync();
         }
 
         public async Task<ActionResult?> AddVehicle(VehicleRequest vehicleRequest)

@@ -11,6 +11,16 @@
         "tags": [
           "Vehicle"
         ],
+        "parameters": [
+          {
+            "name": "onlyActive",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -167,7 +177,74 @@
         }
       }
     },
+    "/api/vehicle/{vehicleId}/set-inactive": {
+      "patch": {
+        "tags": [
+          "Vehicle"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/vehicle/{vehicleId}/set-active": {
+      "patch": {
+        "tags": [
+          "Vehicle"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/vehicle/{vehicleId}/options": {
+      "get": {
+        "tags": [
+          "VehicleOptions"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      },
       "post": {
         "tags": [
           "VehicleOptions"
@@ -208,7 +285,7 @@
           }
         }
       },
-      "get": {
+      "delete": {
         "tags": [
           "VehicleOptions"
         ],
@@ -268,8 +345,33 @@
             "description": "OK"
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/vehicle/{vehicleId}/options/set-inactive": {
+      "patch": {
+        "tags": [
+          "VehicleOptions"
+        ],
+        "parameters": [
+          {
+            "name": "vehicleId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/vehicle/{vehicleId}/options/set-active": {
+      "patch": {
         "tags": [
           "VehicleOptions"
         ],

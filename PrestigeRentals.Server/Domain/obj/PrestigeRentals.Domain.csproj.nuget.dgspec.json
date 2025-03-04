@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj": {}
+    "C:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj": {}
   },
   "projects": {
-    "D:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj": {
+    "C:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj",
+        "projectUniqueName": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj",
         "projectName": "PrestigeRentals.Domain",
-        "projectPath": "D:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj",
-        "packagesPath": "C:\\Users\\Xyro\\.nuget\\packages\\",
-        "outputPath": "D:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\obj\\",
+        "projectPath": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\PrestigeRentals.Domain.csproj",
+        "packagesPath": "C:\\Users\\Raul\\.nuget\\packages\\",
+        "outputPath": "C:\\PrestigeRentals\\PrestigeRentals.Server\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Xyro\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Raul\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -44,7 +44,7 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.200"
+        "SdkAnalysisLevel": "9.0.100"
       },
       "frameworks": {
         "net8.0": {
@@ -75,7 +75,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

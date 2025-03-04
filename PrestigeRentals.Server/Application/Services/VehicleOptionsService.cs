@@ -42,7 +42,7 @@ namespace PrestigeRentals.Application.Services
         public async Task<VehicleOptions> GetOptionsByVehicleId(int vehicleId)
         {
 
-            return await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId && vo.Active && !vo.Deleted);
+            return await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
         }
         
         public async Task<VehicleOptions> UpdateVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest)
@@ -66,18 +66,18 @@ namespace PrestigeRentals.Application.Services
 
         }
 
-        private async Task<bool> IsVehicleOptionsExists(int vehicleId)
+        private async Task<bool> IsVehicleOptionsAlive(int vehicleId)
         {
-            bool isVehicleOptionsExists = await _dbContext.VehicleOptions.AnyAsync(vo => vo.VehicleId == vehicleId && vo.Active && !vo.Deleted);
+            bool isVehicleOptionsAlive = await _dbContext.VehicleOptions.AnyAsync(vo => vo.VehicleId == vehicleId && vo.Active && !vo.Deleted);
 
-            return isVehicleOptionsExists;
+            return isVehicleOptionsAlive;
         }
 
-        public async Task<bool> DeleteVehicleOptions(int vehicleId)
+        public async Task<bool> DeactivateVehicleOptions(int vehicleId)
         {
-            bool isVehicleOptionsExists = await IsVehicleOptionsExists(vehicleId);
+            bool isVehicleOptionsAlive = await IsVehicleOptionsAlive(vehicleId);
 
-            if(isVehicleOptionsExists)
+            if(isVehicleOptionsAlive)
             {
                 VehicleOptions vehicleOptions = await GetOptionsByVehicleId(vehicleId);
                 vehicleOptions.Active = false;
@@ -89,6 +89,41 @@ namespace PrestigeRentals.Application.Services
 
                 return true;
             }
+            return false;
+        }
+
+        public async Task<bool> ActivateVehicleOptions(int vehicleId)
+        {
+            bool isVehicleOptionsDead = await _dbContext.VehicleOptions.AnyAsync(v => v.VehicleId == vehicleId && !v.Active && v.Deleted);
+
+            if (isVehicleOptionsDead)
+            {
+                VehicleOptions vehicleOptions = await GetOptionsByVehicleId(vehicleId);
+                vehicleOptions.Active = true;
+                vehicleOptions.Deleted = false;
+
+                var vehicleEntry = _dbContext.Entry(vehicleOptions);
+                vehicleEntry.State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public async Task<bool> DeleteVehicleOptions(int vehicleId)
+        {
+            VehicleOptions vehicleOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(v => v.Id == vehicleId);
+
+            if (vehicleOptions != null)
+            {
+                _dbContext.VehicleOptions.Remove(vehicleOptions);
+                await _dbContext.SaveChangesAsync();
+
+                return true;
+            }
+
             return false;
         }
 
