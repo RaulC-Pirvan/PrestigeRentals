@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VehicleService, Vehicle, VehicleForPOST } from '../../services/vehicle.service';
+import {
+  VehicleService,
+  Vehicle,
+  VehicleForPOST,
+  VehicleOptions,
+} from '../../services/vehicle.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -8,13 +13,29 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './vehicles.component.html',
-  styleUrl: './vehicles.component.scss'
+  styleUrl: './vehicles.component.scss',
 })
 export class VehiclesComponent implements OnInit {
   vehicles: Vehicle[] = [];
+  vehicleOptions: Record<number, VehicleOptions> = {};
   selectedVehicle: Vehicle | null = null;
-  newVehicle: VehicleForPOST = { make: '', model: '', fuelType: '', transmission: '', engineSize: 0 };
+  newVehicle: VehicleForPOST = {
+    make: '',
+    model: '',
+    fuelType: '',
+    transmission: '',
+    engineSize: 0,
+    active: true,
+    deleted: false,
+    options: {
+      navigation: false,
+      headsUpDisplay: false,
+      hillAssist: false,
+      cruiseControl: false,
+    },
+  };
   vehicleId: number | null = null;
+  onlyActive: boolean = false;
 
   constructor(private vehicleService: VehicleService) {}
 
@@ -25,10 +46,12 @@ export class VehiclesComponent implements OnInit {
 
   loadVehicles() {
     console.log('Loading vehicles...');
-    this.vehicleService.getVehicles().subscribe(
+    this.vehicleService.getVehiclesWithOptions(this.onlyActive).subscribe(
       (data) => {
-        this.vehicles = data;
+        this.vehicles = data.vehicles;
+        this.vehicleOptions = data.options;
         console.log('Vehicles loaded:', this.vehicles);
+        console.log('Vehicle options loaded:', this.vehicleOptions);
       },
       (error) => {
         console.error('Error loading vehicles:', error);
@@ -72,7 +95,21 @@ export class VehiclesComponent implements OnInit {
       () => {
         console.log('New vehicle added successfully');
         this.loadVehicles();
-        this.newVehicle = { make: '', model: '', fuelType: '', transmission: '', engineSize: 0 };
+        this.newVehicle = {
+          make: '',
+          model: '',
+          fuelType: '',
+          transmission: '',
+          engineSize: 0,
+          active: true,
+          deleted: false,
+          options: {
+            navigation: false,
+            headsUpDisplay: false,
+            hillAssist: false,
+            cruiseControl: false,
+          },
+        };
         console.log('New vehicle form reset:', this.newVehicle);
       },
       (error) => {
@@ -83,18 +120,25 @@ export class VehiclesComponent implements OnInit {
 
   updateVehicle() {
     if (this.selectedVehicle) {
-      console.log('Updating vehicle with ID:', this.selectedVehicle.id, 'Data:', this.selectedVehicle);
-      this.vehicleService.updateVehicle(this.selectedVehicle.id, this.selectedVehicle).subscribe(
-        () => {
-          console.log('Vehicle updated successfully');
-          this.loadVehicles();
-          this.selectedVehicle = null;
-          console.log('Selected vehicle reset:', this.selectedVehicle);
-        },
-        (error) => {
-          console.error('Error updating vehicle:', error);
-        }
+      console.log(
+        'Updating vehicle with ID:',
+        this.selectedVehicle.id,
+        'Data:',
+        this.selectedVehicle
       );
+      this.vehicleService
+        .updateVehicle(this.selectedVehicle.id, this.selectedVehicle)
+        .subscribe(
+          () => {
+            console.log('Vehicle updated successfully');
+            this.loadVehicles();
+            this.selectedVehicle = null;
+            console.log('Selected vehicle reset:', this.selectedVehicle);
+          },
+          (error) => {
+            console.error('Error updating vehicle:', error);
+          }
+        );
     } else {
       console.log('No vehicle selected for update.');
     }
@@ -114,6 +158,28 @@ export class VehiclesComponent implements OnInit {
       );
     } else {
       console.log('Invalid vehicle ID for deletion.');
+    }
+  }
+
+  getOption(vehicleId: number, optionName: string): string {
+    // Ensure vehicleOptions is defined
+    const options = this.vehicleOptions[vehicleId];
+
+    // If no options exist for the vehicle, return 'false'
+    if (!options) return 'false';
+
+    // Access the option based on the optionName
+    switch (optionName.toLowerCase()) {
+      case 'navigation':
+        return options.navigation ? 'true' : 'false';
+      case 'heads-up display':
+        return options.headsUpDisplay ? 'true' : 'false';
+      case 'hill assist':
+        return options.hillAssist ? 'true' : 'false';
+      case 'cruise control':
+        return options.cruiseControl ? 'true' : 'false';
+      default:
+        return 'false'; // Return 'false' if the option name doesn't match
     }
   }
 }

@@ -1,75 +1,138 @@
 <div class="wrapper">
-    <div class="container">
-        <h2>Vehicles List</h2>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Make</th>
-                    <th>Model</th>
-                    <th>Engine Size</th>
-                    <th>Fuel Type</th>
-                    <th>Transmission</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let vehicle of vehicles">
-                    <td>{{ vehicle.id }}</td>
-                    <td>{{ vehicle.make }}</td>
-                    <td>{{ vehicle.model }}</td>
-                    <td>{{ vehicle.engineSize }}</td>
-                    <td>{{ vehicle.fuelType }}</td>
-                    <td>{{ vehicle.transmission }}</td>
-                </tr>
-            </tbody>
-        </table>
+  <div class="container">
+    <h2>Vehicles List</h2>
+    <label>
+      <input
+        type="checkbox"
+        [(ngModel)]="onlyActive"
+        (change)="loadVehicles()"
+      />
+      Show only Active Vehicles</label
+    >
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Id</th>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Engine Size</th>
+          <th>Fuel Type</th>
+          <th>Transmission</th>
+          <th>Navigation</th>
+          <th>Heads-up Display</th>
+          <th>Hill Assist</th>
+          <th>Cruise Control</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehicle of vehicles">
+          <td>{{ vehicle.id }}</td>
+          <td>{{ vehicle.make }}</td>
+          <td>{{ vehicle.model }}</td>
+          <td>{{ vehicle.engineSize }}</td>
+          <td>{{ vehicle.fuelType }}</td>
+          <td>{{ vehicle.transmission }}</td>
+          <td>{{ getOption(vehicle.id, "Navigation") }}</td>
+          <td>{{ getOption(vehicle.id, "Heads-up Display") }}</td>
+          <td>{{ getOption(vehicle.id, "Hill Assist") }}</td>
+          <td>{{ getOption(vehicle.id, "Cruise Control") }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <h3>Add Vehicle</h3>
+    <form id="vehicle-form" (ngSubmit)="addVehicle()">
+      <label for="vehicleMake">Make:</label>
+      <input type="text" id="vehicleMake" name="Make" required />
+
+      <label for="vehicleModel">Model</label>
+      <input type="text" id="vehicleModel" name="Model" required />
+
+      <label for="vehicleEngineSize">Engine Size:</label>
+      <input
+        type="number"
+        id="vehicleEngineSize"
+        name="vehicleEngineSize"
+        required
+      />
+
+      <label for="vehicleFuelType">Fuel Type:</label>
+      <input
+        type="text"
+        id="vehicleFuelType"
+        name="vehicleFuelType"
+        required
+      />
+
+      <label for="vehicleTransmission">Transmission:</label>
+      <input
+        type="text"
+        id="vehicleTransmission"
+        name="vehicleTransmission"
+        required
+      />
+
+      <label for="navigation">Navigation</label>
+      <input type="checkbox" id="navigation" name="navigation" />
+
+      <label for="headsUpDisplay">Heads-up Display</label>
+      <input type="checkbox" id="headsUpDisplay" name="headsUpDisplay" />
+
+      <label for="hillAsist">Hill Assist</label>
+      <input type="checkbox" id="hillAsist" name="hillAsist" />
+
+      <label for="cruiseControl">Cruise Control</label>
+      <input type="checkbox" id="cruiseControl" name="cruiseControl" />
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <h3>Enter Vehicle ID</h3>
+    <form>
+      <input
+        type="number"
+        [(ngModel)]="vehicleId"
+        name="vehicleId"
+        placeholder="Enter Vehicle ID"
+        required
+      />
+      <button type="button" (click)="getVehicleById()">Get Vehicle</button>
+      <button
+        type="button"
+        (click)="vehicleId !== null ? deleteVehicle(vehicleId) : null"
+      >
+        Delete Vehicle
+      </button>
+    </form>
+
+    <div *ngIf="selectedVehicle">
+      <h3>Vehicle Details</h3>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Engine Size</th>
+            <th>Fuel Type</th>
+            <th>Transmission</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ selectedVehicle.id }}</td>
+            <td>{{ selectedVehicle.make }}</td>
+            <td>{{ selectedVehicle.model }}</td>
+            <td>{{ selectedVehicle.engineSize }}</td>
+            <td>{{ selectedVehicle.fuelType }}</td>
+            <td>{{ selectedVehicle.transmission }}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-    
-    <div class="container">
-        <h3>Add Vehicle</h3>
-        <form (ngSubmit)="addVehicle()">
-            <input type="text" [(ngModel)]="newVehicle.make" name="make" placeholder="Make" required />
-            <input type="text" [(ngModel)]="newVehicle.model" name="model" placeholder="Model" required />
-            <input type="text" [(ngModel)]="newVehicle.fuelType" name="fuelType" placeholder="Fuel Type" required />
-            <input type="text" [(ngModel)]="newVehicle.transmission" name="transmission" placeholder="Transmission" required />
-            <input type="number" [(ngModel)]="newVehicle.engineSize" name="engineSize" placeholder="Engine Size" required />
-            <button type="submit">Add</button>
-        </form>
-    </div>
-    
-    <div class="container">
-        <h3>Enter Vehicle ID</h3>
-        <form>
-            <input type="number" [(ngModel)]="vehicleId" name="vehicleId" placeholder="Enter Vehicle ID" required />
-            <button type="button" (click)="getVehicleById()">Get Vehicle</button>
-            <button type="button" (click)="vehicleId !== null ? deleteVehicle(vehicleId) : null">Delete Vehicle</button>
-        </form>
-        
-        <div *ngIf="selectedVehicle">
-            <h3>Vehicle Details</h3>
-            <table border="1">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Make</th>
-                        <th>Model</th>
-                        <th>Engine Size</th>
-                        <th>Fuel Type</th>
-                        <th>Transmission</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{{ selectedVehicle.id }}</td>
-                        <td>{{ selectedVehicle.make }}</td>
-                        <td>{{ selectedVehicle.model }}</td>
-                        <td>{{ selectedVehicle.engineSize }}</td>
-                        <td>{{ selectedVehicle.fuelType }}</td>
-                        <td>{{ selectedVehicle.transmission }}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
+  </div>
 </div>
-   
