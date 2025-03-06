@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
@@ -16,9 +17,11 @@ namespace PrestigeRentals.Application.Services
     {
 
         private readonly ApplicationDbContext _dbContext;
-        public VehicleOptionsService(ApplicationDbContext dbContext) 
+        private readonly ILogger<VehiclePhotosService> _logger;
+        public VehicleOptionsService(ApplicationDbContext dbContext, ILogger<VehiclePhotosService> logger) 
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
         public async Task<VehicleOptions> AddVehicleOptions(int vehicleId,VehicleOptionsRequest vehicleOptionsRequest)

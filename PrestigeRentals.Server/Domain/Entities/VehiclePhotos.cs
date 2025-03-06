@@ -1,0 +1,27 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
+namespace PrestigeRentals.Domain.Entities
+{
+    public class VehiclePhotos
+    {
+        [Key]
+        public int Id { get; set; }
+        [ForeignKey("VehicleId")]
+        public int VehicleId { get; set; }
+        [JsonIgnore]
+        public Vehicle Vehicle { get; set; }
+        [Required]
+        public string photoUrl { get; set; }
+        [Required]
+        public bool Active { get; set; } = true;
+        [Required]
+        public bool Deleted { get; set; } = false;
+    }
+}
