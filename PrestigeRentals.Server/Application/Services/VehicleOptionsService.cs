@@ -17,8 +17,9 @@ namespace PrestigeRentals.Application.Services
     {
 
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<VehiclePhotosService> _logger;
-        public VehicleOptionsService(ApplicationDbContext dbContext, ILogger<VehiclePhotosService> logger) 
+        private readonly ILogger<VehicleOptionsService> _logger;
+   
+        public VehicleOptionsService(ApplicationDbContext dbContext, ILogger<VehicleOptionsService> logger) 
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -44,8 +45,15 @@ namespace PrestigeRentals.Application.Services
 
         public async Task<VehicleOptions> GetOptionsByVehicleId(int vehicleId)
         {
+            VehicleOptions vehicleOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
 
-            return await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
+            if(vehicleOptions == null)
+            {
+                _logger.LogWarning($"No options were found for this vehicle {vehicleId}");
+                return null;
+            }
+
+            return vehicleOptions;
         }
         
         public async Task<VehicleOptions> UpdateVehicleOptions(int vehicleId, VehicleOptionsRequest vehicleOptionsRequest)
@@ -54,6 +62,7 @@ namespace PrestigeRentals.Application.Services
 
             if (existingOptions == null)
             {
+                _logger.LogWarning($"Options for vehicle with ID {vehicleId} were not found for update.");
                 return null;
             }
 
@@ -65,6 +74,7 @@ namespace PrestigeRentals.Application.Services
             _dbContext.Entry(existingOptions).State = EntityState.Modified;
             await _dbContext.SaveChangesAsync();
 
+            _logger.LogInformation($"Options for vehicle with ID {vehicleId} have been updated.");
             return existingOptions;
 
         }
@@ -80,7 +90,7 @@ namespace PrestigeRentals.Application.Services
         {
             bool isVehicleOptionsAlive = await IsVehicleOptionsAlive(vehicleId);
 
-            if(isVehicleOptionsAlive)
+            if (isVehicleOptionsAlive)
             {
                 VehicleOptions vehicleOptions = await GetOptionsByVehicleId(vehicleId);
                 vehicleOptions.Active = false;
@@ -90,8 +100,11 @@ namespace PrestigeRentals.Application.Services
                 vehicleOptionsEntry.State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
 
+                _logger.LogInformation($"Options for vehicle with ID {vehicleId} have been deactivated.");
                 return true;
             }
+
+            _logger.LogWarning($"Options for vehicle with ID {vehicleId} could not be found or are already inactive.");
             return false;
         }
 
@@ -109,9 +122,12 @@ namespace PrestigeRentals.Application.Services
                 vehicleEntry.State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
 
+
+                _logger.LogInformation($"Options for vehicle with ID {vehicleId} have been activated.");
                 return true;
             }
 
+            _logger.LogWarning($"Options for vehicle with ID {vehicleId} could not be found or are already active.");
             return false;
         }
 
@@ -124,9 +140,11 @@ namespace PrestigeRentals.Application.Services
                 _dbContext.VehicleOptions.Remove(vehicleOptions);
                 await _dbContext.SaveChangesAsync();
 
+                _logger.LogInformation($"Options for vehicle with ID {vehicleId} have been successfully deleted.");
                 return true;
             }
 
+            _logger.LogWarning($"Options for vehicle with ID {vehicleId} were not found or have been already deleted.");
             return false;
         }
 

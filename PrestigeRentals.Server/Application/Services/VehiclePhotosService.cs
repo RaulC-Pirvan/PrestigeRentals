@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.Services.Interfaces;
@@ -6,6 +7,7 @@ using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Formats.Asn1;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,6 +18,7 @@ namespace PrestigeRentals.Application.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<VehiclePhotosService> _logger;
+
         public VehiclePhotosService(ApplicationDbContext dbContext, ILogger<VehiclePhotosService> logger)
         {
             _dbContext = dbContext;
@@ -32,6 +35,7 @@ namespace PrestigeRentals.Application.Services
                 return null;
             }
 
+            _logger.LogInformation($"Successfully retrieved photos for vehicle ID {vehicleId}");
             return vehiclePhotos;
         }
     }

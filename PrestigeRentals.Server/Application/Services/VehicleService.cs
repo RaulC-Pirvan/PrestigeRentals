@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
@@ -14,14 +15,25 @@ using PrestigeRentals.Infrastructure.Persistence;
 
 namespace PrestigeRentals.Application.Services
 {
-    public class VehicleService(ApplicationDbContext dbContext, IMapper mapper) : IVehicleService
+    public class VehicleService : IVehicleService
     {
-        private readonly ApplicationDbContext _dbContext = dbContext;
-        private readonly IMapper _mapper = mapper;
+        private readonly ApplicationDbContext _dbContext;
+        private readonly IMapper _mapper;
+        private readonly ILogger<VehicleService> _logger;
+
+        public VehicleService(ApplicationDbContext dbContext, IMapper mapper, ILogger<VehicleService> logger)
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+            _logger = logger;
+        }
 
         public async Task<Vehicle> GetVehicleByID(int vehicleId)
         {
             Vehicle vehicle = await _dbContext.Vehicles.Where(v => v.Id == vehicleId).FirstOrDefaultAsync();
+
+            if (vehicle == null)
+                _logger.LogWarning($"Vehicle with ID {vehicleId} not found.");
 
             return vehicle;
         }
@@ -47,9 +59,11 @@ namespace PrestigeRentals.Application.Services
                 vehicleEntry.State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
 
+                _logger.LogInformation($"Vehicle with ID {vehicleId} has been deactivated.");
                 return true;
             }
 
+            _logger.LogWarning($"Vehicle with ID {vehicleId} was not found or is already dead.");
             return false;
         }
 
@@ -67,9 +81,11 @@ namespace PrestigeRentals.Application.Services
                 vehicleEntry.State = EntityState.Modified;
                 await _dbContext.SaveChangesAsync();
 
+                _logger.LogInformation($"Vehicle with ID {vehicleId} has been activated.");
                 return true;
             }
 
+            _logger.LogWarning($"Vehicle with ID {vehicleId} was not found or is already active.");
             return false;
         }
 
@@ -82,17 +98,30 @@ namespace PrestigeRentals.Application.Services
                 _dbContext.Vehicles.Remove(vehicle);
                 await _dbContext.SaveChangesAsync();
 
+
+                _logger.LogInformation($"Vehicle with ID {vehicleId} has been deleted.");
                 return true;
             }
 
+            _logger.LogWarning($"Vehicle with ID {vehicleId} not found or has been already deleted.");
             return false;
         }
 
         public async Task<List<Vehicle>> GetAllVehicles(bool? onlyActive = false)
         {
-            if(onlyActive.HasValue && onlyActive.Value)
-                return await _dbContext.Vehicles.Where(v => v.Active && !v.Deleted).ToListAsync();
-            return await _dbContext.Vehicles.ToListAsync();
+            if (onlyActive.HasValue && onlyActive.Value)
+            {
+                List<Vehicle> activeVehicles = await _dbContext.Vehicles.Where(v => v.Active && !v.Deleted).ToListAsync();
+
+                _logger.LogInformation($"Retrieved all alive vehicles.");
+                return activeVehicles;
+            }
+
+            List<Vehicle> allVehicles = await _dbContext.Vehicles.ToListAsync();
+
+            _logger.LogInformation($"Retrieved all vehicles (including inactive).");
+            return allVehicles;
+
         }
 
         public async Task<ActionResult?> AddVehicle(VehicleRequest vehicleRequest)
@@ -102,6 +131,7 @@ namespace PrestigeRentals.Application.Services
             _dbContext.Vehicles.Add(mappedVehicle);
             await _dbContext.SaveChangesAsync();
 
+            _logger.LogInformation($"Vehicle with ID {mappedVehicle.Id} has been added.");
             return null;
         }
 
@@ -116,16 +146,18 @@ namespace PrestigeRentals.Application.Services
                 vehicle.EngineSize = vehicleRequest.EngineSize != 0 ? vehicleRequest.EngineSize : vehicle.EngineSize;
                 vehicle.FuelType = vehicleRequest.FuelType ?? vehicle.FuelType;
                 vehicle.Transmission = vehicleRequest.Transmission ?? vehicle.Transmission;
+
+                _dbContext.Entry(vehicle).State = EntityState.Modified;
+                await _dbContext.SaveChangesAsync();
+
+                VehicleDTO vehicleDTO = _mapper.Map<VehicleDTO>(vehicle);
+
+                _logger.LogInformation($"Vehicle with ID {vehicleId} has been updated.");
+                return vehicleDTO;
             }
 
-            _dbContext.Entry(vehicle).State = EntityState.Modified;
-            await _dbContext.SaveChangesAsync();
-
-            VehicleDTO vehicleDTO = _mapper.Map<VehicleDTO>(vehicle);
-
-            return vehicleDTO;
+            _logger.LogWarning($"Vehicle with ID {vehicleId} not found for update.");
+            return null;
         }
-
-
     }
 }
