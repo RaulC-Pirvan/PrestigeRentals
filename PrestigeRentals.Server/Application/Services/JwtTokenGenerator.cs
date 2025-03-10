@@ -5,7 +5,9 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using PrestigeRentals.Application.Helpers;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
 
@@ -13,32 +15,25 @@ namespace PrestigeRentals.Application.Services
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
-        private readonly string _secretKey;
+        private readonly JwtSettings _jwtSettings;
 
-        public JwtTokenGenerator(string secretKey)
+        public JwtTokenGenerator(IOptions<JwtSettings> jwtSettings)
         {
-            _secretKey = secretKey;
+            _jwtSettings = jwtSettings.Value;
         }
 
         public string GenerateToken(User user)
         {
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new System.Security.Claims.ClaimsIdentity(new[]
-                {
-                    new System.Security.Claims.Claim("email", user.Email),
-                    new System.Security.Claims.Claim("role", user.Role)
-                }),
-                Expires = DateTime.Now.AddDays(1),
-                SigningCredentials = credentials
-            };
+            var token = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                expires: DateTime.Now.AddMinutes(30),
+                signingCredentials: credentials);
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

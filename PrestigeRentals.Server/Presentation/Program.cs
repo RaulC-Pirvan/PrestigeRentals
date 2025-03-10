@@ -5,6 +5,11 @@ using PrestigeRentals.Application.Services;
 using AutoMapper;
 using PrestigeRentals.Application.Helpers;
 using PrestigeRentals.Application.Services.Interfaces;
+using System.Configuration;
+using PrestigeRentals.Application.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Presentation
 {
@@ -14,17 +19,38 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+
             MapperConfiguration mapperConfiguration = new(configuration => configuration.AddProfile<MappingProfile>());
             mapperConfiguration.CompileMappings();
+
 
             // Add services to the container
             builder.Services.AddControllers();
 
-            builder.Services.AddScoped<IVehicleService, VehicleService>();
-            builder.Services.AddScoped<IVehicleOptionsService, VehicleOptionsService>();
-            builder.Services.AddScoped<IVehiclePhotosService, VehiclePhotosService>();
+            builder.Services.AddAplicationServices();
 
             builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
+
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+                var key = Encoding.ASCII.GetBytes(jwtSettings.SecretKey);
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(key)
+                };
+            });
 
             // Configure Swagger
             builder.Services.AddSwaggerGen(c =>
@@ -61,6 +87,9 @@ namespace Presentation
 
             // Configure CORS middleware
             app.UseCors("AllowAngularApp");
+
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             // Other middleware
             app.UseRouting();

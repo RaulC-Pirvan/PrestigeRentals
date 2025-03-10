@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using LoginRequest = PrestigeRentals.Application.Requests.LoginRequest;
 using RegisterRequest = PrestigeRentals.Application.Requests.RegisterRequest;
 
 namespace PrestigeRentals.Presentation.Controllers
