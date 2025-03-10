@@ -14,6 +14,7 @@ export interface Vehicle {
 }
 
 export interface VehicleOptions {
+  vehicleId: number;
   navigation: boolean;
   headsUpDisplay: boolean;
   hillAssist: boolean;

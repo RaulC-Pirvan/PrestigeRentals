@@ -28,7 +28,6 @@ namespace PrestigeRentals.Application.Services
         public async Task<VehicleOptions> AddVehicleOptions(int vehicleId,VehicleOptionsRequest vehicleOptionsRequest)
         {
             VehicleOptions vehicleOptions = new VehicleOptions()
-
             {
                 VehicleId = vehicleId,
                 Navigation = vehicleOptionsRequest.Navigation,

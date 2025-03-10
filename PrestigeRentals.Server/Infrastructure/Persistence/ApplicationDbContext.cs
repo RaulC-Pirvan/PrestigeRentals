@@ -15,12 +15,15 @@ namespace PrestigeRentals.Infrastructure.Persistence
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<VehicleOptions> VehicleOptions { get; set; }
         public DbSet<VehiclePhotos> VehiclePhotos { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserDetails> UsersDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<VehicleOptions>().HasIndex(vo => vo.VehicleId).IsUnique();
+            modelBuilder.Entity<UserDetails>().HasOne(ud => ud.User).WithOne().HasForeignKey<UserDetails>(ud => ud.UserID).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

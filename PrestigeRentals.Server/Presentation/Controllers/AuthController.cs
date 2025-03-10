@@ -1,0 +1,50 @@
+﻿using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
+using PrestigeRentals.Application.Requests;
+using PrestigeRentals.Application.Services.Interfaces;
+using RegisterRequest = PrestigeRentals.Application.Requests.RegisterRequest;
+
+namespace PrestigeRentals.Presentation.Controllers
+{
+    [ApiController]
+    [Route("api/auth")]
+    public class AuthController : ControllerBase
+    {
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
+        {
+            _authService = authService;
+        }
+
+        [HttpPost("/register")]
+        public async Task<IActionResult> Register([FromBody] RegisterRequest model)
+        {
+            try
+            {
+                var token = await _authService.RegisterAsync(model.Email, model.Password, model.Role, model.FirstName, model.LastName, model.DateOfBirth);
+                return Ok(new { Token = token });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpPost("/login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest model)
+        {
+            try
+            {
+                var token = await _authService.AuthenticateAsync(model.Email, model.Password);
+                return Ok(new { Token = token });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {Message = ex.Message});
+            }
+        }
+
+
+    }
+}

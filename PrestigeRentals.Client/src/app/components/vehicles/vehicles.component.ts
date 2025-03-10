@@ -1,18 +1,41 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { VehicleService, Vehicle, VehicleOptions, VehiclePhotos } from '../../services/vehicle.service';
+import {
+  VehicleService,
+  Vehicle,
+  VehicleOptions,
+  VehiclePhotos,
+} from '../../services/vehicle.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-vehicles',
   standalone: true,
-  imports: [CommonModule],  // Include HttpClientModule here
+  imports: [CommonModule, FormsModule], // Include HttpClientModule here
   templateUrl: './vehicles.component.html',
-  styleUrls: ['./vehicles.component.scss']
+  styleUrls: ['./vehicles.component.scss'],
 })
 export class VehiclesComponent implements OnInit {
   vehicles: Vehicle[] = [];
   vehicleOptions: { [key: number]: VehicleOptions } = {};
   vehiclePhotos: { [key: number]: VehiclePhotos[] } = {};
+
+  newVehicle = {
+    make: '',
+    model: '',
+    engineSize: '',
+    fuelType: '',
+    transmission: '',
+  };
+
+  newVehicleOptions = {
+    navigation: false,
+    headsUpDisplay: false,
+    hillAssist: false,
+    cruiseControl: false,
+  };
+
+  photoPreviews: string[] = [];
 
   constructor(private vehicleService: VehicleService) {}
 
@@ -24,7 +47,7 @@ export class VehiclesComponent implements OnInit {
     this.vehicleService.getVehicles().subscribe(
       (data) => {
         this.vehicles = data;
-        this.vehicles.forEach(vehicle => {
+        this.vehicles.forEach((vehicle) => {
           this.loadVehicleOptions(vehicle.id);
           this.loadVehiclePhotos(vehicle.id);
         });
