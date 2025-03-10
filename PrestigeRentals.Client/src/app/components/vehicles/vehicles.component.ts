@@ -1,20 +1,16 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-  VehicleService,
-  Vehicle,
-  VehicleForPOST,
-  VehicleOptions,
-} from '../../services/vehicle.service';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common'; // Import CommonModule for common directives
+import { FormsModule } from '@angular/forms'; // Import FormsModule for ngModel
+import { VehicleService, Vehicle, VehicleOptions } from '../../services/vehicle.service';
 
 @Component({
   selector: 'app-vehicles',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
+  standalone: true, // This makes it a standalone component
+  imports: [CommonModule, FormsModule], // Import necessary modules here
   templateUrl: './vehicles.component.html',
-  styleUrl: './vehicles.component.scss',
+  styleUrls: ['./vehicles.component.scss'],
 })
+
 export class VehiclesComponent implements OnInit {
   vehicles: Vehicle[] = [];
   vehicleOptions: Record<number, VehicleOptions> = {};
@@ -163,13 +159,9 @@ export class VehiclesComponent implements OnInit {
   }
 
   getOption(vehicleId: number, optionName: string): string {
-    // Ensure vehicleOptions is defined
     const options = this.vehicleOptions[vehicleId];
-
-    // If no options exist for the vehicle, return 'false'
     if (!options) return 'false';
 
-    // Access the option based on the optionName
     switch (optionName.toLowerCase()) {
       case 'navigation':
         return options.navigation ? 'true' : 'false';
@@ -180,7 +172,7 @@ export class VehiclesComponent implements OnInit {
       case 'cruise control':
         return options.cruiseControl ? 'true' : 'false';
       default:
-        return 'false'; // Return 'false' if the option name doesn't match
+        return 'false';
     }
   }
 
