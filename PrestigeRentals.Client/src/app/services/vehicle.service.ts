@@ -93,4 +93,9 @@ export class VehicleService {
       });
     });
   }
+
+  getVehiclePhotos(vehicleId: number): Observable<any> {
+    return this.http.get<any[]>(`${this.apiUrl}/vehicle/${vehicleId}/photos`);
+  }
+
 }

@@ -36,6 +36,7 @@ export class VehiclesComponent implements OnInit {
   };
   vehicleId: number | null = null;
   onlyActive: boolean = false;
+  vehiclePhotos: any[] = [];
 
   constructor(private vehicleService: VehicleService) {}
 
@@ -181,5 +182,17 @@ export class VehiclesComponent implements OnInit {
       default:
         return 'false'; // Return 'false' if the option name doesn't match
     }
+  }
+
+  getVehiclePhotos(vehicleId: number) {
+    this.vehicleService.getVehiclePhotos(vehicleId).subscribe(
+      (photos) => {
+        this.vehiclePhotos = photos;
+      },
+      (error) => {
+        console.error("Error fetching vehicle photos", error);
+        this.vehiclePhotos = [];
+      }
+    );
   }
 }

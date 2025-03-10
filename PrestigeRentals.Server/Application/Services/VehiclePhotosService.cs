@@ -25,18 +25,50 @@ namespace PrestigeRentals.Application.Services
             _logger = logger;
         }
 
-        public async Task<ActionResult<List<VehiclePhotos>>> GetVehiclePhotos(int vehicleId)
+        public async Task<ActionResult<List<String>>> GetVehiclePhotosAsBase64(int vehicleId)
         {
-            List<VehiclePhotos> vehiclePhotos = await _dbContext.VehiclePhotos.Where(v => v.VehicleId == vehicleId).ToListAsync();
+          var vehiclePhotos = await _dbContext.VehiclePhotos.Where(v => v.VehicleId == vehicleId).ToListAsync();
 
-            if (vehiclePhotos == null || !vehiclePhotos.Any())
+            if (vehiclePhotos == null || !vehiclePhotos.Any()) 
             {
-                _logger.LogWarning($"No photos were found for vehicle ID {vehicleId}.");
-                return null;
+                _logger.LogWarning($"No photos found for vehicle ID {vehicleId}");
+                return new NotFoundResult();
             }
 
-            _logger.LogInformation($"Successfully retrieved photos for vehicle ID {vehicleId}");
-            return vehiclePhotos;
+            var base64Images = vehiclePhotos.Select(photo => Convert.ToBase64String(photo.ImageData)).ToList();
+
+            return base64Images;
+        }
+
+        public async Task<ActionResult<VehiclePhotos>> UploadVehiclePhoto(int vehicleId, string base64Image)
+        {
+            if(string.IsNullOrWhiteSpace(base64Image))
+            {
+                _logger.LogWarning("Base64 image string is empty.");
+                return new BadRequestObjectResult("Invalid image data.");
+            }
+
+            try
+            {
+                VehiclePhotos vehiclePhoto = new VehiclePhotos
+                {
+                    VehicleId = vehicleId,
+                    ImageData = Convert.FromBase64String(base64Image)
+                };
+
+                _dbContext.VehiclePhotos.Add(vehiclePhoto);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation($"Photo uploaded for vehicle ID {vehicleId}");
+
+                return vehiclePhoto;
+            }
+
+            catch(Exception ex)
+            {
+                _logger.LogError($"Error uploading photo: {ex.Message}");
+                return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

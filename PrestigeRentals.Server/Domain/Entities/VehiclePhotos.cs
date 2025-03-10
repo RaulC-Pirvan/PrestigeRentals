@@ -18,7 +18,7 @@ namespace PrestigeRentals.Domain.Entities
         [JsonIgnore]
         public Vehicle Vehicle { get; set; }
         [Required]
-        public string photoUrl { get; set; }
+        public byte[] ImageData { get; set; }
         [Required]
         public bool Active { get; set; } = true;
         [Required]

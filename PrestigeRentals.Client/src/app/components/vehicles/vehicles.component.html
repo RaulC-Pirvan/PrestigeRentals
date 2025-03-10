@@ -136,3 +136,17 @@
     </div>
   </div>
 </div>
+
+
+<div class="container">
+  <h3>Vehicle Photos</h3>
+  <div *ngIf="vehiclePhotos.length > 0; else noImages">
+    <div *ngFor="let photo of vehiclePhotos">
+      <img [src]=" 'data:iamge/jpeg;base64.' + photo.ImageBase64" alt="Vehicle Photo" width="200px" />
+    </div>
+  </div>
+
+  <ng-template #noImages>
+    <p>No images found for this vehicle.</p>
+  </ng-template>
+</div>

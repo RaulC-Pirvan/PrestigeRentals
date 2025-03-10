@@ -11,6 +11,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
 {
     public interface IVehiclePhotosService
     {
-        Task<ActionResult<List<VehiclePhotos>>> GetVehiclePhotos(int vehicleId);
+        Task<ActionResult<List<string>>> GetVehiclePhotosAsBase64(int vehicleId);
+        Task<ActionResult<VehiclePhotos>> UploadVehiclePhoto(int vehicleId, string base64Image);
     }
 }
