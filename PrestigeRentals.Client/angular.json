@@ -70,10 +70,7 @@
               "buildTarget": "PrestigeRentals:build:production"
             },
             "development": {
-              "buildTarget": "PrestigeRentals:build:development",
-              "options": {
-                "ssl": false
-              }
+              "buildTarget": "PrestigeRentals:build:development"
             }
           },
           "defaultConfiguration": "development"
