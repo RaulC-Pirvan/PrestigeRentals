@@ -35,7 +35,7 @@ namespace PrestigeRentals.Application.Services
                 return new NotFoundResult();
             }
 
-            var base64Images = vehiclePhotos.Select(photo => Convert.ToBase64String(photo.ImageData)).ToList();
+            var base64Images = vehiclePhotos.Select(photo => $"data:image/jpeg;base64,{Convert.ToBase64String(photo.ImageData)}").ToList();
 
             return base64Images;
         }

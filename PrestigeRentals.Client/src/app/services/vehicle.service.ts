@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, forkJoin } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 export interface Vehicle {
   id: number;
@@ -11,7 +11,6 @@ export interface Vehicle {
   transmission: string;
   active: boolean;
   deleted: boolean;
-  options: VehicleOptions;
 }
 
 export interface VehicleOptions {
@@ -21,81 +20,29 @@ export interface VehicleOptions {
   cruiseControl: boolean;
 }
 
-export type VehicleForPOST = Omit<Vehicle, 'id'>;
+export interface VehiclePhotos {
+  imageBase64: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class VehicleService {
-  private apiUrl = 'https://localhost:7093/api';
+  private apiUrl = 'https://localhost:7093/api'; 
   constructor(private http: HttpClient) {}
 
-  getVehicles(onlyActive: boolean): Observable<Vehicle[]> {
-    return this.http.get<Vehicle[]>(
-      `${this.apiUrl}/vehicle?onlyActive=${onlyActive}`
-    );
+  // Fetch list of vehicles
+  getVehicles(): Observable<Vehicle[]> {
+    return this.http.get<Vehicle[]>(`${this.apiUrl}/vehicle?onlyActive=false`);
   }
 
-  getVehicleById(id: number): Observable<Vehicle> {
-    return this.http.get<Vehicle>(this.apiUrl + `/Vehicle/${id}`);
-  }
-
-  addVehicle(vehicle: VehicleForPOST) {
-    return this.http.post<{ success: boolean }>('/api/vehicles', vehicle);
-  }
-
-  updateVehicle(id: number, vehicle: Vehicle): Observable<Vehicle> {
-    return this.http.put<Vehicle>(this.apiUrl + '/Vehicle/${id}', vehicle);
-  }
-
-  deleteVehicle(id: number): Observable<string> {
-    return this.http
-      .delete(this.apiUrl + `/Vehicle/${id}`, { responseType: 'text' })
-      .pipe(
-        catchError((error) => {
-          console.error('Error deleting vehicle:', error);
-          throw error;
-        })
-      );
-  }
-
+  // Fetch options for a specific vehicle
   getVehicleOptions(vehicleId: number): Observable<VehicleOptions> {
-    return this.http.get<VehicleOptions>(
-      `${this.apiUrl}/vehicle/${vehicleId}/options`
-    );
+    return this.http.get<VehicleOptions>(`${this.apiUrl}/vehicle/${vehicleId}/options`);
   }
 
-  getVehiclesWithOptions(onlyActive: boolean): Observable<{
-    vehicles: Vehicle[];
-    options: Record<number, VehicleOptions>;
-  }> {
-    return new Observable((observer) => {
-      this.getVehicles(onlyActive).subscribe((vehicles) => {
-        if (vehicles.length === 0) {
-          observer.next({ vehicles, options: {} });
-          observer.complete();
-          return;
-        }
-
-        const optionsPromises = vehicles.map((vehicle) =>
-          this.getVehicleOptions(vehicle.id)
-        );
-
-        forkJoin(optionsPromises).subscribe((optionsArray) => {
-          const optionsMap = vehicles.reduce((acc, vehicle, index) => {
-            acc[vehicle.id] = optionsArray[index];
-            return acc;
-          }, {} as Record<number, VehicleOptions>);
-
-          observer.next({ vehicles, options: optionsMap });
-          observer.complete();
-        });
-      });
-    });
+  // Fetch photos for a specific vehicle
+  getVehiclePhotos(vehicleId: number): Observable<VehiclePhotos[]> {
+    return this.http.get<VehiclePhotos[]>(`${this.apiUrl}/vehicle/${vehicleId}/photos`);
   }
-
-  getVehiclePhotos(vehicleId: number): Observable<any> {
-    return this.http.get<any[]>(`${this.apiUrl}/vehicle/${vehicleId}/photos`);
-  }
-
 }
