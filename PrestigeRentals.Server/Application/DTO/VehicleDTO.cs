@@ -16,6 +16,10 @@ namespace PrestigeRentals.Application.DTO
         public decimal EngineSize { get; set;}
         public string FuelType { get; set;}
         public string Transmission {  get; set;}
+        public bool Navigation { get; set; }
+        public bool HeadsUpDisplay { get; set; }
+        public bool HillAssist { get; set; }
+        public bool CruiseControl { get; set; }
         public bool Active { get; set; }
         public bool Deleted { get; set; }
 

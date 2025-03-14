@@ -57,6 +57,23 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        [HttpGet("{vehicleId}/options")]
+        public async Task<ActionResult<VehicleOptions>> GetVehicleOptions(int vehicleId)
+        {
+            try
+            {
+                VehicleOptions vehicleOptions = await _vehicleService.GetVehicleOptions(vehicleId);
+
+                if (vehicleOptions == null)
+                    return NotFound("Vehicle options not found.");
+                return Ok(vehicleOptions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
         [HttpPost("")]
         public async Task<IActionResult> AddVehicle([FromBody, Required] VehicleRequest vehicleRequest)
         {
@@ -131,12 +148,12 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
-        [HttpPut("{vehicleId}")]
-        public async Task<ActionResult<VehicleDTO>> UpdateVehicle(int vehicleId, [FromBody, Required] VehicleRequest vehicleRequest)
+        [HttpPatch("{vehicleId}")]
+        public async Task<ActionResult<VehicleDTO>> UpdateVehicle(int vehicleId, [FromBody] VehicleUpdateRequest vehicleUpdateRequest)
         {
             try
             {
-                VehicleDTO vehicleDTO = await _vehicleService.UpdateVehicle(vehicleId, vehicleRequest);
+                VehicleDTO vehicleDTO = await _vehicleService.UpdateVehicle(vehicleId, vehicleUpdateRequest);
 
                 if(vehicleDTO == null)
                     return BadRequest("Error");

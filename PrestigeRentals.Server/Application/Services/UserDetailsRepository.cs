@@ -3,30 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
 
 namespace PrestigeRentals.Application.Services
 {
-    public class UserService : IUserRepository
+    public class UserDetailsRepository : IUserDetailsRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public UserService(ApplicationDbContext dbContext)
+        public UserDetailsRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public async Task<User> GetByEmailAsync(string email)
+        public async Task AddAsync(UserDetails userDetails)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-        }
-
-        public async Task AddAsync(User user)
-        {
-            await _dbContext.Users.AddAsync(user);
+            await _dbContext.UsersDetails.AddAsync(userDetails);
             await _dbContext.SaveChangesAsync();
         }
     }

@@ -15,9 +15,10 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task<List<Vehicle>> GetAllVehicles(bool? onlyActive = false);
         Task<ActionResult?> AddVehicle(VehicleRequest vehicleRequest);
         Task<Vehicle> GetVehicleByID(int vehicleId);
+        Task<VehicleOptions> GetVehicleOptions(int vehicleId);
         Task<bool> DeactivateVehicle(int vehicleId);
         Task<bool> ActivateVehicle(int vehicleId);
         Task<bool> DeleteVehicle(int vehicleId);
-        Task<VehicleDTO> UpdateVehicle(int vehicleId, VehicleRequest vehicleRequest);
+        Task<VehicleDTO> UpdateVehicle(int vehicleId, VehicleUpdateRequest vehicleUpdateRequest);
     }
 }

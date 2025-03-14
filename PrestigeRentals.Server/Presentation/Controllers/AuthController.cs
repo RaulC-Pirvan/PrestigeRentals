@@ -28,7 +28,7 @@ namespace PrestigeRentals.Presentation.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { Message = ex.Message });
+                return BadRequest(new { ex.Message });
             }
         }
 
@@ -42,7 +42,7 @@ namespace PrestigeRentals.Presentation.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new {Message = ex.Message});
+                return BadRequest(new { ex.Message });
             }
         }
 

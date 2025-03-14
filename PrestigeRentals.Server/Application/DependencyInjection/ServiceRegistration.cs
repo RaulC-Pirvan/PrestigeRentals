@@ -14,10 +14,11 @@ namespace PrestigeRentals.Application.DependencyInjection
         public static void AddAplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IVehicleService, VehicleService>();
-            services.AddScoped<IVehicleOptionsService, VehicleOptionsService>();
+            services.AddScoped<IVehicleRepository, VehicleRepository>();
+            services.AddScoped<IVehicleOptionsRepository, VehicleOptionsRepository>();
             services.AddScoped<IVehiclePhotosService, VehiclePhotosService>();
-            services.AddScoped<IUserRepository, UserService>();
-            services.AddScoped<IUserDetailsRepository, UserDetailsService>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserDetailsRepository, UserDetailsRepository>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         }
