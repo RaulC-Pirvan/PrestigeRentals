@@ -24,6 +24,8 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public DateTime DateOfBirth { get; set; }
         [Required]
+        public byte[] ImageData { get; set; }
+        [Required]
         public bool Active { get; set; } = true;
         [Required]
         public bool Deleted { get; set; } = false;

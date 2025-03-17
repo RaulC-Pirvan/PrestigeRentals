@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PrestigeRentals.Application.Requests;
 
 namespace PrestigeRentals.Application.Services.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> RegisterAsync(string email, string password, string role, string firstName, string lastName, DateTime dateOfBirth);
-        Task<string> AuthenticateAsync(string email, string password);
+        Task<string> RegisterAsync(RegisterRequest registerRequest);
+        Task<string> AuthenticateAsync(LoginRequest loginRequest);
 
     }
 }

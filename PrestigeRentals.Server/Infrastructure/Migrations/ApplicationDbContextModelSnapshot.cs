@@ -74,6 +74,10 @@ namespace PrestigeRentals.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("text");

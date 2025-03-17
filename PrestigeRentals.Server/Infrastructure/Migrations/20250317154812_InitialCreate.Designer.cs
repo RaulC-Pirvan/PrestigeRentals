@@ -12,8 +12,8 @@ using PrestigeRentals.Infrastructure.Persistence;
 namespace PrestigeRentals.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250310150446_AddUserAndUserDetailsTables")]
-    partial class AddUserAndUserDetailsTables
+    [Migration("20250317154812_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,6 +76,10 @@ namespace PrestigeRentals.Infrastructure.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<byte[]>("ImageData")
+                        .IsRequired()
+                        .HasColumnType("bytea");
 
                     b.Property<string>("LastName")
                         .IsRequired()

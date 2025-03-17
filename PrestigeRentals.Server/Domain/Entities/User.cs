@@ -16,7 +16,7 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public string Password { get; set; }
         [Required]
-        public string Role { get; set; }
+        public string Role { get; set; } = "User";
         [Required]
         public bool Active { get; set; } = true;
         [Required]

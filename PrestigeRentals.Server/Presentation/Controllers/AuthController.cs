@@ -23,7 +23,7 @@ namespace PrestigeRentals.Presentation.Controllers
         {
             try
             {
-                var token = await _authService.RegisterAsync(model.Email, model.Password, model.Role, model.FirstName, model.LastName, model.DateOfBirth);
+                var token = await _authService.RegisterAsync(model);
                 return Ok(new { Token = token });
             }
             catch (Exception ex)
@@ -37,7 +37,7 @@ namespace PrestigeRentals.Presentation.Controllers
         {
             try
             {
-                var token = await _authService.AuthenticateAsync(model.Email, model.Password);
+                var token = await _authService.AuthenticateAsync(model);
                 return Ok(new { Token = token });
             }
             catch (Exception ex)
