@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Infrastructure.Persistence;
 using LoginRequest = PrestigeRentals.Application.Requests.LoginRequest;
 using RegisterRequest = PrestigeRentals.Application.Requests.RegisterRequest;
 
@@ -13,11 +14,13 @@ namespace PrestigeRentals.Presentation.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IUserManagementService _userManagementService;
+        private readonly ApplicationDbContext _dbContext;
 
-        public AuthController(IAuthService authService, IUserManagementService userManagementService)
+        public AuthController(IAuthService authService, IUserManagementService userManagementService, ApplicationDbContext dbContext)
         {
             _authService = authService;
             _userManagementService = userManagementService;
+            _dbContext = dbContext;
         }
 
         [HttpPost("/register")]
@@ -45,6 +48,23 @@ namespace PrestigeRentals.Presentation.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { ex.Message });
+            }
+        }
+
+        [HttpPatch("{userId}/change-password")]
+        public async Task<IActionResult> ChangePassword(int userId, string oldPassword, string newPassword)
+        {
+            try
+            {
+                bool isPasswordChanged = await _userManagementService.ChangePassword(userId, newPassword);
+                if (isPasswordChanged)
+                    return Ok("Password change successfully.");
+                return BadRequest("Error: Password could not be changed.");
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 

@@ -12,7 +12,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
     {
         Task<bool> MakeAdmin(int userId);
         Task<bool> RevertToUser(int userId);
-        Task<IActionResult> ChangePassword(int userId, string newPassword);
+        Task<bool> ChangePassword(int userId, string newPassword);
         Task<IActionResult> ChangeEmail(int userId, string newEmail);
         Task<bool> DeactivateAccount(int userId);
         Task<bool> ActivateAccount(int userId);

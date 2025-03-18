@@ -20,13 +20,15 @@ namespace PrestigeRentals.Application.Services
         private readonly IUserDetailsRepository _userDetailsRepository;
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<UserManagementService> _logger;
+        private readonly IAuthService _authService;
 
-        public UserManagementService(IUserRepository userRepository, IUserDetailsRepository userDetailsRepository, ApplicationDbContext dbContext, ILogger<UserManagementService> logger)
+        public UserManagementService(IUserRepository userRepository, IAuthService authService, IUserDetailsRepository userDetailsRepository, ApplicationDbContext dbContext, ILogger<UserManagementService> logger)
         {
             _userRepository = userRepository;
             _userDetailsRepository = userDetailsRepository;
             _dbContext = dbContext;
             _logger = logger;
+            _authService = authService;
         }
         private async Task<bool> IsUserAlive(int userId)
         {
@@ -61,9 +63,16 @@ namespace PrestigeRentals.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<IActionResult> ChangePassword(int userId, string newPassword)
+        public async Task<bool> ChangePassword(int userId, string newPassword)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.Users.FindAsync(userId);
+            if (user == null)
+                return false;
+
+            user.Password = _authService.HashPassword(newPassword);
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> DeactivateAccount(int userId)
