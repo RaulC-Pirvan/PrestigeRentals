@@ -102,5 +102,41 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        [HttpPatch("{userId}/set-admin")]
+        public async Task<IActionResult> SetAdmin(int userId)
+        {
+            try
+            {
+                bool isUserPromoted = await _userManagementService.MakeAdmin(userId);
+
+                if (isUserPromoted)
+                    return Ok("User successfully promoted to Admin.");
+                return BadRequest("Error: User could not be promoted.");
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPatch("{userId}/set-user")]
+        public async Task<IActionResult> SetUser(int userId)
+        {
+            try
+            {
+                bool isUserDemoted = await _userManagementService.RevertToUser(userId);
+
+                if (isUserDemoted)
+                    return Ok("User successfully demoted to User.");
+                return BadRequest("Error: User could not be demoted.");
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
     }
 }

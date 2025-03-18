@@ -112,9 +112,54 @@ namespace PrestigeRentals.Application.Services
             return false;
         }
 
-        public Task<IActionResult> MakeAdmin(int userId)
+        public async Task<bool> MakeAdmin(int userId)
         {
-            throw new NotImplementedException();
+            bool isUserAlive = await IsUserAlive(userId);
+            bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
+
+            if(isUserAlive && isUserDetailsAlive)
+            {
+                User user = await _userRepository.GetUserById(userId);
+                if (user.Role != "Admin")
+                {
+                    user.Role = "Admin";
+                    await _dbContext.SaveChangesAsync();
+                    _logger.LogInformation($"User with ID {userId} successfully promoted to Admin.");
+
+                    return true;
+                }
+
+                _logger.LogWarning($"User with ID {userId} is already an Admin.");
+                return false;
+            }
+
+            _logger.LogWarning($"User with ID {userId} could not be found.");
+            return false;
+        }
+
+        public async Task<bool> RevertToUser(int userId)
+        {
+            bool isUserAlive = await IsUserAlive(userId);
+            bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
+
+            if (isUserAlive && isUserDetailsAlive)
+            {
+                User user = await _userRepository.GetUserById(userId);
+                if (user.Role != "User")
+                {
+                    user.Role = "User";
+                    await _dbContext.SaveChangesAsync();
+                    _logger.LogInformation($"User with ID {userId} successfully demoted to User.");
+
+                    return true;
+                }
+
+                _logger.LogWarning($"User with ID {userId} is already an User.");
+                return false;
+            }
+
+            _logger.LogWarning($"User with ID {userId} could not be found.");
+            return false;
         }
 
         public async Task<bool> ActivateAccount(int userId)
@@ -140,11 +185,6 @@ namespace PrestigeRentals.Application.Services
 
             _logger.LogWarning($"User with ID {userId} was not found or is already alive.");
             return false;
-        }
-
-        public Task<IActionResult> RevertToUser(int userId)
-        {
-            throw new NotImplementedException();
         }
 
         public Task<IActionResult> UpdateUserDetails(UpdateUserRequest updateUserRequest)
