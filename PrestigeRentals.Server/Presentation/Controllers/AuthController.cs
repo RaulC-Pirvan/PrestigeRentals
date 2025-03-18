@@ -66,5 +66,23 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        [HttpPatch("{userId}/set-active")]
+        public async Task<IActionResult> ActivateAccount(int userId)
+        {
+            try
+            {
+                bool isUserActivated = await _userManagementService.ActivateAccount(userId);
+
+                if (isUserActivated == true)
+                    return Ok("User activated successfully.");
+                return BadRequest("Error: User could not be activated.");
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
     }
 }

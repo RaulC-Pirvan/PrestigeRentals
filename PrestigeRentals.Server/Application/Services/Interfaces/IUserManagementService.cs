@@ -15,7 +15,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task<IActionResult> ChangePassword(int userId, string newPassword);
         Task<IActionResult> ChangeEmail(int userId, string newEmail);
         Task<bool> DeactivateAccount(int userId);
-        Task<bool> ReactivateAccount(int userId);
+        Task<bool> ActivateAccount(int userId);
         Task<bool> DeleteAccount(int userId);
         Task<IActionResult> UpdateUserDetails(UpdateUserRequest updateUserRequest);
      

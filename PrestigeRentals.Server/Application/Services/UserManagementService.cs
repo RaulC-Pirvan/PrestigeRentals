@@ -42,6 +42,20 @@ namespace PrestigeRentals.Application.Services
             return isUserDetailsAlive;
         }
 
+        private async Task<bool> IsUserDead(int userId)
+        {
+            bool isUserDead = await _dbContext.Users.AnyAsync(u => u.Id == userId && !u.Active && u.Deleted);
+
+            return isUserDead;
+        }
+
+        private async Task<bool> IsUserDetailsDead(int userId)
+        {
+            bool isUserDetailsDead = await _dbContext.UsersDetails.AnyAsync(ud => ud.Id == userId && !ud.Active && ud.Deleted);
+
+            return isUserDetailsDead;
+        }
+
         public Task<IActionResult> ChangeEmail(int userId, string newEmail)
         {
             throw new NotImplementedException();
@@ -87,9 +101,29 @@ namespace PrestigeRentals.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> ReactivateAccount(int userId)
+        public async Task<bool> ActivateAccount(int userId)
         {
-            throw new NotImplementedException();
+            bool isUserDead = await IsUserDead(userId);
+            bool isUserDetailsDead = await IsUserDetailsDead(userId);
+
+            if (isUserDead && isUserDetailsDead)
+            {
+                User user = await _userRepository.GetUserById(userId);
+                user.Active = true;
+                user.Deleted = false;
+
+                UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
+                userDetails.Active = true;
+                userDetails.Deleted = false;
+
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation($"User with ID {userId} has been activated.");
+                return true;
+            }
+
+            _logger.LogWarning($"User with ID {userId} was not found or is already alive.");
+            return false;
         }
 
         public Task<IActionResult> RevertToUser(int userId)
