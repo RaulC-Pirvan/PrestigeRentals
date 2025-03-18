@@ -84,5 +84,23 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> DeleteAccount(int userId)
+        {
+            try
+            {
+                bool isUserDeleted = await _userManagementService.DeleteAccount(userId);
+
+                if (isUserDeleted)
+                    return Ok("User deleted successfully.");
+                return BadRequest("Error: User could not be deleted.");
+            }
+
+            catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
     }
 }

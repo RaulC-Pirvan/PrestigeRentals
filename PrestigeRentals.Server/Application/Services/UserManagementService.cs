@@ -91,9 +91,25 @@ namespace PrestigeRentals.Application.Services
             return false;
         }
 
-        public Task<bool> DeleteAccount(int userId)
+        public async Task<bool> DeleteAccount(int userId)
         {
-            throw new NotImplementedException();
+            User user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
+            UserDetails userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(ud => ud.UserID == userId);
+
+            if (user != null && userDetails != null)
+            {
+                _dbContext.UsersDetails.Remove(userDetails);
+                await _dbContext.SaveChangesAsync();
+
+                _dbContext.Users.Remove(user);
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation($"User with ID {userId} has been deleted.");
+                return true;
+            }
+
+            _logger.LogWarning($"User with ID {userId} not found or has been already deleted.");
+            return false;
         }
 
         public Task<IActionResult> MakeAdmin(int userId)
