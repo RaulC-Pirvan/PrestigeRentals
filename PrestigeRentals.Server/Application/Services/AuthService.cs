@@ -28,7 +28,7 @@ namespace PrestigeRentals.Application.Services
 
         public async Task<string> RegisterAsync(RegisterRequest registerRequest)
         {
-            var existingUser = await _userRepository.GetByEmailAsync(registerRequest.Email);
+            var existingUser = await _userRepository.GetUserByEmail(registerRequest.Email);
             if(existingUser != null)
             {
                 throw new Exception("User already exists.");
@@ -80,7 +80,7 @@ namespace PrestigeRentals.Application.Services
 
         public async Task<string> AuthenticateAsync(LoginRequest loginRequest)
         {
-            var user = await _userRepository.GetByEmailAsync(loginRequest.Email);
+            var user = await _userRepository.GetUserByEmail(loginRequest.Email);
             if (user == null || !VerifyPassword(loginRequest.Password, user.Password))
             {
                 throw new Exception("Invalid credentials.");

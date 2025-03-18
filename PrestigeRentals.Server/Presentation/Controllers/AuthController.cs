@@ -12,10 +12,12 @@ namespace PrestigeRentals.Presentation.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IUserManagementService _userManagementService;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IUserManagementService userManagementService)
         {
             _authService = authService;
+            _userManagementService = userManagementService;
         }
 
         [HttpPost("/register")]
@@ -46,6 +48,23 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        [HttpPatch("{userId}/set-inactive")]
+        public async Task<IActionResult> DeactivateAccount(int userId)
+        {
+            try
+            {
+                bool isUserDeactivated = await _userManagementService.DeactivateAccount(userId);
+
+                if (isUserDeactivated == true)
+                    return Ok("User deactivated successfully.");
+                return BadRequest("Error: User could not be deactivated.");
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
 
     }
 }

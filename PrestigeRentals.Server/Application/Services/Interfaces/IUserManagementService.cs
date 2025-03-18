@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using PrestigeRentals.Application.Requests;
+
+namespace PrestigeRentals.Application.Services.Interfaces
+{
+    public interface IUserManagementService
+    {
+        Task<IActionResult> MakeAdmin(int userId);
+        Task<IActionResult> RevertToUser(int userId);
+        Task<IActionResult> ChangePassword(int userId, string newPassword);
+        Task<IActionResult> ChangeEmail(int userId, string newEmail);
+        Task<bool> DeactivateAccount(int userId);
+        Task<bool> ReactivateAccount(int userId);
+        Task<bool> DeleteAccount(int userId);
+        Task<IActionResult> UpdateUserDetails(UpdateUserRequest updateUserRequest);
+     
+    }
+}

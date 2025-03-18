@@ -10,5 +10,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
     public interface IUserDetailsRepository
     {
         Task AddAsync(UserDetails userDetails);
+        Task<UserDetails> GetUserDetailsById(int userid);
     }
 }

@@ -21,6 +21,7 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<IUserDetailsRepository, UserDetailsRepository>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+            services.AddScoped<IUserManagementService, UserManagementService>();
         }
     }
 }

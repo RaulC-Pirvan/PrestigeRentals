@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
@@ -22,6 +23,11 @@ namespace PrestigeRentals.Application.Services
         {
             await _dbContext.UsersDetails.AddAsync(userDetails);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<UserDetails> GetUserDetailsById(int userId)
+        {
+            return await _dbContext.UsersDetails.FirstOrDefaultAsync(ud => ud.Id == userId);
         }
     }
 }
