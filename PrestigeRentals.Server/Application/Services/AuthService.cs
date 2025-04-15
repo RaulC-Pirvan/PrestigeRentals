@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
@@ -31,7 +32,7 @@ namespace PrestigeRentals.Application.Services
             var existingUser = await _userRepository.GetUserByEmail(registerRequest.Email);
             if(existingUser != null)
             {
-                throw new Exception("User already exists.");
+                throw new EmailAlreadyExistsException();
             }
 
             var hashedPassword = HashPassword(registerRequest.Password);
@@ -54,7 +55,7 @@ namespace PrestigeRentals.Application.Services
                 }
                 catch (FormatException)
                 {
-                    throw new Exception("Invalid base64 image format.");
+                    throw new InvalidPhotoFormatException();
                 }
             }
             else
@@ -100,7 +101,7 @@ namespace PrestigeRentals.Application.Services
             }
         }
 
-        private bool VerifyPassword(string inputPassword, string storedHash)
+        public bool VerifyPassword(string inputPassword, string storedHash)
         {
             var hashInputPassword = HashPassword(inputPassword);
             return hashInputPassword == storedHash;

@@ -12,5 +12,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task<string> RegisterAsync(RegisterRequest registerRequest);
         Task<string> AuthenticateAsync(LoginRequest loginRequest);
         string HashPassword(string password);
+        bool VerifyPassword(string oldPassword, string hashedPassword);
     }
 }

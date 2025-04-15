@@ -18,7 +18,6 @@ namespace PrestigeRentals.Presentation.Controllers
     {
         private readonly IVehicleService _vehicleService;
 
-
         public VehicleController(IVehicleService vehicleService)
         {
             _vehicleService = vehicleService;

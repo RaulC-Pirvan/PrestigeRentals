@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Infrastructure.Persistence;
@@ -31,6 +32,17 @@ namespace PrestigeRentals.Presentation.Controllers
                 var token = await _authService.RegisterAsync(model);
                 return Ok(new { Token = token });
             }
+
+            catch (EmailAlreadyExistsException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
+            catch (InvalidPhotoFormatException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
             catch (Exception ex)
             {
                 return BadRequest(new { ex.Message });
@@ -45,6 +57,17 @@ namespace PrestigeRentals.Presentation.Controllers
                 var token = await _authService.AuthenticateAsync(model);
                 return Ok(new { Token = token });
             }
+
+            catch (InvalidPasswordException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+
+            catch(UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
             catch (Exception ex)
             {
                 return BadRequest(new { ex.Message });
@@ -56,10 +79,18 @@ namespace PrestigeRentals.Presentation.Controllers
         {
             try
             {
-                bool isPasswordChanged = await _userManagementService.ChangePassword(userId, newPassword);
-                if (isPasswordChanged)
-                    return Ok("Password changed successfully.");
-                return BadRequest("Error: Password could not be changed.");
+                bool isPasswordChanged = await _userManagementService.ChangePassword(userId, oldPassword, newPassword);
+                return Ok("Password changed successfully.");
+            }
+
+            catch(InvalidPasswordException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+
+            catch(UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch (Exception ex)
@@ -79,6 +110,11 @@ namespace PrestigeRentals.Presentation.Controllers
                 return BadRequest("Error: Email could not be changed.");
             }
 
+            catch(EmailAlreadyExistsException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -91,10 +127,17 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDeactivated = await _userManagementService.DeactivateAccount(userId);
+                return Ok("User deactivated successfully.");
+            }
 
-                if (isUserDeactivated == true)
-                    return Ok("User deactivated successfully.");
-                return BadRequest("Error: User could not be deactivated.");
+            catch(UserAlreadyDeactivatedException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch (Exception ex)
@@ -109,10 +152,17 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserActivated = await _userManagementService.ActivateAccount(userId);
+                return Ok("User activated successfully.");
+            }
 
-                if (isUserActivated == true)
-                    return Ok("User activated successfully.");
-                return BadRequest("Error: User could not be activated.");
+            catch(UserAlreadyActivatedException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch (Exception ex)
@@ -127,10 +177,12 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDeleted = await _userManagementService.DeleteAccount(userId);
+                return Ok("User deleted successfully.");
+            }
 
-                if (isUserDeleted)
-                    return Ok("User deleted successfully.");
-                return BadRequest("Error: User could not be deleted.");
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch(Exception ex)
@@ -145,13 +197,20 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserPromoted = await _userManagementService.MakeAdmin(userId);
-
-                if (isUserPromoted)
-                    return Ok("User successfully promoted to Admin.");
-                return BadRequest("Error: User could not be promoted.");
+                return Ok("User successfully promoted to Admin.");
             }
 
-            catch(Exception ex)
+            catch(UserAlreadyAdminException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
@@ -163,10 +222,18 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDemoted = await _userManagementService.RevertToUser(userId);
+                return Ok("User successfully demoted to User.");
 
-                if (isUserDemoted)
-                    return Ok("User successfully demoted to User.");
-                return BadRequest("Error: User could not be demoted.");
+            }
+
+            catch (UserAlreadyUserException ex)
+            {
+                return Conflict(ex.Message);
+            }
+
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch (Exception ex)
@@ -181,10 +248,13 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserUpdated = await _userManagementService.UpdateUserDetails(userId, updateUserDetailsRequest);
+                return Ok("User successfully updated.");
 
-                if (isUserUpdated)
-                    return Ok("User successfully updated.");
-                return BadRequest("Error: User could not be updated.");
+            }
+
+            catch(UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch (Exception ex)

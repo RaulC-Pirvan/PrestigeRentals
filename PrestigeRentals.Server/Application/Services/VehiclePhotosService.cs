@@ -27,7 +27,7 @@ namespace PrestigeRentals.Application.Services
 
         public async Task<ActionResult<List<String>>> GetVehiclePhotosAsBase64(int vehicleId)
         {
-          var vehiclePhotos = await _dbContext.VehiclePhotos.Where(v => v.VehicleId == vehicleId).ToListAsync();
+          List<VehiclePhotos>? vehiclePhotos = await _dbContext.VehiclePhotos.Where(v => v.VehicleId == vehicleId).ToListAsync();
 
             if (vehiclePhotos == null || !vehiclePhotos.Any()) 
             {
@@ -35,7 +35,7 @@ namespace PrestigeRentals.Application.Services
                 return new NotFoundResult();
             }
 
-            var base64Images = vehiclePhotos.Select(photo => $"data:image/jpeg;base64,{Convert.ToBase64String(photo.ImageData)}").ToList();
+            List<string>? base64Images = vehiclePhotos.Select(photo => $"data:image/jpeg;base64,{Convert.ToBase64String(photo.ImageData)}").ToList();
 
             return base64Images;
         }

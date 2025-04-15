@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
@@ -60,10 +61,10 @@ namespace PrestigeRentals.Application.Services
 
         public async Task<bool> ChangeEmail(int userId, string newEmail)
         {
-            var user = await _dbContext.Users.FindAsync(userId);
+            User user = await _dbContext.Users.FindAsync(userId);
 
             if (user == null)
-                return false;
+                throw new UserNotFoundException();
 
             user.Email = newEmail;
             await _dbContext.SaveChangesAsync();
@@ -71,11 +72,14 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
-        public async Task<bool> ChangePassword(int userId, string newPassword)
+        public async Task<bool> ChangePassword(int userId, string oldPassword, string newPassword)
         {
-            var user = await _dbContext.Users.FindAsync(userId);
+            User user = await _dbContext.Users.FindAsync(userId);
             if (user == null)
-                return false;
+                throw new UserNotFoundException();
+
+            if (!_authService.VerifyPassword(oldPassword, user.Password))
+                throw new InvalidPasswordException();
 
             user.Password = _authService.HashPassword(newPassword);
             await _dbContext.SaveChangesAsync();
@@ -88,24 +92,24 @@ namespace PrestigeRentals.Application.Services
             bool isUserAlive = await IsUserAlive(userId);
             bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
 
-            if(isUserAlive && isUserDetailsAlive)
+            if (!isUserAlive && !isUserDetailsAlive)
             {
-                User user = await _userRepository.GetUserById(userId);
-                user.Active = false;
-                user.Deleted = true;
-
-                UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
-                userDetails.Active = false;
-                userDetails.Deleted = true;
-
-                await _dbContext.SaveChangesAsync();
-
-                _logger.LogInformation($"User with ID {userId} has been deactivated.");
-                return true;
+                _logger.LogWarning($"User with ID {userId} was not found or is already dead.");
+                throw new UserAlreadyDeactivatedException();
             }
 
-            _logger.LogWarning($"User with ID {userId} was not found or is already dead.");
-            return false;
+            User user = await _userRepository.GetUserById(userId);
+            user.Active = false;
+            user.Deleted = true;
+
+            UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
+            userDetails.Active = false;
+            userDetails.Deleted = true;
+
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInformation($"User with ID {userId} has been deactivated.");
+            return true;
         }
 
         public async Task<bool> DeleteAccount(int userId)
@@ -113,20 +117,20 @@ namespace PrestigeRentals.Application.Services
             User user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
             UserDetails userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(ud => ud.UserID == userId);
 
-            if (user != null && userDetails != null)
+            if (user == null && userDetails == null)
             {
-                _dbContext.UsersDetails.Remove(userDetails);
-                await _dbContext.SaveChangesAsync();
-
-                _dbContext.Users.Remove(user);
-                await _dbContext.SaveChangesAsync();
-
-                _logger.LogInformation($"User with ID {userId} has been deleted.");
-                return true;
+                _logger.LogWarning($"User with ID {userId} not found or has been already deleted.");
+                throw new UserNotFoundException();
             }
 
-            _logger.LogWarning($"User with ID {userId} not found or has been already deleted.");
-            return false;
+            _dbContext.UsersDetails.Remove(userDetails);
+            await _dbContext.SaveChangesAsync();
+
+            _dbContext.Users.Remove(user);
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInformation($"User with ID {userId} has been deleted.");
+            return true;
         }
 
         public async Task<bool> MakeAdmin(int userId)
@@ -134,49 +138,52 @@ namespace PrestigeRentals.Application.Services
             bool isUserAlive = await IsUserAlive(userId);
             bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
 
-            if(isUserAlive && isUserDetailsAlive)
+            if (!isUserAlive || !isUserDetailsAlive)
             {
-                User user = await _userRepository.GetUserById(userId);
-                if (user.Role != "Admin")
-                {
-                    user.Role = "Admin";
-                    await _dbContext.SaveChangesAsync();
-                    _logger.LogInformation($"User with ID {userId} successfully promoted to Admin.");
-
-                    return true;
-                }
-
-                _logger.LogWarning($"User with ID {userId} is already an Admin.");
-                return false;
+                _logger.LogWarning($"User with ID {userId} could not be found.");
+                throw new UserNotFoundException();
             }
 
-            _logger.LogWarning($"User with ID {userId} could not be found.");
-            return false;
+            User user = await _userRepository.GetUserById(userId);
+
+            if (user.Role == "Admin")
+            {
+                _logger.LogWarning($"User with ID {userId} is already an Admin.");
+                throw new UserAlreadyAdminException();
+            }
+
+            user.Role = "Admin";
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInformation($"User with ID {userId} successfully promoted to Admin.");
+            return true;
         }
+
 
         public async Task<bool> RevertToUser(int userId)
         {
             bool isUserAlive = await IsUserAlive(userId);
             bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
 
-            if (isUserAlive && isUserDetailsAlive)
+            if(!isUserAlive || !isUserDetailsAlive)
             {
-                User user = await _userRepository.GetUserById(userId);
-                if (user.Role != "User")
-                {
-                    user.Role = "User";
-                    await _dbContext.SaveChangesAsync();
-                    _logger.LogInformation($"User with ID {userId} successfully demoted to User.");
-
-                    return true;
-                }
-
-                _logger.LogWarning($"User with ID {userId} is already an User.");
-                return false;
+                _logger.LogWarning($"User with ID {userId} could not be found.");
+                throw new UserNotFoundException();
             }
 
-            _logger.LogWarning($"User with ID {userId} could not be found.");
-            return false;
+            User user = await _userRepository.GetUserById(userId);
+
+            if(user.Role == "User")
+            {
+                _logger.LogWarning($"User with ID {userId} is already an User.");
+                throw new UserAlreadyUserException();
+            }
+
+            user.Role = "User";
+            await _dbContext.SaveChangesAsync();
+            _logger.LogInformation($"User with ID {userId} successfully demoted to User.");
+
+            return true;
         }
 
         public async Task<bool> ActivateAccount(int userId)
@@ -184,24 +191,24 @@ namespace PrestigeRentals.Application.Services
             bool isUserDead = await IsUserDead(userId);
             bool isUserDetailsDead = await IsUserDetailsDead(userId);
 
-            if (isUserDead && isUserDetailsDead)
+            if (!isUserDead || !isUserDetailsDead)
             {
-                User user = await _userRepository.GetUserById(userId);
-                user.Active = true;
-                user.Deleted = false;
-
-                UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
-                userDetails.Active = true;
-                userDetails.Deleted = false;
-
-                await _dbContext.SaveChangesAsync();
-
-                _logger.LogInformation($"User with ID {userId} has been activated.");
-                return true;
+                _logger.LogWarning($"User with ID {userId} was not found or is already alive.");
+                throw new UserAlreadyActivatedException();
             }
 
-            _logger.LogWarning($"User with ID {userId} was not found or is already alive.");
-            return false;
+            User user = await _userRepository.GetUserById(userId);
+            user.Active = true;
+            user.Deleted = false;
+
+            UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
+            userDetails.Active = true;
+            userDetails.Deleted = false;
+
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInformation($"User with ID {userId} has been activated.");
+            return true;
         }
 
         public async Task<bool> UpdateUserDetails(int userId, UpdateUserDetailsRequest updateUserDetailsRequest)
@@ -209,20 +216,20 @@ namespace PrestigeRentals.Application.Services
             bool isUserAlive = await IsUserAlive(userId);
             bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
 
-            if(isUserAlive && isUserDetailsAlive)
+            if(!isUserAlive || !isUserDetailsAlive)
             {
-                UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
-                userDetails.FirstName = string.IsNullOrWhiteSpace(updateUserDetailsRequest.FirstName) ? userDetails.FirstName : updateUserDetailsRequest.FirstName;
-                userDetails.LastName = string.IsNullOrWhiteSpace(updateUserDetailsRequest.LastName) ? userDetails.LastName : updateUserDetailsRequest.LastName;
-
-                await _dbContext.SaveChangesAsync();
-
-                _logger.LogInformation($"User with ID {userId} has been updated.");
-                return true;
+                _logger.LogWarning($"User with ID {userId} was not found.");
+                throw new UserNotFoundException();
             }
 
-            _logger.LogWarning($"User with ID {userId} was not found.");
-            return false;
+            UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
+            userDetails.FirstName = string.IsNullOrWhiteSpace(updateUserDetailsRequest.FirstName) ? userDetails.FirstName : updateUserDetailsRequest.FirstName;
+            userDetails.LastName = string.IsNullOrWhiteSpace(updateUserDetailsRequest.LastName) ? userDetails.LastName : updateUserDetailsRequest.LastName;
+
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInformation($"User with ID {userId} has been updated.");
+            return true;
         }
     }
 }
