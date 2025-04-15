@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
@@ -19,26 +20,43 @@ namespace PrestigeRentals.Presentation.Controllers
         [HttpGet("{vehicleId}/photos")]
         public async Task<IActionResult> GetVehiclePhotos(int vehicleId)
         {
-           var result = await _vehiclePhotosService.GetVehiclePhotosAsBase64(vehicleId);
+            try
+            {
+               var result = await _vehiclePhotosService.GetVehiclePhotosAsBase64(vehicleId);
+               return Ok(result.Value);
+            }
 
-            if (result.Result is NotFoundResult)
-                return NotFound("No images found for this vehicle.");
+            catch (VehiclePhotoNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
 
-            return Ok(result.Value);
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
         [HttpPost("upload")]
         public async Task<IActionResult> UploadPhoto([FromQuery] int vehicleId, [FromBody] VehiclePhotoRequest request)
         {
-            if (request == null || string.IsNullOrWhiteSpace(request.ImageData))
-                return BadRequest("Invalid request. Image data is required.");
+            try
+            {
+                if (request == null || string.IsNullOrWhiteSpace(request.ImageData))
+                    return BadRequest("Invalid request. Image data is required.");
 
-            ActionResult<VehiclePhotos> result = await _vehiclePhotosService.UploadVehiclePhoto(vehicleId, request.ImageData);
+                ActionResult<VehiclePhotos> result = await _vehiclePhotosService.UploadVehiclePhoto(vehicleId, request.ImageData);
 
-            if (result.Result is BadRequestObjectResult)
-                return BadRequest(result.Result);
+                if (result.Result is BadRequestObjectResult)
+                    return BadRequest(result.Result);
 
-            return Ok(result.Value);
+                return Ok(result.Value);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
     }
 }

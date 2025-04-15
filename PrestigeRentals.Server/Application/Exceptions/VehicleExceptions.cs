@@ -30,4 +30,9 @@ namespace PrestigeRentals.Application.Exceptions
     {
         public VehicleUpdateException(int vehicleId) : base($"Failed to update vehicle with ID {vehicleId}") { }
     }
+
+    public class VehiclePhotoNotFoundException : Exception
+    {
+        public VehiclePhotoNotFoundException(int vehicleId) : base($"Vehicle with ID {vehicleId} has no photo.") { }
+    }
 }
