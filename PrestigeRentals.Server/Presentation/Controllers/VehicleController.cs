@@ -2,6 +2,7 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.DTO;
+using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services;
 using PrestigeRentals.Application.Services.Interfaces;
@@ -45,10 +46,12 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 Vehicle vehicle = await _vehicleService.GetVehicleByID(vehicleId);
-
-                if (vehicle == null)
-                    return NotFound("Vehicle not found.");
                 return Ok(vehicle);
+            }
+
+            catch (VehicleNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch (Exception ex)
@@ -63,11 +66,14 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 VehicleOptions vehicleOptions = await _vehicleService.GetVehicleOptions(vehicleId);
-
-                if (vehicleOptions == null)
-                    return NotFound("Vehicle options not found.");
                 return Ok(vehicleOptions);
             }
+
+            catch (VehicleOptionsNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -100,10 +106,12 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isVehicleDeactivated = await _vehicleService.DeactivateVehicle(vehicleId);
-
-                if(isVehicleDeactivated == true)
-                    return Ok("Vehicle deactivated successfully.");
                 return BadRequest("Error: Vehicle could not be deactivated.");
+            }
+
+            catch (VehicleAlreadyDeactivatedException ex)
+            {
+                return Conflict(ex.Message);
             }
 
             catch (Exception ex)
@@ -118,10 +126,12 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isVehicleActivated = await _vehicleService.ActivateVehicle(vehicleId);
-
-                if (isVehicleActivated)
-                    return Ok("Vehicle activated successfully.");
                 return BadRequest("Error: Vehicle could not be activated.");
+            }
+
+            catch (VehicleAlreadyActiveException ex)
+            {
+                return Conflict(ex.Message);
             }
             
             catch (Exception ex)
@@ -136,10 +146,12 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isVehicleDeleted = await _vehicleService.DeleteVehicle(vehicleId);
-
-                if (isVehicleDeleted)
-                    return Ok("Vehicle deleted successfully.");
                 return BadRequest("Error: Vehicle could not be deleted.");
+            }
+
+            catch (VehicleNotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
 
             catch (Exception ex)
@@ -154,11 +166,14 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 VehicleDTO vehicleDTO = await _vehicleService.UpdateVehicle(vehicleId, vehicleUpdateRequest);
-
-                if(vehicleDTO == null)
-                    return BadRequest("Error");
                 return Ok(vehicleDTO);
             }
+
+            catch (VehicleUpdateException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);

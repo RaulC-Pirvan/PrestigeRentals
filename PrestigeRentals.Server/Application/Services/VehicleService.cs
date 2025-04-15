@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.DTO;
+using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
@@ -37,8 +38,11 @@ namespace PrestigeRentals.Application.Services
             Vehicle vehicle = await _dbContext.Vehicles.Where(v => v.Id == vehicleId).FirstOrDefaultAsync();
 
             if (vehicle == null)
+            {
                 _logger.LogWarning($"Vehicle with ID {vehicleId} not found.");
-
+                throw new VehicleNotFoundException(vehicleId);
+            }
+                
             return vehicle;
         }
 
@@ -47,8 +51,11 @@ namespace PrestigeRentals.Application.Services
             VehicleOptions vehicleOptions = await _dbContext.VehicleOptions.Where(vo => vo.VehicleId == vehicleId).FirstOrDefaultAsync();
 
             if (vehicleOptions == null)
+            {
                 _logger.LogWarning($"Options for vehicle with ID {vehicleId} not found.");
-
+                throw new VehicleOptionsNotFoundException(vehicleId);
+            }
+                
             return vehicleOptions;
         }
 
@@ -71,24 +78,24 @@ namespace PrestigeRentals.Application.Services
             bool isVehicleAlive = await IsVehicleAlive(vehicleId);
             bool isVehicleOptionsAlive = await IsVehicleOptionsAlive(vehicleId);
 
-            if (isVehicleAlive && isVehicleOptionsAlive)
+            if (!isVehicleAlive && !isVehicleOptionsAlive)
             {
-                Vehicle vehicle = await GetVehicleByID(vehicleId);
-                vehicle.Active = false;
-                vehicle.Deleted = true;
-
-                VehicleOptions vehicleOptions = await GetVehicleOptions(vehicleId);
-                vehicleOptions.Active = false;
-                vehicleOptions.Deleted = true;
-
-                await _dbContext.SaveChangesAsync();
-
-                _logger.LogInformation($"Vehicle with ID {vehicleId} has been deactivated.");
-                return true;
+                _logger.LogWarning($"Vehicle with ID {vehicleId} was not found or is already dead.");
+                throw new VehicleAlreadyDeactivatedException(vehicleId);
             }
 
-            _logger.LogWarning($"Vehicle with ID {vehicleId} was not found or is already dead.");
-            return false;
+            Vehicle vehicle = await GetVehicleByID(vehicleId);
+            vehicle.Active = false;
+            vehicle.Deleted = true;
+
+            VehicleOptions vehicleOptions = await GetVehicleOptions(vehicleId);
+            vehicleOptions.Active = false;
+            vehicleOptions.Deleted = true;
+
+            await _dbContext.SaveChangesAsync();
+
+            _logger.LogInformation($"Vehicle with ID {vehicleId} has been deactivated.");
+            return true;
         }
 
         public async Task<bool> ActivateVehicle(int vehicleId)
@@ -96,24 +103,24 @@ namespace PrestigeRentals.Application.Services
             bool isVehicleDead = await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && !v.Active && v.Deleted);
             bool isVehicleOptionsDead = await _dbContext.VehicleOptions.AnyAsync(vo => vo.VehicleId == vehicleId && !vo.Active && vo.Deleted);
 
-            if (isVehicleDead && isVehicleOptionsDead)
+            if (!isVehicleDead && !isVehicleOptionsDead)
             {
-                Vehicle vehicle = await GetVehicleByID(vehicleId);
-                vehicle.Active = true;
-                vehicle.Deleted = false;
-               
-                VehicleOptions vehicleOptions = await GetVehicleOptions(vehicleId);
-                vehicleOptions.Active = true;
-                vehicleOptions.Deleted = false;
-               
-                await _dbContext.SaveChangesAsync();
-
-                _logger.LogInformation($"Vehicle with ID {vehicleId} has been activated.");
-                return true;
+                _logger.LogWarning($"Vehicle with ID {vehicleId} was not found or is already active.");
+                throw new VehicleAlreadyActiveException(vehicleId);
             }
+           
+            Vehicle vehicle = await GetVehicleByID(vehicleId);
+            vehicle.Active = true;
+            vehicle.Deleted = false;
+               
+            VehicleOptions vehicleOptions = await GetVehicleOptions(vehicleId);
+            vehicleOptions.Active = true;
+            vehicleOptions.Deleted = false;
+               
+            await _dbContext.SaveChangesAsync();
 
-            _logger.LogWarning($"Vehicle with ID {vehicleId} was not found or is already active.");
-            return false;
+            _logger.LogInformation($"Vehicle with ID {vehicleId} has been activated.");
+            return true;
         }
 
         public async Task<bool> DeleteVehicle(int vehicleId)
@@ -190,7 +197,7 @@ namespace PrestigeRentals.Application.Services
             if (vehicle == null)
             {
                 _logger.LogWarning($"Vehicle with ID {vehicleId} not found for update.");
-                return null;
+                throw new VehicleUpdateException(vehicleId);
             }
 
             VehicleOptions vehicleOptions = await GetVehicleOptions(vehicleId);
@@ -201,12 +208,12 @@ namespace PrestigeRentals.Application.Services
                 _dbContext.VehicleOptions.Add(vehicleOptions);
                 await _dbContext.SaveChangesAsync(); 
             }
-
-            vehicle.Make = vehicleUpdateRequest.Make ?? vehicle.Make;
-            vehicle.Model = vehicleUpdateRequest.Model ?? vehicle.Model;
-            vehicle.EngineSize = vehicleUpdateRequest.EngineSize ?? 0;
-            vehicle.FuelType = vehicleUpdateRequest.FuelType ?? vehicle.FuelType;
-            vehicle.Transmission = vehicleUpdateRequest.Transmission ?? vehicle.Transmission;
+           
+            vehicle.Make = string.IsNullOrWhiteSpace(vehicleUpdateRequest.Make) ? vehicle.Make : vehicleUpdateRequest.Make;
+            vehicle.Model = string.IsNullOrWhiteSpace(vehicleUpdateRequest.Model) ? vehicle.Model : vehicleUpdateRequest.Model;
+            vehicle.EngineSize = vehicleUpdateRequest.EngineSize.HasValue && vehicleUpdateRequest.EngineSize.Value != 0 ? vehicleUpdateRequest.EngineSize.Value : vehicle.EngineSize;
+            vehicle.FuelType = string.IsNullOrWhiteSpace(vehicleUpdateRequest.FuelType) ? vehicle.FuelType : vehicleUpdateRequest.FuelType;
+            vehicle.Transmission = string.IsNullOrWhiteSpace(vehicleUpdateRequest.Transmission) ? vehicle.Transmission : vehicleUpdateRequest.Transmission;
 
             if (vehicleUpdateRequest.Navigation.HasValue)
             {
