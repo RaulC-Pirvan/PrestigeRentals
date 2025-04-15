@@ -17,7 +17,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task<bool> DeactivateAccount(int userId);
         Task<bool> ActivateAccount(int userId);
         Task<bool> DeleteAccount(int userId);
-        Task<IActionResult> UpdateUserDetails(UpdateUserRequest updateUserRequest);
+        Task<bool> UpdateUserDetails(int userId, UpdateUserDetailsRequest updateUserDetailsRequest);
      
     }
 }

@@ -204,9 +204,25 @@ namespace PrestigeRentals.Application.Services
             return false;
         }
 
-        public Task<IActionResult> UpdateUserDetails(UpdateUserRequest updateUserRequest)
+        public async Task<bool> UpdateUserDetails(int userId, UpdateUserDetailsRequest updateUserDetailsRequest)
         {
-            throw new NotImplementedException();
+            bool isUserAlive = await IsUserAlive(userId);
+            bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
+
+            if(isUserAlive && isUserDetailsAlive)
+            {
+                UserDetails userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
+                userDetails.FirstName = string.IsNullOrWhiteSpace(updateUserDetailsRequest.FirstName) ? userDetails.FirstName : updateUserDetailsRequest.FirstName;
+                userDetails.LastName = string.IsNullOrWhiteSpace(updateUserDetailsRequest.LastName) ? userDetails.LastName : updateUserDetailsRequest.LastName;
+
+                await _dbContext.SaveChangesAsync();
+
+                _logger.LogInformation($"User with ID {userId} has been updated.");
+                return true;
+            }
+
+            _logger.LogWarning($"User with ID {userId} was not found.");
+            return false;
         }
     }
 }

@@ -174,5 +174,23 @@ namespace PrestigeRentals.Presentation.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
+        [HttpPatch("{userId}")]
+        public async Task<IActionResult> UpdateUser(int userId, UpdateUserDetailsRequest updateUserDetailsRequest)
+        {
+            try
+            {
+                bool isUserUpdated = await _userManagementService.UpdateUserDetails(userId, updateUserDetailsRequest);
+
+                if (isUserUpdated)
+                    return Ok("User successfully updated.");
+                return BadRequest("Error: User could not be updated.");
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
     }
 }

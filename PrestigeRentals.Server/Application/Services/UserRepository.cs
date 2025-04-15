@@ -38,35 +38,5 @@ namespace PrestigeRentals.Application.Services
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsnyc(UpdateUserRequest updateUserRequest)
-        {
-            var existingUser = await _dbContext.Users.FindAsync(updateUserRequest.Id);
-            if (existingUser == null)
-            {
-                throw new Exception("User not found.");
-            }
-
-            existingUser.Email = updateUserRequest.Email;
-            existingUser.Password = updateUserRequest.Password;
-            existingUser.Role = updateUserRequest.Role;
-            
-            _dbContext.Users.Update(existingUser);
-            await _dbContext.SaveChangesAsync();
-
-            var existingUserDetails = await _dbContext.UsersDetails.FindAsync(updateUserRequest.Id);
-
-            if(existingUserDetails == null)
-            {
-                throw new Exception("User details not found.");
-            }
-
-            existingUserDetails.FirstName = updateUserRequest.FirstName;
-            existingUserDetails.LastName = updateUserRequest.LastName;
-            existingUserDetails.DateOfBirth = updateUserRequest.DateOfBirth;
-            existingUserDetails.ImageData = updateUserRequest.ImageData;
-
-            _dbContext.UsersDetails.Update(existingUserDetails);
-            await _dbContext.SaveChangesAsync();
-        }
     }
 }
