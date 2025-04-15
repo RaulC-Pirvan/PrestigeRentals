@@ -58,8 +58,25 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 bool isPasswordChanged = await _userManagementService.ChangePassword(userId, newPassword);
                 if (isPasswordChanged)
-                    return Ok("Password change successfully.");
+                    return Ok("Password changed successfully.");
                 return BadRequest("Error: Password could not be changed.");
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [HttpPatch("{userId}/change-email")]
+        public async Task<IActionResult> ChangeEmail(int userId, string newEmail)
+        {
+            try
+            {
+                bool isEmailChanged = await _userManagementService.ChangeEmail(userId, newEmail);
+                if (isEmailChanged)
+                    return Ok("Email changed successfully.");
+                return BadRequest("Error: Email could not be changed.");
             }
 
             catch (Exception ex)
@@ -157,6 +174,5 @@ namespace PrestigeRentals.Presentation.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-
     }
 }

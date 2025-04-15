@@ -58,9 +58,17 @@ namespace PrestigeRentals.Application.Services
             return isUserDetailsDead;
         }
 
-        public Task<IActionResult> ChangeEmail(int userId, string newEmail)
+        public async Task<bool> ChangeEmail(int userId, string newEmail)
         {
-            throw new NotImplementedException();
+            var user = await _dbContext.Users.FindAsync(userId);
+
+            if (user == null)
+                return false;
+
+            user.Email = newEmail;
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<bool> ChangePassword(int userId, string newPassword)
