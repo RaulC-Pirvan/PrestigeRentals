@@ -79,6 +79,8 @@ namespace Presentation
 
             var app = builder.Build();
 
+           
+
             // Enable Swagger in development
             if (app.Environment.IsDevelopment())
             {
@@ -92,11 +94,11 @@ namespace Presentation
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseMiddleware<LoggingMiddleware>();
-
             // Other middleware
             app.UseRouting();
             app.UseAuthorization();
+
+            app.UseMiddleware<LoggingMiddleware>();
 
             // Map controllers
             app.MapControllers();
