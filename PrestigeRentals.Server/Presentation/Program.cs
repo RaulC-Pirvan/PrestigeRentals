@@ -10,6 +10,7 @@ using PrestigeRentals.Application.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using PrestigeRentals.Presentation.Middleware;
 
 namespace Presentation
 {
@@ -90,6 +91,8 @@ namespace Presentation
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<LoggingMiddleware>();
 
             // Other middleware
             app.UseRouting();

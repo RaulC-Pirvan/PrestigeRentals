@@ -11,6 +11,8 @@ namespace PrestigeRentals.Infrastructure
         {
             services.AddDbContext<ApplicationDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("PostgreSQLConnection")));
 
+            
+
             return services;
         }
     }

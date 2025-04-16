@@ -17,7 +17,7 @@ namespace PrestigeRentals.Infrastructure.Persistence
         public DbSet<VehiclePhotos> VehiclePhotos { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserDetails> UsersDetails { get; set; }
-
+        public DbSet<LogEntry> Logs { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
