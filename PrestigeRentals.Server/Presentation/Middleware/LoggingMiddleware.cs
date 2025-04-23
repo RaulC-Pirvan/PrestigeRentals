@@ -5,6 +5,8 @@ using PrestigeRentals.Infrastructure.Persistence;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Text;
 
 namespace PrestigeRentals.Presentation.Middleware
 {
@@ -26,28 +28,36 @@ namespace PrestigeRentals.Presentation.Middleware
             var stopwatch = Stopwatch.StartNew();
             var originalBodyStream = context.Response.Body;
 
+            context.Request.EnableBuffering();
+
+            string requestBody = string.Empty;
+            context.Request.Body.Seek(0, SeekOrigin.Begin);
+            using (var reader = new StreamReader(context.Request.Body, leaveOpen: true))
+            {
+                requestBody = await reader.ReadToEndAsync();
+            }
+            context.Request.Body.Seek(0, SeekOrigin.Begin); // 👈 Reset so downstream can still read it
+
             using (var memoryStream = new MemoryStream())
             {
                 context.Response.Body = memoryStream;
 
-                // Call the next middleware in the pipeline
-                await _next(context);
+                await _next(context); // 👈 NOW call the next middleware
 
                 stopwatch.Stop();
 
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                var responseBody = new StreamReader(memoryStream).ReadToEnd();
+                var responseBody = await new StreamReader(memoryStream).ReadToEndAsync();
 
                 using var scope = _scopeFactory.CreateScope();
                 var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-                // Log the request and response details
                 var logEntry = new LogEntry
                 {
                     Path = context.Request.Path,
                     Method = context.Request.Method,
                     StatusCode = context.Response.StatusCode,
-                    RequestBody = await GetRequestBodyAsync(context),
+                    RequestBody = requestBody,
                     ResponseBody = responseBody,
                     UserId = context.User?.Identity?.Name,
                     DurationMs = stopwatch.ElapsedMilliseconds,
@@ -57,23 +67,38 @@ namespace PrestigeRentals.Presentation.Middleware
                 dbContext.Logs.Add(logEntry);
                 await dbContext.SaveChangesAsync();
 
-                // Rewind the memory stream to the beginning
                 memoryStream.Seek(0, SeekOrigin.Begin);
                 await memoryStream.CopyToAsync(originalBodyStream);
             }
+
         }
 
         private async Task<string> GetRequestBodyAsync(HttpContext context)
         {
-            if (context.Request.Body.CanSeek)
+            try
             {
+                Console.WriteLine("Before EnableBuffering");
+                context.Request.EnableBuffering();
+                Console.WriteLine("After EnableBuffering");
+
                 context.Request.Body.Seek(0, SeekOrigin.Begin);
-                using (var reader = new StreamReader(context.Request.Body))
+                using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
+                var body = await reader.ReadToEndAsync();
+                Console.WriteLine($"Raw body: {body}");
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
+
+                if (string.IsNullOrWhiteSpace(body))
                 {
-                    return await reader.ReadToEndAsync();
+                    return "Request body was readable but empty";
                 }
+
+                return body;
             }
-            return string.Empty;
+            
+            catch(Exception ex)
+            {
+                return $"Exception reading body: {ex.Message}";
+            }
         }
     }
 }
