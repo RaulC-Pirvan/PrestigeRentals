@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
@@ -15,6 +13,10 @@ using PrestigeRentals.Infrastructure.Persistence;
 
 namespace PrestigeRentals.Application.Services
 {
+    /// <summary>
+    /// Provides services for managing user accounts, including actions like changing email, password, 
+    /// deactivating/activating accounts, promoting users to admin, and updating user details.
+    /// </summary>
     public class UserManagementService : IUserManagementService
     {
         private readonly IUserRepository _userRepository;
@@ -23,6 +25,14 @@ namespace PrestigeRentals.Application.Services
         private readonly ILogger<UserManagementService> _logger;
         private readonly IAuthService _authService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserManagementService"/> class.
+        /// </summary>
+        /// <param name="userRepository">The user repository for interacting with the users.</param>
+        /// <param name="authService">The authentication service for password hashing and verification.</param>
+        /// <param name="userDetailsRepository">The repository for interacting with user details.</param>
+        /// <param name="dbContext">The database context used for querying and saving data.</param>
+        /// <param name="logger">The logger for logging operations.</param>
         public UserManagementService(IUserRepository userRepository, IAuthService authService, IUserDetailsRepository userDetailsRepository, ApplicationDbContext dbContext, ILogger<UserManagementService> logger)
         {
             _userRepository = userRepository;
@@ -31,38 +41,52 @@ namespace PrestigeRentals.Application.Services
             _logger = logger;
             _authService = authService;
         }
+
+        /// <summary>
+        /// Checks whether the user is active and not deleted.
+        /// </summary>
         private async Task<bool> IsUserAlive(int userId)
         {
             bool isUserAlive = await _dbContext.Users.AnyAsync(u => u.Id == userId && u.Active && !u.Deleted);
-
             return isUserAlive;
         }
 
+        /// <summary>
+        /// Checks whether the user details are active and not deleted.
+        /// </summary>
         private async Task<bool> IsUserDetailsAlive(int userId)
         {
             bool isUserDetailsAlive = await _dbContext.UsersDetails.AnyAsync(ud => ud.Id == userId && ud.Active && !ud.Deleted);
-
             return isUserDetailsAlive;
         }
 
+        /// <summary>
+        /// Checks whether the user is deactivated and deleted.
+        /// </summary>
         private async Task<bool> IsUserDead(int userId)
         {
             bool isUserDead = await _dbContext.Users.AnyAsync(u => u.Id == userId && !u.Active && u.Deleted);
-
             return isUserDead;
         }
 
+        /// <summary>
+        /// Checks whether the user details are deactivated and deleted.
+        /// </summary>
         private async Task<bool> IsUserDetailsDead(int userId)
         {
             bool isUserDetailsDead = await _dbContext.UsersDetails.AnyAsync(ud => ud.Id == userId && !ud.Active && ud.Deleted);
-
             return isUserDetailsDead;
         }
 
+        /// <summary>
+        /// Changes the user's email address.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="newEmail">The new email address.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> ChangeEmail(int userId, string newEmail)
         {
             User user = await _dbContext.Users.FindAsync(userId);
-
             if (user == null)
                 throw new UserNotFoundException();
 
@@ -72,6 +96,13 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Changes the user's password.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="oldPassword">The current password of the user.</param>
+        /// <param name="newPassword">The new password to set for the user.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> ChangePassword(int userId, string oldPassword, string newPassword)
         {
             User user = await _dbContext.Users.FindAsync(userId);
@@ -87,6 +118,11 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Deactivates the user's account by setting the account and user details to inactive and deleted.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> DeactivateAccount(int userId)
         {
             bool isUserAlive = await IsUserAlive(userId);
@@ -112,6 +148,11 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Deletes the user's account and details permanently from the database.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> DeleteAccount(int userId)
         {
             User user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
@@ -133,6 +174,11 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Promotes the user to an admin role.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> MakeAdmin(int userId)
         {
             bool isUserAlive = await IsUserAlive(userId);
@@ -159,13 +205,17 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
-
+        /// <summary>
+        /// Reverts the user to a standard user role.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> RevertToUser(int userId)
         {
             bool isUserAlive = await IsUserAlive(userId);
             bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
 
-            if(!isUserAlive || !isUserDetailsAlive)
+            if (!isUserAlive || !isUserDetailsAlive)
             {
                 _logger.LogWarning($"User with ID {userId} could not be found.");
                 throw new UserNotFoundException();
@@ -173,9 +223,9 @@ namespace PrestigeRentals.Application.Services
 
             User user = await _userRepository.GetUserById(userId);
 
-            if(user.Role == "User")
+            if (user.Role == "User")
             {
-                _logger.LogWarning($"User with ID {userId} is already an User.");
+                _logger.LogWarning($"User with ID {userId} is already a User.");
                 throw new UserAlreadyUserException();
             }
 
@@ -186,6 +236,11 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Activates the user's account by setting the account and user details to active and undeleted.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> ActivateAccount(int userId)
         {
             bool isUserDead = await IsUserDead(userId);
@@ -211,12 +266,18 @@ namespace PrestigeRentals.Application.Services
             return true;
         }
 
+        /// <summary>
+        /// Updates the user's personal details, such as first and last name.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <param name="updateUserDetailsRequest">The request containing the updated user details.</param>
+        /// <returns>A task that represents the asynchronous operation, with a result indicating success.</returns>
         public async Task<bool> UpdateUserDetails(int userId, UpdateUserDetailsRequest updateUserDetailsRequest)
         {
             bool isUserAlive = await IsUserAlive(userId);
             bool isUserDetailsAlive = await IsUserDetailsAlive(userId);
 
-            if(!isUserAlive || !isUserDetailsAlive)
+            if (!isUserAlive || !isUserDetailsAlive)
             {
                 _logger.LogWarning($"User with ID {userId} was not found.");
                 throw new UserNotFoundException();

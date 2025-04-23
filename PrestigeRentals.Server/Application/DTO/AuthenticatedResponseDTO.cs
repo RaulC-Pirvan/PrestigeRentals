@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PrestigeRentals.Application.DTO
+﻿namespace PrestigeRentals.Application.DTO
 {
+    /// <summary>
+    /// Represents the response returned after a successful authentication.
+    /// </summary>
     public class AuthenticatedResponseDTO
     {
-        public string Token { get; set; }
+        /// <summary>
+        /// The JWT token issued to the authenticated user.
+        /// </summary>
+        public string Token { get; set; } = string.Empty;
     }
 }

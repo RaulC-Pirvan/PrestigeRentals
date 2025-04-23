@@ -20,19 +20,23 @@ namespace Presentation
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // Configure JwtSettings from appsettings.json
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
 
+            // Add AutoMapper configuration
             MapperConfiguration mapperConfiguration = new(configuration => configuration.AddProfile<MappingProfile>());
             mapperConfiguration.CompileMappings();
-
 
             // Add services to the container
             builder.Services.AddControllers();
 
-            builder.Services.AddAplicationServices();
+            // Register application services
+            builder.Services.AddApplicationServices();
 
+            // Register AutoMapper singleton
             builder.Services.AddSingleton(mapperConfiguration.CreateMapper());
 
+            // Configure authentication using JWT
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -53,7 +57,7 @@ namespace Presentation
                 };
             });
 
-            // Configure Swagger
+            // Configure Swagger with JWT Bearer Authentication
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -62,9 +66,35 @@ namespace Presentation
                     Version = "v1",
                     Description = "API for managing products in Prestige Rentals"
                 });
+
+                // Add Bearer Authentication to Swagger UI
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    Description = "Enter 'Bearer' followed by your JWT token"
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
 
-            // Add and configure CORS
+            // Add and configure CORS policy
             builder.Services.AddCors(options =>
             {
                 options.AddPolicy("AllowAngularApp", policy =>
@@ -75,35 +105,40 @@ namespace Presentation
                 });
             });
 
+            // Add Infrastructure services
             builder.Services.AddInfrastructure(builder.Configuration);
 
+            // Build the application
             var app = builder.Build();
 
+            // Use Logging Middleware
             app.UseMiddleware<LoggingMiddleware>();
 
-            // Enable Swagger in development
+            // Enable Swagger UI in development
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
-            // Configure CORS middleware
+            // Redirect HTTP to HTTPS (for production environments)
+            app.UseHttpsRedirection();
+
+            // Enable CORS
             app.UseCors("AllowAngularApp");
 
+            // Use authentication and authorization middleware
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Other middleware
+            // Use routing middleware
             app.UseRouting();
-            app.UseAuthorization();
 
             // Map controllers
             app.MapControllers();
 
-            // Run the app
+            // Run the application
             app.Run();
         }
     }
 }
-
