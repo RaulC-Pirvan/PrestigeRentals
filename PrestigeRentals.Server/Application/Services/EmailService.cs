@@ -27,10 +27,15 @@ namespace PrestigeRentals.Application.Services
 
             var mailMessage = new MailMessage
             {
-                From = new MailAddress(_smtpUsername),
-                Subject = "Email Verification",
-                Body = $"Your verification code is: {verificationCode}",
-                IsBodyHtml = false
+                From = new MailAddress(_smtpUsername, "Prestige Rentals"),
+                Subject = "Welcome to Prestige Rentals",
+                Body = $@"
+                        <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                            <h2>Email Verification</h2>
+                            <p>Your verification code is: <strong style='font-size: 18px;'>{verificationCode}</strong></p>
+                            <p style='color: gray;'>If you didn’t request this, you can ignore the email.</p>
+                        </div>",
+                IsBodyHtml = true
             };
 
             mailMessage.To.Add(toEmail);
