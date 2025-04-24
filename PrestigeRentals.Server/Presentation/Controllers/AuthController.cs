@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
+using PrestigeRentals.Application.Services;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Infrastructure.Persistence;
 using LoginRequest = PrestigeRentals.Application.Requests.LoginRequest;
@@ -19,6 +20,7 @@ namespace PrestigeRentals.Presentation.Controllers
         private readonly IUserManagementService _userManagementService;
         private readonly ApplicationDbContext _dbContext;
         private readonly IEmailService _emailService;
+        private readonly IUserRepository _userRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthController"/> class.
@@ -26,12 +28,13 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="authService">The authentication service used for user registration and login.</param>
         /// <param name="userManagementService">The user management service for user account operations.</param>
         /// <param name="dbContext">The application's database context.</param>
-        public AuthController(IAuthService authService, IUserManagementService userManagementService, ApplicationDbContext dbContext, IEmailService emailService)
+        public AuthController(IAuthService authService, IUserManagementService userManagementService, ApplicationDbContext dbContext, IEmailService emailService, IUserRepository userRepository)
         {
             _authService = authService;
             _userManagementService = userManagementService;
             _dbContext = dbContext;
             _emailService = emailService;
+            _userRepository = userRepository;
         }
 
         /// <summary>
@@ -45,9 +48,6 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 var token = await _authService.RegisterAsync(model);
-
-                var verificationCode = new Random().Next(100000, 999999).ToString();
-                await _emailService.SendVerificationEmailAsync(model.Email, verificationCode);
 
                 return Ok(new { Token = token, Message = "Verification email sent." });
             }
@@ -63,6 +63,42 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 return BadRequest(new { ex.Message });
             }
+        }
+
+        /// <summary>
+        /// Verifies a user's email address based on the provided verification code.
+        /// This endpoint is typically called when the user submits their email verification code.
+        /// </summary>
+        /// <param name="request">The request containing the email and verification code sent to the user.</param>
+        /// <returns>
+        /// Returns an `Ok` response with a success message if the email is successfully verified. 
+        /// Returns `NotFound` if the user is not found in the system. 
+        /// Returns `BadRequest` if the email is already confirmed or if the verification code is invalid or expired.
+        /// </returns>
+        /// <response code="200">Email successfully verified.</response>
+        /// <response code="400">Invalid or expired verification code, or email already verified.</response>
+        /// <response code="404">User not found.</response>
+
+        [HttpPost("/verify-email")]
+        public async Task<IActionResult> VerifyEmail([FromBody] VerifyEmailRequest request)
+        {
+            var user = await _userRepository.GetUserByEmail(request.Email);
+            if (user == null)
+                return NotFound("User not found.");
+
+            if (user.EmailConfirmed)
+                return BadRequest("Email already verified.");
+
+            if (user.EmailVerificationCode != request.Code || user.VerificationCodeExpiry < DateTime.UtcNow)
+                return BadRequest("Invalid or expired verification code.");
+
+            user.EmailConfirmed = true;
+            user.EmailVerificationCode = null;
+            user.VerificationCodeExpiry = null;
+
+            await _userRepository.UpdateAsync(user);
+
+            return Ok("Email successfully verified.");
         }
 
         /// <summary>

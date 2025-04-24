@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -10,7 +9,7 @@ using PrestigeRentals.Infrastructure.Persistence;
 namespace PrestigeRentals.Application.Services
 {
     /// <summary>
-    /// Repository class responsible for performing CRUD operations on User entities in the database.
+    /// Repository responsible for user-related CRUD operations in the database.
     /// </summary>
     public class UserRepository : IUserRepository
     {
@@ -19,98 +18,95 @@ namespace PrestigeRentals.Application.Services
         private readonly ILogger<UserRepository> _logger;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="UserRepository"/> class.
+        /// Constructs a new instance of the <see cref="UserRepository"/>.
         /// </summary>
-        /// <param name="dbContext">The application database context.</param>
-        /// <param name="userDetailsRepository">The repository for accessing user details.</param>
-        /// <param name="logger">Logger instance to log operation details.</param>
-        public UserRepository(ApplicationDbContext dbContext, IUserDetailsRepository userDetailsRepository, ILogger<UserRepository> logger)
+        public UserRepository(
+            ApplicationDbContext dbContext,
+            IUserDetailsRepository userDetailsRepository,
+            ILogger<UserRepository> logger)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), "Database context cannot be null.");
-            _userDetailsRepository = userDetailsRepository ?? throw new ArgumentNullException(nameof(userDetailsRepository), "User details repository cannot be null.");
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger cannot be null.");
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
+            _userDetailsRepository = userDetailsRepository ?? throw new ArgumentNullException(nameof(userDetailsRepository));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        /// <summary>
-        /// Fetches a user by their email address.
-        /// </summary>
-        /// <param name="email">The email address of the user to fetch.</param>
-        /// <returns>The <see cref="User"/> with the given email, or null if not found.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if an error occurs while querying the database.</exception>
         public async Task<User> GetUserByEmail(string email)
         {
             try
             {
-                _logger.LogInformation("Attempting to fetch user by email: {Email}", email);
-                var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-                if (user == null)
-                {
-                    _logger.LogWarning("User with email {Email} was not found.", email);
-                }
-
-                return user;
+                _logger.LogInformation("Fetching user by email: {Email}", email);
+                return await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             }
             catch (Exception ex)
             {
-                _logger.LogError("An error occurred while retrieving the user by email {Email}: {Error}", email, ex.Message);
-                throw new InvalidOperationException("An error occurred while fetching the user by email.", ex);
+                _logger.LogError(ex, "Error fetching user by email: {Email}", email);
+                throw new InvalidOperationException("Error fetching user by email.", ex);
             }
         }
 
-        /// <summary>
-        /// Fetches a user by their unique identifier (ID).
-        /// </summary>
-        /// <param name="userId">The ID of the user to fetch.</param>
-        /// <returns>The <see cref="User"/> with the given ID, or null if not found.</returns>
-        /// <exception cref="InvalidOperationException">Thrown if an error occurs while querying the database.</exception>
         public async Task<User> GetUserById(int userId)
         {
             try
             {
-                _logger.LogInformation("Attempting to fetch user by ID: {UserId}", userId);
-                var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId);
-
-                if (user == null)
-                {
-                    _logger.LogWarning("User with ID {UserId} was not found.", userId);
-                }
-
-                return user;
+                _logger.LogInformation("Fetching user by ID: {UserId}", userId);
+                return await _dbContext.Users.FindAsync(userId);
             }
             catch (Exception ex)
             {
-                _logger.LogError("An error occurred while retrieving the user by ID {UserId}: {Error}", userId, ex.Message);
-                throw new InvalidOperationException("An error occurred while fetching the user by ID.", ex);
+                _logger.LogError(ex, "Error fetching user by ID: {UserId}", userId);
+                throw new InvalidOperationException("Error fetching user by ID.", ex);
+            }
+        }
+
+        public async Task AddAsync(User user)
+        {
+            if (user == null)
+                throw new ArgumentNullException(nameof(user), "User entity cannot be null.");
+
+            try
+            {
+                _logger.LogInformation("Adding new user to database.");
+                await _dbContext.Users.AddAsync(user);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation("User added successfully. ID: {UserId}", user.Id);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error adding user to database.");
+                throw new InvalidOperationException("Error adding user.", ex);
             }
         }
 
         /// <summary>
-        /// Adds a new user to the database.
+        /// Updates the user record in the database.
         /// </summary>
-        /// <param name="user">The user entity to add to the database.</param>
-        /// <returns>A task representing the asynchronous operation.</returns>
-        /// <exception cref="ArgumentNullException">Thrown if the <paramref name="user"/> is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if an error occurs while adding the user to the database.</exception>
-        public async Task AddAsync(User user)
+        /// <param name="user">The updated user entity with changed values.</param>
+        public async Task UpdateAsync(User user)
         {
             if (user == null)
-            {
-                _logger.LogError("Attempted to add a null user to the database.");
-                throw new ArgumentNullException(nameof(user), "User cannot be null.");
-            }
+                throw new ArgumentNullException(nameof(user), "Cannot update a null user.");
 
             try
             {
-                _logger.LogInformation("Attempting to add a new user to the database.");
-                await _dbContext.Users.AddAsync(user);
+                var existingUser = await _dbContext.Users.FindAsync(user.Id);
+                if (existingUser == null)
+                {
+                    _logger.LogWarning("Attempted to update non-existent user with ID {UserId}.", user.Id);
+                    throw new InvalidOperationException("User not found.");
+                }
+
+                existingUser.EmailConfirmed = user.EmailConfirmed;
+                existingUser.EmailVerificationCode = user.EmailVerificationCode;
+                existingUser.VerificationCodeExpiry = user.VerificationCodeExpiry;
+
+                _logger.LogInformation("Updating user ID {UserId}.", user.Id);
                 await _dbContext.SaveChangesAsync();
-                _logger.LogInformation("User with ID {UserId} has been successfully added.", user.Id);
+                _logger.LogInformation("User ID {UserId} updated successfully.", user.Id);
             }
             catch (Exception ex)
             {
-                _logger.LogError("An error occurred while adding the user: {Error}", ex.Message);
-                throw new InvalidOperationException("An error occurred while adding the user.", ex);
+                _logger.LogError(ex, "Error updating user ID {UserId}.", user?.Id);
+                throw new InvalidOperationException("Error updating user.", ex);
             }
         }
     }

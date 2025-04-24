@@ -16,6 +16,11 @@ namespace PrestigeRentals.Application.Services
         private readonly string _smtpUsername = "MS_SjKDQR@test-2p0347zzkd7lzdrn.mlsender.net";
         private readonly string _smtpPassword = "mssp.cNmLtF8.pq3enl60r30l2vwr.blQM3cj";
 
+        /// <summary>
+        /// Sends a verification email with a one-time verification code.
+        /// </summary>
+        /// <param name="toEmail">The recipient's email address.</param>
+        /// <param name="verificationCode">The verification code to be sent.</param>
         public async Task SendVerificationEmailAsync(string toEmail, string verificationCode)
         {
             var smtpClient = new SmtpClient(_smtpHost)
