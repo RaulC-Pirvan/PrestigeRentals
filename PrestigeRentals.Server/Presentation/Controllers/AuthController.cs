@@ -18,6 +18,7 @@ namespace PrestigeRentals.Presentation.Controllers
         private readonly IAuthService _authService;
         private readonly IUserManagementService _userManagementService;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IEmailService _emailService;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthController"/> class.
@@ -25,11 +26,12 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="authService">The authentication service used for user registration and login.</param>
         /// <param name="userManagementService">The user management service for user account operations.</param>
         /// <param name="dbContext">The application's database context.</param>
-        public AuthController(IAuthService authService, IUserManagementService userManagementService, ApplicationDbContext dbContext)
+        public AuthController(IAuthService authService, IUserManagementService userManagementService, ApplicationDbContext dbContext, IEmailService emailService)
         {
             _authService = authService;
             _userManagementService = userManagementService;
             _dbContext = dbContext;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -43,7 +45,11 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 var token = await _authService.RegisterAsync(model);
-                return Ok(new { Token = token });
+
+                var verificationCode = new Random().Next(100000, 999999).ToString();
+                await _emailService.SendVerificationEmailAsync(model.Email, verificationCode);
+
+                return Ok(new { Token = token, Message = "Verification email sent." });
             }
             catch (EmailAlreadyExistsException ex)
             {
