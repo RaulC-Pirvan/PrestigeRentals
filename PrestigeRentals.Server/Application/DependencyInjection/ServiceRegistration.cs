@@ -22,12 +22,14 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IUserManagementService, UserManagementService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IOrderService, OrderService>();
 
             // Repositories
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IVehicleOptionsRepository, VehicleOptionsRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserDetailsRepository, UserDetailsRepository>();
+            services.AddScoped<IOrderRepository, OrderRepository>();
         }
     }
 }

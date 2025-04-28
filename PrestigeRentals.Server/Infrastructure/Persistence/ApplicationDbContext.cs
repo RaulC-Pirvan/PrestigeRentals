@@ -46,6 +46,11 @@ namespace PrestigeRentals.Infrastructure.Persistence
         public DbSet<LogEntry> Logs { get; set; }
 
         /// <summary>
+        /// Table for orders information
+        /// </summary>
+        public DbSet<Order> Orders { get; set; }
+
+        /// <summary>
         /// Model configuration using Fluent API.
         /// </summary>
         /// <param name="modelBuilder">The builder used to construct the model.</param>
