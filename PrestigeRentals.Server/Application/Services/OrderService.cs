@@ -14,14 +14,16 @@ namespace PrestigeRentals.Application.Services
     public class OrderService : IOrderService
     {
         private readonly IOrderRepository _orderRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
         /// <summary>
         /// Constructor to initialize the service with the order repository.
         /// </summary>
         /// <param name="orderRepository">The repository used to interact with the order data.</param>
-        public OrderService(IOrderRepository orderRepository)
+        public OrderService(IOrderRepository orderRepository, IVehicleRepository vehicleRepository)
         {
             _orderRepository = orderRepository;
+            _vehicleRepository = vehicleRepository;
         }
 
         /// <summary>
@@ -123,6 +125,12 @@ namespace PrestigeRentals.Application.Services
 
             // Update the order in the repository
             await _orderRepository.UpdateAsync(order);
+            var vehicle = await _vehicleRepository.GetVehicleById(order.VehicleId);
+            if(vehicle != null)
+            {
+                vehicle.Available = true;
+                await _vehicleRepository.UpdateAsync(vehicle);
+            }
 
             // Return true indicating the order was successfully cancelled
             return true;

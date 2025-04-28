@@ -55,5 +55,11 @@ namespace PrestigeRentals.Domain.Entities
         /// </summary>
         [Required]
         public bool Deleted { get; set; } = false;
+        
+        /// <summary>
+        /// Indicates wheter the vehicle is currently available for renting.
+        /// </summary>
+        [Required]
+        public bool Available { get; set; } = true;
     }
 }

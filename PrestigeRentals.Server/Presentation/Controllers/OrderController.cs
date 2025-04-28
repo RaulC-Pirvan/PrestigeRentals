@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
@@ -23,6 +24,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="createOrderRequest">The request containing the details of the order to create.</param>
         /// <returns>The created order.</returns>   
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<OrderDTO>> CreateOrder([FromBody] CreateOrderRequest createOrderRequest)
         {
             if (createOrderRequest == null)
@@ -45,6 +47,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <returns>A list of all orders.</returns>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetAllOrders()
         {
             try
@@ -65,6 +68,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="id">The ID of the order to retrieve.</param>
         /// <returns>The order with the specified ID.</returns>
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<OrderDTO>> GetOrderById(long id)
         {
             try
@@ -93,6 +97,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="id">The ID of the order to cancel.</param>
         /// <returns>A status indicating whether the cancellation was successful.</returns>
         [HttpPut("cancel/{id}")]
+        [Authorize]
         public async Task<ActionResult> CancelOrder(long id)
         {
             try

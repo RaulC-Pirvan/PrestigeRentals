@@ -53,5 +53,20 @@ namespace PrestigeRentals.Application.Services
                 throw new InvalidOperationException("An error occurred while saving the vehicle.", ex);
             }
         }
+
+        public async Task<Vehicle> GetVehicleById(long vehicleId)
+        {
+            return await _dbContext.Vehicles.FindAsync(vehicleId);
+        }
+
+        public async Task UpdateAsync(Vehicle vehicle)
+        {
+            var existingVehicle = await _dbContext.Vehicles.FindAsync(vehicle.Id);
+            if(existingVehicle != null)
+            {
+                existingVehicle.Available = vehicle.Available;
+                await _dbContext.SaveChangesAsync();
+            }
+        }
     }
 }
