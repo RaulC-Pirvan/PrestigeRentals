@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PrestigeRentals.Application.Services
+namespace PrestigeRentals.Application.Services.Services
 {
     /// <summary>
     /// Service class for handling vehicle photo uploads and retrieval.

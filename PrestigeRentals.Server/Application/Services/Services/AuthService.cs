@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
 
-namespace PrestigeRentals.Application.Services
+namespace PrestigeRentals.Application.Services.Services
 {
     /// <summary>
     /// Provides authentication services, including user registration, login, and password hashing.

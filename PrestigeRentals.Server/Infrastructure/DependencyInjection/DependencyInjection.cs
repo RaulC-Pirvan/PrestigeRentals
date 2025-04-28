@@ -3,7 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PrestigeRentals.Infrastructure.Persistence;
 
-namespace PrestigeRentals.Infrastructure
+namespace PrestigeRentals.Infrastructure.DependencyInjection
 {
     /// <summary>
     /// Provides extension methods for registering infrastructure services into the <see cref="IServiceCollection"/>.

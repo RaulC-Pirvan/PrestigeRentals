@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
-using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Domain.Entities;
 
-namespace PrestigeRentals.Application.Services.Interfaces
+namespace PrestigeRentals.Application.Services.Interfaces.Repositories
 {
     /// <summary>
     /// Defines the contract for user data operations, including retrieval and persistence.

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using PrestigeRentals.Domain.Entities;
 
-namespace PrestigeRentals.Application.Services.Interfaces
+namespace PrestigeRentals.Application.Services.Interfaces.Repositories
 {
     /// <summary>
     /// Defines the contract for interacting with the vehicle repository.

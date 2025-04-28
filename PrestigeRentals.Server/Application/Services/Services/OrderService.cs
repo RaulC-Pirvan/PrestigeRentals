@@ -1,11 +1,12 @@
 ﻿using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PrestigeRentals.Application.Services
+namespace PrestigeRentals.Application.Services.Services
 {
     /// <summary>
     /// Service class for managing order operations like creation, retrieval, cancellation, etc.

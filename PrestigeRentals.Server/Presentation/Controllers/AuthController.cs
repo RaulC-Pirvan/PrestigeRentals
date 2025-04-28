@@ -4,6 +4,7 @@ using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Infrastructure.Persistence;
 using LoginRequest = PrestigeRentals.Application.Requests.LoginRequest;
 using RegisterRequest = PrestigeRentals.Application.Requests.RegisterRequest;

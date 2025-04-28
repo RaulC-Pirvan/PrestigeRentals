@@ -7,7 +7,7 @@ using PrestigeRentals.Application.Helpers;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
 
-namespace PrestigeRentals.Application.Services
+namespace PrestigeRentals.Application.Services.Services
 {
     /// <summary>
     /// Generates JSON Web Tokens (JWT) for user authentication.

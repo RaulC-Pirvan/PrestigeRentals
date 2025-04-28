@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Infrastructure\PrestigeRentals.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Validators\" />
+  </ItemGroup>
+
 </Project>

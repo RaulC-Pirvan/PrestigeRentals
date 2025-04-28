@@ -1,5 +1,4 @@
 using System.Reflection;
-using PrestigeRentals.Infrastructure;
 using Microsoft.OpenApi.Models;
 using PrestigeRentals.Application.Services;
 using AutoMapper;
@@ -11,6 +10,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using PrestigeRentals.Presentation.Middleware;
+using PrestigeRentals.Infrastructure.DependencyInjection;
 
 namespace Presentation
 {

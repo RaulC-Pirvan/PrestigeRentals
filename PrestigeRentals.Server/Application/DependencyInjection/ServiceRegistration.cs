@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PrestigeRentals.Application.Services;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
+using PrestigeRentals.Application.Services.Services;
 
 namespace PrestigeRentals.Application.DependencyInjection
 {

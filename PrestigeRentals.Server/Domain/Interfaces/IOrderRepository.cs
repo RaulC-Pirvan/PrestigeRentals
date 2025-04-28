@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PrestigeRentals.Application.Services.Interfaces
+namespace PrestigeRentals.Application.Services.Interfaces.Repositories
 {
     /// <summary>
     /// Interface for performing CRUD operations on Order entities.

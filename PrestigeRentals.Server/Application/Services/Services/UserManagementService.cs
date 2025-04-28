@@ -8,10 +8,11 @@ using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
 
-namespace PrestigeRentals.Application.Services
+namespace PrestigeRentals.Application.Services.Services
 {
     /// <summary>
     /// Provides services for managing user accounts, including actions like changing email, password, 

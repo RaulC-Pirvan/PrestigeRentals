@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
-using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
 using System;
 using System.Threading.Tasks;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 
 namespace PrestigeRentals.Application.Services
 {
