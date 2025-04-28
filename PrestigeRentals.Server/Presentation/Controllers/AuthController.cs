@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services;
@@ -135,6 +136,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="oldPassword">The user's current password.</param>
         /// <param name="newPassword">The new password.</param>
         /// <returns>A message indicating whether the password was successfully changed.</returns>
+        [Authorize]
         [HttpPatch("{userId}/change-password")]
         public async Task<IActionResult> ChangePassword(int userId, string oldPassword, string newPassword)
         {
@@ -163,6 +165,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="userId">The ID of the user whose email is to be changed.</param>
         /// <param name="newEmail">The new email address.</param>
         /// <returns>A message indicating whether the email was successfully changed.</returns>
+        [Authorize]
         [HttpPatch("{userId}/change-email")]
         public async Task<IActionResult> ChangeEmail(int userId, string newEmail)
         {
@@ -188,6 +191,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user to deactivate.</param>
         /// <returns>A message indicating whether the account was successfully deactivated.</returns>
+        [Authorize]
         [HttpPatch("{userId}/set-inactive")]
         public async Task<IActionResult> DeactivateAccount(int userId)
         {
@@ -215,6 +219,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user to activate.</param>
         /// <returns>A message indicating whether the account was successfully activated.</returns>
+        [Authorize]
         [HttpPatch("{userId}/set-active")]
         public async Task<IActionResult> ActivateAccount(int userId)
         {
@@ -242,6 +247,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user to delete.</param>
         /// <returns>A message indicating whether the account was successfully deleted.</returns>
+        [Authorize]
         [HttpDelete("{userId}")]
         public async Task<IActionResult> DeleteAccount(int userId)
         {
@@ -265,6 +271,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user to promote.</param>
         /// <returns>A message indicating whether the promotion was successful.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{userId}/set-admin")]
         public async Task<IActionResult> SetAdmin(int userId)
         {
@@ -292,6 +299,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="userId">The ID of the user to demote.</param>
         /// <returns>A message indicating whether the demotion was successful.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{userId}/set-user")]
         public async Task<IActionResult> SetUser(int userId)
         {
@@ -320,6 +328,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="userId">The ID of the user whose details are to be updated.</param>
         /// <param name="updateUserDetailsRequest">The new user details to be updated.</param>
         /// <returns>A message indicating whether the user details were successfully updated.</returns>
+        [Authorize]
         [HttpPatch("{userId}")]
         public async Task<IActionResult> UpdateUser(int userId, UpdateUserDetailsRequest updateUserDetailsRequest)
         {

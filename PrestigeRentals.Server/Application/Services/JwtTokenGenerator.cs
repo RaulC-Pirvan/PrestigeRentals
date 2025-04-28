@@ -38,10 +38,20 @@ namespace PrestigeRentals.Application.Services
             // Create the signing credentials using the security key and HMAC-SHA256 algorithm
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
+            // Prepare the claims
+            var claims = new[]
+            {
+                new System.Security.Claims.Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
+                new System.Security.Claims.Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, user.Role),
+                new System.Security.Claims.Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
+
             // Create the JWT token with issuer, audience, expiration time, and signing credentials
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
+                claims: claims,
                 expires: DateTime.Now.AddMinutes(30), // Set expiration to 30 minutes
                 signingCredentials: credentials);
 

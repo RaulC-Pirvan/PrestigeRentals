@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
@@ -91,6 +92,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="vehicleRequest">The request body containing the vehicle details.</param>
         /// <returns>The details of the added vehicle.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPost("")]
         public async Task<IActionResult> AddVehicle([FromBody, Required] VehicleRequest vehicleRequest)
         {
@@ -114,6 +116,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to deactivate.</param>
         /// <returns>A message indicating whether the vehicle was successfully deactivated.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{vehicleId}/set-inactive")]
         public async Task<ActionResult> DeactivateVehicle(int vehicleId)
         {
@@ -139,6 +142,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to activate.</param>
         /// <returns>A message indicating whether the vehicle was successfully activated.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{vehicleId}/set-active")]
         public async Task<ActionResult> ActivateVehicle(int vehicleId)
         {
@@ -164,6 +168,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to delete.</param>
         /// <returns>A message indicating whether the vehicle was successfully deleted.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{vehicleId}")]
         public async Task<ActionResult> DeleteVehicle(int vehicleId)
         {
@@ -190,6 +195,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="vehicleId">The ID of the vehicle to update.</param>
         /// <param name="vehicleUpdateRequest">The updated vehicle details.</param>
         /// <returns>The updated vehicle details.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPatch("{vehicleId}")]
         public async Task<ActionResult<VehicleDTO>> UpdateVehicle(int vehicleId, [FromBody] VehicleUpdateRequest vehicleUpdateRequest)
         {

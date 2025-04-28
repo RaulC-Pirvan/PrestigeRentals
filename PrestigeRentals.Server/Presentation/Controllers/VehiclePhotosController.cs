@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
@@ -46,6 +47,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <param name="vehicleId">The ID of the vehicle to upload a photo for.</param>
         /// <param name="request">The request body containing the base64-encoded image data.</param>
         /// <returns>A status indicating success or failure of the upload operation.</returns>
+        [Authorize(Roles = "Admin")]
         [HttpPost("upload")]
         public async Task<IActionResult> UploadPhoto([FromQuery] int vehicleId, [FromBody] VehiclePhotoRequest request)
         {
