@@ -128,12 +128,12 @@ namespace Presentation
             // Enable CORS
             app.UseCors("AllowAngularApp");
 
+            // Use routing middleware
+            app.UseRouting();
+
             // Use authentication and authorization middleware
             app.UseAuthentication();
             app.UseAuthorization();
-
-            // Use routing middleware
-            app.UseRouting();
 
             // Map controllers
             app.MapControllers();
