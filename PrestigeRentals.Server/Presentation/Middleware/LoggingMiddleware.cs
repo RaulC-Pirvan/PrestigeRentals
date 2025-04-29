@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using PrestigeRentals.Domain.Interfaces;
 
 namespace PrestigeRentals.Presentation.Middleware
 {
@@ -52,7 +53,7 @@ namespace PrestigeRentals.Presentation.Middleware
 
                 using (var scope = _scopeFactory.CreateScope())
                 {
-                    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                    var logRepo = scope.ServiceProvider.GetRequiredService<ILogEntryRepository>();
 
                     // Create a new log entry
                     var logEntry = new LogEntry
@@ -68,8 +69,7 @@ namespace PrestigeRentals.Presentation.Middleware
                     };
 
                     // Save the log entry to the database
-                    dbContext.Logs.Add(logEntry);
-                    await dbContext.SaveChangesAsync();
+                    await logRepo.AddAsync(logEntry);
                 }
 
                 // Copy the content of the memory stream to the original response stream

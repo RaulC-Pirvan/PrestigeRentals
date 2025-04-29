@@ -35,6 +35,7 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserDetailsRepository, UserDetailsRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
+            services.AddScoped<ILogEntryRepository, LogEntryRepository>();
         }
     }
 }
