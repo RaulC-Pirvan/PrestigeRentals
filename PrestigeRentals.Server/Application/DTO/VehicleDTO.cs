@@ -8,6 +8,7 @@ namespace PrestigeRentals.Application.DTO
     /// </summary>
     public class VehicleDTO
     {
+        public long Id { get; set; }
         /// <summary>
         /// Gets or sets the make of the vehicle (e.g., Toyota, Ford, etc.).
         /// </summary>
@@ -82,10 +83,11 @@ namespace PrestigeRentals.Application.DTO
         /// <param name="cruiseControl">Indicates whether the vehicle has cruise control.</param>
         /// <param name="active">Indicates whether the vehicle is active.</param>
         /// <param name="deleted">Indicates whether the vehicle is marked as deleted.</param>
-        public VehicleDTO(string make, string model, decimal engineSize, string fuelType, string transmission,
+        public VehicleDTO(long id, string make, string model, decimal engineSize, string fuelType, string transmission,
                           bool navigation, bool headsUpDisplay, bool hillAssist, bool cruiseControl,
                           bool active, bool deleted)
         {
+            Id = id;
             Make = make;
             Model = model;
             EngineSize = engineSize;

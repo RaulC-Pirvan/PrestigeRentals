@@ -12,7 +12,7 @@ namespace PrestigeRentals.Domain.Entities
         /// Primary key for the vehicle entity.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Manufacturer or brand of the vehicle (e.g., BMW, Audi).

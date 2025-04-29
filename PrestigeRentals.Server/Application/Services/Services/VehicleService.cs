@@ -21,7 +21,6 @@ namespace PrestigeRentals.Application.Services.Services
     /// </summary>
     public class VehicleService : IVehicleService
     {
-        private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<VehicleService> _logger;
         private readonly IMapper _mapper;
         private readonly IVehicleRepository _vehicleRepository;
@@ -30,14 +29,12 @@ namespace PrestigeRentals.Application.Services.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="VehicleService"/> class.
         /// </summary>
-        /// <param name="dbContext">The application database context.</param>
         /// <param name="mapper">AutoMapper instance for mapping between DTOs and entities.</param>
         /// <param name="logger">Logger instance for logging service operations.</param>
         /// <param name="vehicleRepository">Vehicle repository for accessing vehicle data.</param>
         /// <param name="vehicleOptionsRepository">Repository for accessing vehicle options data.</param>
-        public VehicleService(ApplicationDbContext dbContext, IMapper mapper, ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleOptionsRepository vehicleOptionsRepository)
+        public VehicleService(IMapper mapper, ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleOptionsRepository vehicleOptionsRepository)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _vehicleRepository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
@@ -49,9 +46,10 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to retrieve.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the vehicle entity.</returns>
-        public async Task<Vehicle> GetVehicleByID(int vehicleId)
+        public async Task<Vehicle> GetVehicleByID(long vehicleId)
         {
-            var vehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.Id == vehicleId);
+            Vehicle? vehicle = await _vehicleRepository.GetVehicleById(vehicleId);
+
             if (vehicle == null)
             {
                 _logger.LogWarning($"Vehicle with ID {vehicleId} not found.");
@@ -66,9 +64,10 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to retrieve options for.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the vehicle options entity.</returns>
-        public async Task<VehicleOptions> GetVehicleOptions(int vehicleId)
+        public async Task<VehicleOptions> GetVehicleOptions(long vehicleId)
         {
-            var vehicleOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
+            VehicleOptions? vehicleOptions = await _vehicleRepository.GetVehicleOptionsByVehicleId(vehicleId);
+
             if (vehicleOptions == null)
             {
                 _logger.LogWarning($"Options for vehicle with ID {vehicleId} not found.");
@@ -83,9 +82,14 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to check.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating if the vehicle is active.</returns>
-        private async Task<bool> IsVehicleAlive(int vehicleId)
+        private async Task<bool> IsVehicleAlive(long vehicleId)
         {
-            return await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && v.Active && !v.Deleted);
+            return await _vehicleRepository.IsAliveAsync(vehicleId);
+        }
+
+        private async Task<bool> IsVehicleDead(long vehicleId)
+        {
+            return await _vehicleRepository.IsDeadAsync(vehicleId);
         }
 
         /// <summary>
@@ -103,7 +107,7 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to deactivate.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating success.</returns>
-        public async Task<bool> DeactivateVehicle(int vehicleId)
+        public async Task<bool> DeactivateVehicle(long vehicleId)
         {
             var isVehicleAlive = await IsVehicleAlive(vehicleId);
             var isVehicleOptionsAlive = await IsVehicleOptionsAlive(vehicleId);
@@ -122,7 +126,8 @@ namespace PrestigeRentals.Application.Services.Services
             vehicleOptions.Active = false;
             vehicleOptions.Deleted = true;
 
-            await _dbContext.SaveChangesAsync();
+            await _vehicleRepository.UpdateAsync(vehicle);
+
             _logger.LogInformation($"Vehicle with ID {vehicleId} has been deactivated.");
             return true;
         }
@@ -132,9 +137,9 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to activate.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating success.</returns>
-        public async Task<bool> ActivateVehicle(int vehicleId)
+        public async Task<bool> ActivateVehicle(long vehicleId)
         {
-            var isVehicleDead = await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && !v.Active && v.Deleted);
+            var isVehicleDead = await _vehicleRepository.IsDeadAsync(vehicleId);
             var isVehicleOptionsDead = await _dbContext.VehicleOptions.AnyAsync(vo => vo.VehicleId == vehicleId && !vo.Active && vo.Deleted);
 
             if (!isVehicleDead && !isVehicleOptionsDead)
@@ -151,7 +156,7 @@ namespace PrestigeRentals.Application.Services.Services
             vehicleOptions.Active = true;
             vehicleOptions.Deleted = false;
 
-            await _dbContext.SaveChangesAsync();
+            await _vehicleRepository.UpdateAsync(vehicle);
             _logger.LogInformation($"Vehicle with ID {vehicleId} has been activated.");
             return true;
         }
@@ -161,17 +166,14 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to delete.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains a boolean indicating success.</returns>
-        public async Task<bool> DeleteVehicle(int vehicleId)
+        public async Task<bool> DeleteVehicle(long vehicleId)
         {
-            var vehicle = await _dbContext.Vehicles.FirstOrDefaultAsync(v => v.Id == vehicleId);
+            var vehicle = await _vehicleRepository.GetVehicleById(vehicleId);
             var vehicleOptions = await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
 
             if (vehicle != null && vehicleOptions != null)
             {
-                _dbContext.VehicleOptions.Remove(vehicleOptions);
-                _dbContext.Vehicles.Remove(vehicle);
-                await _dbContext.SaveChangesAsync();
-
+                await _vehicleRepository.DeleteAsync(vehicle);
                 _logger.LogInformation($"Vehicle with ID {vehicleId} has been deleted.");
                 return true;
             }
@@ -187,16 +189,14 @@ namespace PrestigeRentals.Application.Services.Services
         /// <returns>A task that represents the asynchronous operation. The task result contains a list of vehicles.</returns>
         public async Task<List<Vehicle>> GetAllVehicles(bool? onlyActive = false)
         {
-            List<Vehicle> vehicles;
+            List<Vehicle> vehicles = await _vehicleRepository.GetAllVehiclesAsync(onlyActive);
 
             if (onlyActive.HasValue && onlyActive.Value)
             {
-                vehicles = await _dbContext.Vehicles.Where(v => v.Active && !v.Deleted).ToListAsync();
                 _logger.LogInformation("Retrieved all active vehicles.");
             }
             else
             {
-                vehicles = await _dbContext.Vehicles.ToListAsync();
                 _logger.LogInformation("Retrieved all vehicles, including inactive ones.");
             }
 
@@ -208,12 +208,12 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleRequest">Request containing the vehicle details.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public async Task<ActionResult?> AddVehicle(VehicleRequest vehicleRequest)
+        public async Task<VehicleDTO> AddVehicle(VehicleRequest vehicleRequest)
         {
             if (vehicleRequest == null)
             {
                 _logger.LogError("Received null vehicle request.");
-                return new BadRequestObjectResult("Vehicle request cannot be null.");
+                throw new ArgumentNullException(nameof(vehicleRequest), "Vehicle request cannot be null.");
             }
 
             var vehicle = new Vehicle
@@ -225,7 +225,7 @@ namespace PrestigeRentals.Application.Services.Services
                 Transmission = vehicleRequest.Transmission
             };
 
-            await _vehicleRepository.AddVehicle(vehicle);
+            await _vehicleRepository.AddAsync(vehicle);
 
             var vehicleOptions = new VehicleOptions
             {
@@ -239,7 +239,8 @@ namespace PrestigeRentals.Application.Services.Services
             await _vehicleOptionsRepository.AddVehicleOptions(vehicleOptions);
 
             _logger.LogInformation($"Vehicle with ID {vehicle.Id} and its options have been added.");
-            return new OkResult();
+
+            return _mapper.Map<VehicleDTO>(vehicle);
         }
 
         /// <summary>
@@ -248,9 +249,10 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="vehicleId">The ID of the vehicle to update.</param>
         /// <param name="vehicleUpdateRequest">Request containing the updated vehicle details.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the updated vehicle DTO.</returns>
-        public async Task<VehicleDTO> UpdateVehicle(int vehicleId, VehicleUpdateRequest vehicleUpdateRequest)
+        public async Task<VehicleDTO> UpdateVehicle(long vehicleId, VehicleUpdateRequest vehicleUpdateRequest)
         {
             var vehicle = await GetVehicleByID(vehicleId);
+            var vehicleOptions = await GetVehicleOptions(vehicleId);
 
             if (vehicle == null)
             {
@@ -258,7 +260,6 @@ namespace PrestigeRentals.Application.Services.Services
                 throw new VehicleUpdateException(vehicleId);
             }
 
-            var vehicleOptions = await GetVehicleOptions(vehicleId);
             if (vehicleOptions == null)
             {
                 _logger.LogWarning($"Vehicle options for vehicle ID {vehicleId} not found. Creating new options.");
@@ -267,21 +268,31 @@ namespace PrestigeRentals.Application.Services.Services
                 await _dbContext.SaveChangesAsync();
             }
 
-            vehicle.Make = vehicleUpdateRequest.Make ?? vehicle.Make;
-            vehicle.Model = vehicleUpdateRequest.Model ?? vehicle.Model;
-            vehicle.EngineSize = vehicleUpdateRequest.EngineSize ?? vehicle.EngineSize;
-            vehicle.FuelType = vehicleUpdateRequest.FuelType ?? vehicle.FuelType;
-            vehicle.Transmission = vehicleUpdateRequest.Transmission ?? vehicle.Transmission;
+            UpdateVehicleProperties(vehicle, vehicleUpdateRequest);
+            UpdateVehicleOptionsProperties(vehicleOptions, vehicleUpdateRequest);
 
-            vehicleOptions.Navigation = vehicleUpdateRequest.Navigation ?? vehicleOptions.Navigation;
-            vehicleOptions.HeadsUpDisplay = vehicleUpdateRequest.HeadsUpDisplay ?? vehicleOptions.HeadsUpDisplay;
-            vehicleOptions.HillAssist = vehicleUpdateRequest.HillAssist ?? vehicleOptions.HillAssist;
-            vehicleOptions.CruiseControl = vehicleUpdateRequest.CruiseControl ?? vehicleOptions.CruiseControl;
+            _vehicleRepository.UpdateAsync(vehicle);
 
-            await _dbContext.SaveChangesAsync();
 
             _logger.LogInformation($"Vehicle with ID {vehicleId} has been updated.");
             return _mapper.Map<VehicleDTO>(vehicle);
+        }
+
+        private void UpdateVehicleProperties(Vehicle vehicle, VehicleUpdateRequest request)
+        {
+            vehicle.Make = request.Make ?? vehicle.Make;
+            vehicle.Model = request.Model ?? vehicle.Model;
+            vehicle.EngineSize = request.EngineSize ?? vehicle.EngineSize;
+            vehicle.FuelType = request.FuelType ?? vehicle.FuelType;
+            vehicle.Transmission = request.Transmission ?? vehicle.Transmission;
+        }
+
+        private void UpdateVehicleOptionsProperties(VehicleOptions vehicleOptions, VehicleUpdateRequest request)
+        {
+            vehicleOptions.Navigation = request.Navigation ?? vehicleOptions.Navigation;
+            vehicleOptions.HeadsUpDisplay = request.HeadsUpDisplay ?? vehicleOptions.HeadsUpDisplay;
+            vehicleOptions.HillAssist = request.HillAssist ?? vehicleOptions.HillAssist;
+            vehicleOptions.CruiseControl = request.CruiseControl ?? vehicleOptions.CruiseControl;
         }
     }
 }

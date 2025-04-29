@@ -126,7 +126,6 @@ namespace PrestigeRentals.Application.Services
                 _logger.LogError($"Error deleting order: {ex.Message}");
                 throw new InvalidOperationException("An error occurred while deleting the order.", ex);
             }
-
         }
     }
 }

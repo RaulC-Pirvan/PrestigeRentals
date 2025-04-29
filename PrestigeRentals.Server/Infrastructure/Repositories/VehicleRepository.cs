@@ -1,10 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.EntityFrameworkCore;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
-using System;
-using System.Threading.Tasks;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace PrestigeRentals.Application.Services
 {
@@ -32,7 +30,7 @@ namespace PrestigeRentals.Application.Services
         /// </summary>
         /// <param name="vehicle">The vehicle to be added.</param>
         /// <returns>A task that represents the asynchronous operation.</returns>
-        public async Task AddVehicle(Vehicle vehicle)
+        public async Task AddAsync(Vehicle vehicle)
         {
             if (vehicle == null)
             {
@@ -59,14 +57,75 @@ namespace PrestigeRentals.Application.Services
             return await _dbContext.Vehicles.FindAsync(vehicleId);
         }
 
+        public async Task<List<Vehicle>> GetAllVehiclesAsync(bool? onlyActive = false)
+        {
+            if (onlyActive.HasValue && onlyActive.Value)
+            {
+                return await _dbContext.Vehicles
+                    .Where(v => v.Active && !v.Deleted)
+                    .ToListAsync();
+            }
+            else
+            {
+                return await _dbContext.Vehicles
+                    .ToListAsync();
+            }
+        }
+
         public async Task UpdateAsync(Vehicle vehicle)
         {
-            var existingVehicle = await _dbContext.Vehicles.FindAsync(vehicle.Id);
-            if(existingVehicle != null)
+            if (vehicle == null)
             {
-                existingVehicle.Available = vehicle.Available;
-                await _dbContext.SaveChangesAsync();
+                _logger.LogError("Attempted to update a null vehicle to the database.");
+                throw new ArgumentNullException(nameof(vehicle), "Vehicle cannot be null.");
             }
+            try
+            {
+                _logger.LogInformation("Attempting to update a vehicle to the database.");
+                _dbContext.Vehicles.Update(vehicle);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"Vehicle with ID {vehicle.Id} has been successfully updated.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating vehicle: {ex.Message}");
+                throw new InvalidOperationException("An error occurred while updating the vehicle.", ex);
+            }
+        }
+
+        public async Task DeleteAsync(Vehicle vehicle)
+        {
+            if (vehicle == null)
+            {
+                _logger.LogError("Attempted to delete a null vehicle from the database.");
+                throw new ArgumentNullException(nameof(vehicle), "Vehicle cannot be null.");
+            }
+            try
+            {
+                _logger.LogInformation("Attempting to delete an vehicle from the database.");
+                _dbContext.Vehicles.Remove(vehicle);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"Vehicle with ID {vehicle.Id} has been successfully deleted.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting vehicle: {ex.Message}");
+                throw new InvalidOperationException("An error occurred while deleting the vehicle.", ex);
+            }
+        }
+
+        public async Task<VehicleOptions?> GetVehicleOptionsByVehicleId(long vehicleId)
+        {
+            return await _dbContext.VehicleOptions.FirstOrDefaultAsync(vo => vo.VehicleId == vehicleId);
+        }
+
+        public async Task<bool> IsAliveAsync(long vehicleId)
+        {
+            return await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && v.Active && !v.Deleted);
+        }
+        public async Task<bool> IsDeadAsync(long vehicleId)
+        {
+            return await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && !v.Active && v.Deleted);
         }
     }
 }

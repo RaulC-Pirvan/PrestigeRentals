@@ -13,13 +13,18 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         /// </summary>
         /// <param name="vehicle">The vehicle to be added to the repository.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        Task AddVehicle(Vehicle vehicle);
+        Task AddAsync(Vehicle vehicle);
 
         /// <summary>
         /// Asynchronously gets a vehicle based on id.
         /// </summary>
         /// <returns></returns>
         Task<Vehicle> GetVehicleById(long vehicleId);
+        Task<List<Vehicle>> GetAllVehiclesAsync(bool? onlyActive = false);
         Task UpdateAsync(Vehicle vehicle);
+        Task DeleteAsync(Vehicle vehicle);
+        Task<VehicleOptions?> GetVehicleOptionsByVehicleId(long vehicleId);
+        Task<bool> IsAliveAsync(long vehicleId);
+        Task<bool> IsDeadAsync(long vehicleId);
     }
 }

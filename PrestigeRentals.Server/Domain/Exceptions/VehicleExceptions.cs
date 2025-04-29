@@ -11,7 +11,7 @@ namespace PrestigeRentals.Application.Exceptions
         /// Initializes a new instance of the <see cref="VehicleNotFoundException"/> class with a specified vehicle ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle that was not found.</param>
-        public VehicleNotFoundException(int vehicleId) : base($"Vehicle with ID {vehicleId} was not found.") { }
+        public VehicleNotFoundException(long vehicleId) : base($"Vehicle with ID {vehicleId} was not found.") { }
     }
 
     /// <summary>
@@ -23,7 +23,7 @@ namespace PrestigeRentals.Application.Exceptions
         /// Initializes a new instance of the <see cref="VehicleOptionsNotFoundException"/> class with a specified vehicle ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle whose options were not found.</param>
-        public VehicleOptionsNotFoundException(int vehicleId) : base($"Vehicle options for vehicle with ID {vehicleId} were not found.") { }
+        public VehicleOptionsNotFoundException(long vehicleId) : base($"Vehicle options for vehicle with ID {vehicleId} were not found.") { }
     }
 
     /// <summary>
@@ -35,7 +35,7 @@ namespace PrestigeRentals.Application.Exceptions
         /// Initializes a new instance of the <see cref="VehicleAlreadyActiveException"/> class with a specified vehicle ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle that is already active.</param>
-        public VehicleAlreadyActiveException(int vehicleId) : base($"Vehicle with ID {vehicleId} is already active.") { }
+        public VehicleAlreadyActiveException(long vehicleId) : base($"Vehicle with ID {vehicleId} is already active.") { }
     }
 
     /// <summary>
@@ -47,7 +47,7 @@ namespace PrestigeRentals.Application.Exceptions
         /// Initializes a new instance of the <see cref="VehicleAlreadyDeactivatedException"/> class with a specified vehicle ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle that is already deactivated or not found.</param>
-        public VehicleAlreadyDeactivatedException(int vehicleId) : base($"Vehicle with ID {vehicleId} is already deactivated or not found.") { }
+        public VehicleAlreadyDeactivatedException(long vehicleId) : base($"Vehicle with ID {vehicleId} is already deactivated or not found.") { }
     }
 
     /// <summary>
@@ -59,7 +59,7 @@ namespace PrestigeRentals.Application.Exceptions
         /// Initializes a new instance of the <see cref="VehicleUpdateException"/> class with a specified vehicle ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle that failed to be updated.</param>
-        public VehicleUpdateException(int vehicleId) : base($"Failed to update vehicle with ID {vehicleId}") { }
+        public VehicleUpdateException(long vehicleId) : base($"Failed to update vehicle with ID {vehicleId}") { }
     }
 
     /// <summary>
@@ -71,6 +71,6 @@ namespace PrestigeRentals.Application.Exceptions
         /// Initializes a new instance of the <see cref="VehiclePhotoNotFoundException"/> class with a specified vehicle ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle that does not have a photo.</param>
-        public VehiclePhotoNotFoundException(int vehicleId) : base($"Vehicle with ID {vehicleId} has no photo.") { }
+        public VehiclePhotoNotFoundException(long vehicleId) : base($"Vehicle with ID {vehicleId} has no photo.") { }
     }
 }

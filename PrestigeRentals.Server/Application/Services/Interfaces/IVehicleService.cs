@@ -24,42 +24,42 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// </summary>
         /// <param name="vehicleRequest">The request object containing the details of the vehicle to be added.</param>
         /// <returns>A task representing the asynchronous operation, with an action result indicating success or failure.</returns>
-        Task<ActionResult?> AddVehicle(VehicleRequest vehicleRequest);
+        Task<VehicleDTO> AddVehicle(VehicleRequest vehicleRequest);
 
         /// <summary>
         /// Asynchronously retrieves a vehicle by its ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to be retrieved.</param>
         /// <returns>A task representing the asynchronous operation, containing the vehicle data if found, otherwise null.</returns>
-        Task<Vehicle> GetVehicleByID(int vehicleId);
+        Task<Vehicle> GetVehicleByID(long vehicleId);
 
         /// <summary>
         /// Asynchronously retrieves the options associated with a vehicle.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle whose options are to be retrieved.</param>
         /// <returns>A task representing the asynchronous operation, containing the vehicle options if found, otherwise null.</returns>
-        Task<VehicleOptions> GetVehicleOptions(int vehicleId);
+        Task<VehicleOptions> GetVehicleOptions(long vehicleId);
 
         /// <summary>
         /// Asynchronously deactivates a vehicle by its ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to be deactivated.</param>
         /// <returns>A task representing the asynchronous operation, indicating whether the operation was successful.</returns>
-        Task<bool> DeactivateVehicle(int vehicleId);
+        Task<bool> DeactivateVehicle(long vehicleId);
 
         /// <summary>
         /// Asynchronously activates a vehicle by its ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to be activated.</param>
         /// <returns>A task representing the asynchronous operation, indicating whether the operation was successful.</returns>
-        Task<bool> ActivateVehicle(int vehicleId);
+        Task<bool> ActivateVehicle(long vehicleId);
 
         /// <summary>
         /// Asynchronously deletes a vehicle by its ID.
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle to be deleted.</param>
         /// <returns>A task representing the asynchronous operation, indicating whether the operation was successful.</returns>
-        Task<bool> DeleteVehicle(int vehicleId);
+        Task<bool> DeleteVehicle(long vehicleId);
 
         /// <summary>
         /// Asynchronously updates a vehicle's details by its ID.
@@ -67,6 +67,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <param name="vehicleId">The ID of the vehicle to be updated.</param>
         /// <param name="vehicleUpdateRequest">The request object containing the updated vehicle details.</param>
         /// <returns>A task representing the asynchronous operation, containing the updated vehicle DTO.</returns>
-        Task<VehicleDTO> UpdateVehicle(int vehicleId, VehicleUpdateRequest vehicleUpdateRequest);
+        Task<VehicleDTO> UpdateVehicle(long vehicleId, VehicleUpdateRequest vehicleUpdateRequest);
     }
 }

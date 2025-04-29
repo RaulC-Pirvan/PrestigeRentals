@@ -13,13 +13,13 @@ namespace PrestigeRentals.Domain.Entities
         /// Primary key for the vehicle options entity.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Foreign key referencing the associated vehicle.
         /// </summary>
         [ForeignKey("VehicleId")]
-        public int VehicleId { get; set; }
+        public long VehicleId { get; set; }
 
         /// <summary>
         /// Navigation property for the associated vehicle.
