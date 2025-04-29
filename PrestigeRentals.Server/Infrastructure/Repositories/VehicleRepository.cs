@@ -49,7 +49,7 @@ namespace PrestigeRentals.Application.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("Error saving vehicle: {Message}", ex.Message);
+                _logger.LogError($"Error saving vehicle: {ex.Message}");
                 throw new InvalidOperationException("An error occurred while saving the vehicle.", ex);
             }
         }

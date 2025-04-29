@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
@@ -15,14 +16,17 @@ namespace PrestigeRentals.Application.Services
     public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly ILogger<OrderRepository> _logger;
 
         /// <summary>
         /// Constructor to initialize the repository with a database context.
         /// </summary>
         /// <param name="dbContext">The database context used to interact with the database.</param>
-        public OrderRepository(ApplicationDbContext dbContext)
+        /// <param name="logger">Logger instance to log repository activities.</param>
+        public OrderRepository(ApplicationDbContext dbContext, ILogger<OrderRepository> logger)
         {
-            _dbContext = dbContext;
+            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), "Database context cannot be null.");
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger cannot be null.");
         }
 
         /// <summary>
@@ -51,8 +55,25 @@ namespace PrestigeRentals.Application.Services
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task AddAsync(Order order)
         {
-            await _dbContext.Orders.AddAsync(order);
-            await _dbContext.SaveChangesAsync();
+            if(order == null)
+            {
+                _logger.LogError("Attempted to add a null order to the database.");
+                throw new ArgumentNullException(nameof(order), "Order cannot be null.");
+            }
+
+            try
+            {
+                _logger.LogInformation("Attempting to add a new order to the database.");
+                _dbContext.Orders.Add(order);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"Order with ID {order.Id} has been successfully added.");
+            }
+
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error saving order: {ex.Message}");
+                throw new InvalidOperationException("An error occurred while saving the order.", ex);
+            }
         }
 
         /// <summary>
@@ -62,8 +83,23 @@ namespace PrestigeRentals.Application.Services
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task UpdateAsync(Order order)
         {
-            _dbContext.Orders.Update(order);
-            await _dbContext.SaveChangesAsync();
+            if (order == null)
+            {
+                _logger.LogError("Attempted to update a null order to the database.");
+                throw new ArgumentNullException(nameof(order), "Order cannot be null.");
+            }
+            try
+            {
+                _logger.LogInformation("Attempting to update an order to the database.");
+                _dbContext.Orders.Update(order);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"Order with ID {order.Id} has been successfully updated.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating order: {ex.Message}");
+                throw new InvalidOperationException("An error occurred while updating the order.", ex);
+            }
         }
 
         /// <summary>
@@ -73,8 +109,24 @@ namespace PrestigeRentals.Application.Services
         /// <returns>A task representing the asynchronous operation.</returns>
         public async Task DeleteAsync(Order order)
         {
-            _dbContext.Orders.Remove(order);
-            await _dbContext.SaveChangesAsync();
+            if (order == null)
+            {
+                _logger.LogError("Attempted to delete a null order from the database.");
+                throw new ArgumentNullException(nameof(order), "Order cannot be null.");
+            }
+            try
+            {
+                _logger.LogInformation("Attempting to delete an order from the database.");
+                _dbContext.Orders.Remove(order);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"Order with ID {order.Id} has been successfully deleted.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting order: {ex.Message}");
+                throw new InvalidOperationException("An error occurred while deleting the order.", ex);
+            }
+
         }
     }
 }
