@@ -16,7 +16,6 @@ namespace PrestigeRentals.Application.Services.Services
     public class VehicleService : IVehicleService
     {
         private readonly ILogger<VehicleService> _logger;
-        private readonly IMapper _mapper;
         private readonly IVehicleRepository _vehicleRepository;
         private readonly IVehicleOptionsRepository _vehicleOptionsRepository;
 
@@ -27,10 +26,9 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="logger">Logger instance for logging service operations.</param>
         /// <param name="vehicleRepository">Vehicle repository for accessing vehicle data.</param>
         /// <param name="vehicleOptionsRepository">Repository for accessing vehicle options data.</param>
-        public VehicleService(IMapper mapper, ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleOptionsRepository vehicleOptionsRepository)
+        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleOptionsRepository vehicleOptionsRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _vehicleRepository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
             _vehicleOptionsRepository = vehicleOptionsRepository ?? throw new ArgumentNullException(nameof(vehicleOptionsRepository));
         }
@@ -275,9 +273,28 @@ namespace PrestigeRentals.Application.Services.Services
 
 
             _logger.LogInformation($"Vehicle with ID {vehicleId} has been updated.");
-            return _mapper.Map<VehicleDTO>(vehicle);
-        }
 
+            var vehicleDTO = new VehicleDTO
+            {
+                Id = vehicle.Id,
+                Make = vehicle.Make,
+                Model = vehicle.Model,
+                EngineSize = vehicle.EngineSize,
+                FuelType = vehicle.FuelType,
+                Transmission = vehicle.Transmission,
+                Active = vehicle.Active,
+                Deleted = vehicle.Deleted,
+                Available = vehicle.Available,
+
+                // Manually map the VehicleOptions to VehicleDTO
+                Navigation = vehicleOptions.Navigation,
+                HeadsUpDisplay = vehicleOptions.HeadsUpDisplay,
+                HillAssist = vehicleOptions.HillAssist,
+                CruiseControl = vehicleOptions.CruiseControl
+            };
+
+            return vehicleDTO;
+        }
         private void UpdateVehicleProperties(Vehicle vehicle, VehicleUpdateRequest request)
         {
             vehicle.Make = request.Make ?? vehicle.Make;
