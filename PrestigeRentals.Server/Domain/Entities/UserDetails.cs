@@ -14,13 +14,13 @@ namespace PrestigeRentals.Domain.Entities
         /// Primary key for the UserDetails entity.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Foreign key referencing the associated User.
         /// </summary>
         [ForeignKey(nameof(User))]
-        public int UserID { get; set; }
+        public long UserID { get; set; }
 
         /// <summary>
         /// Navigation property for the associated User.

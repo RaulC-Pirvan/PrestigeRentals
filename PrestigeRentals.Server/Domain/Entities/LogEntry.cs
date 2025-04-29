@@ -12,7 +12,7 @@ namespace PrestigeRentals.Domain.Entities
         /// Primary key of the log entry.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// The URL path of the HTTP request.

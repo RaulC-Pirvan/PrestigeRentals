@@ -20,7 +20,7 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         /// </summary>
         /// <param name="id">The user's ID.</param>
         /// <returns>The matching <see cref="User"/> if found; otherwise, null.</returns>
-        Task<User> GetUserById(int id);
+        Task<User> GetUserById(long id);
 
         /// <summary>
         /// Adds a new user to the data store.
@@ -33,5 +33,9 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         /// </summary>
         /// <param name="user">The user object with updated information.</param>
         Task UpdateAsync(User user);
+        Task<bool> IsAliveAsync(long userId);
+        Task<bool> IsDeadAsync(long userId);
+        Task<bool> EmailExists(string email);
+        Task DeleteAsync(User user);
     }
 }

@@ -40,9 +40,39 @@ namespace PrestigeRentals.Application.Services
         /// </summary>
         /// <param name="userId">The ID of the user whose details are to be retrieved.</param>
         /// <returns>A task that represents the asynchronous operation, with a result of the user details if found, or null if not.</returns>
-        public async Task<UserDetails> GetUserDetailsById(int userId)
+        public async Task<UserDetails> GetUserDetailsById(long userId)
         {
             return await _dbContext.UsersDetails.FirstOrDefaultAsync(ud => ud.Id == userId);
+        }
+
+        public async Task<bool> IsAliveAsync(long userId)
+        {
+            var userDetails = await _dbContext.UsersDetails
+                .AsNoTracking()
+                .FirstOrDefaultAsync(ud => ud.UserID == userId);
+
+            return userDetails != null && userDetails.Active && !userDetails.Deleted;
+        }
+
+        public async Task<bool> IsDeadAsync(long userId)
+        {
+            var userDetails = await _dbContext.UsersDetails
+                .AsNoTracking()
+                .FirstOrDefaultAsync(ud => ud.UserID == userId);
+
+            return userDetails != null && !userDetails.Active && userDetails.Deleted;
+        }
+
+        public async Task UpdateAsync(UserDetails userDetails)
+        {
+            _dbContext.UsersDetails.Update(userDetails);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(UserDetails userDetails)
+        {
+            _dbContext.UsersDetails.Remove(userDetails);
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

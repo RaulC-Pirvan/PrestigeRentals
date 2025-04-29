@@ -44,7 +44,7 @@ namespace PrestigeRentals.Application.Services
             }
         }
 
-        public async Task<User> GetUserById(int userId)
+        public async Task<User> GetUserById(long userId)
         {
             try
             {
@@ -107,6 +107,41 @@ namespace PrestigeRentals.Application.Services
             {
                 _logger.LogError(ex, "Error updating user ID {UserId}.", user?.Id);
                 throw new InvalidOperationException("Error updating user.", ex);
+            }
+        }
+        public async Task<bool> IsAliveAsync(long userId)
+        {
+            return await _dbContext.Users.AnyAsync(u => u.Id == userId && u.Active && !u.Deleted);
+        }
+
+        public async Task<bool> IsDeadAsync(long userId)
+        {
+            return await _dbContext.Users.AnyAsync(u => u.Id == userId && !u.Active && u.Deleted);
+        }
+
+        public async Task<bool> EmailExists(string email)
+        {
+            return await _dbContext.Users.AnyAsync(u => u.Email == email);
+        }
+
+        public async Task DeleteAsync(User user)
+        {
+            if (user == null)
+            {
+                _logger.LogError("Attempted to delete a null user from the database.");
+                throw new ArgumentNullException(nameof(user), "User cannot be null.");
+            }
+            try
+            {
+                _logger.LogInformation("Attempting to delete a user from the database.");
+                _dbContext.Users.Remove(user);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"User with ID {user.Id} has been successfully deleted.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting user: {ex.Message}");
+                throw new InvalidOperationException("An error occurred while deleting the user.", ex);
             }
         }
     }

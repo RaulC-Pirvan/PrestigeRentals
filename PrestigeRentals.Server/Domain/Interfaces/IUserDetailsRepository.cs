@@ -21,6 +21,11 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         /// </summary>
         /// <param name="userid">The ID of the user whose details are to be retrieved.</param>
         /// <returns>A task representing the asynchronous operation, with a result of the user details.</returns>
-        Task<UserDetails> GetUserDetailsById(int userid);
+        Task<UserDetails> GetUserDetailsById(long userid);
+
+        Task<bool> IsAliveAsync(long id);
+        Task<bool> IsDeadAsync(long id);
+        Task UpdateAsync(UserDetails details);
+        Task DeleteAsync(UserDetails details);
     }
 }

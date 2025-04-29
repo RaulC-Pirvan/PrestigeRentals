@@ -12,7 +12,7 @@ namespace PrestigeRentals.Domain.Entities
         /// Primary key for the User entity.
         /// </summary>
         [Key]
-        public int Id { get; set; }
+        public long Id { get; set; }
 
         /// <summary>
         /// Email address of the user. This should be unique.
