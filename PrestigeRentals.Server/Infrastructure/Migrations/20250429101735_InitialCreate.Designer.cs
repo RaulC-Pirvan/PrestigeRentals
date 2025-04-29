@@ -12,8 +12,8 @@ using PrestigeRentals.Infrastructure.Persistence;
 namespace PrestigeRentals.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250416101042_InitialCreate2")]
-    partial class InitialCreate2
+    [Migration("20250429101735_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,76 @@ namespace PrestigeRentals.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("PrestigeRentals.Domain.Entities.LogEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<long>("DurationMs")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Method")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RequestBody")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ResponseBody")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("Timestamp")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Logs");
+                });
+
+            modelBuilder.Entity("PrestigeRentals.Domain.Entities.Order", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("EndTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("IsCancelled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("StartTime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("VehicleId")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Orders");
+                });
 
             modelBuilder.Entity("PrestigeRentals.Domain.Entities.User", b =>
                 {
@@ -43,6 +113,12 @@ namespace PrestigeRentals.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("EmailVerificationCode")
+                        .HasColumnType("text");
+
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("text");
@@ -50,6 +126,9 @@ namespace PrestigeRentals.Infrastructure.Migrations
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("VerificationCodeExpiry")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -98,13 +177,16 @@ namespace PrestigeRentals.Infrastructure.Migrations
 
             modelBuilder.Entity("PrestigeRentals.Domain.Entities.Vehicle", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("Available")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("Deleted")
@@ -136,11 +218,11 @@ namespace PrestigeRentals.Infrastructure.Migrations
 
             modelBuilder.Entity("PrestigeRentals.Domain.Entities.VehicleOptions", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -160,8 +242,8 @@ namespace PrestigeRentals.Infrastructure.Migrations
                     b.Property<bool>("Navigation")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("integer");
+                    b.Property<long>("VehicleId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -192,9 +274,12 @@ namespace PrestigeRentals.Infrastructure.Migrations
                     b.Property<int>("VehicleId")
                         .HasColumnType("integer");
 
+                    b.Property<long>("VehicleId1")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("VehicleId1");
 
                     b.ToTable("VehiclePhotos");
                 });
@@ -225,7 +310,7 @@ namespace PrestigeRentals.Infrastructure.Migrations
                 {
                     b.HasOne("PrestigeRentals.Domain.Entities.Vehicle", "Vehicle")
                         .WithMany()
-                        .HasForeignKey("VehicleId")
+                        .HasForeignKey("VehicleId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

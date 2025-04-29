@@ -59,6 +59,8 @@ namespace PrestigeRentals.Application.DTO
         /// </summary>
         public bool Active { get; set; }
 
+        public bool Available { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether the vehicle is marked as deleted.
         /// </summary>
@@ -84,7 +86,7 @@ namespace PrestigeRentals.Application.DTO
         /// <param name="active">Indicates whether the vehicle is active.</param>
         /// <param name="deleted">Indicates whether the vehicle is marked as deleted.</param>
         public VehicleDTO(long id, string make, string model, decimal engineSize, string fuelType, string transmission,
-                          bool navigation, bool headsUpDisplay, bool hillAssist, bool cruiseControl,
+                          bool navigation, bool headsUpDisplay, bool hillAssist, bool cruiseControl, bool available,
                           bool active, bool deleted)
         {
             Id = id;
@@ -97,6 +99,7 @@ namespace PrestigeRentals.Application.DTO
             HeadsUpDisplay = headsUpDisplay;
             HillAssist = hillAssist;
             CruiseControl = cruiseControl;
+            Available = available;
             Active = active;
             Deleted = deleted;
         }

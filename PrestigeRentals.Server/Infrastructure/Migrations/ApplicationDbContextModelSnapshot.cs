@@ -174,11 +174,11 @@ namespace PrestigeRentals.Infrastructure.Migrations
 
             modelBuilder.Entity("PrestigeRentals.Domain.Entities.Vehicle", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -215,11 +215,11 @@ namespace PrestigeRentals.Infrastructure.Migrations
 
             modelBuilder.Entity("PrestigeRentals.Domain.Entities.VehicleOptions", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
@@ -239,8 +239,8 @@ namespace PrestigeRentals.Infrastructure.Migrations
                     b.Property<bool>("Navigation")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("VehicleId")
-                        .HasColumnType("integer");
+                    b.Property<long>("VehicleId")
+                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
@@ -271,9 +271,12 @@ namespace PrestigeRentals.Infrastructure.Migrations
                     b.Property<int>("VehicleId")
                         .HasColumnType("integer");
 
+                    b.Property<long>("VehicleId1")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("VehicleId");
+                    b.HasIndex("VehicleId1");
 
                     b.ToTable("VehiclePhotos");
                 });
@@ -304,7 +307,7 @@ namespace PrestigeRentals.Infrastructure.Migrations
                 {
                     b.HasOne("PrestigeRentals.Domain.Entities.Vehicle", "Vehicle")
                         .WithMany()
-                        .HasForeignKey("VehicleId")
+                        .HasForeignKey("VehicleId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

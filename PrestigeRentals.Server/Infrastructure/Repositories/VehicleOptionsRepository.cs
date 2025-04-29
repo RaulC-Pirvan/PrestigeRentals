@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
@@ -62,6 +63,62 @@ namespace PrestigeRentals.Application.Services
                 _logger.LogError($"An error occurred while adding vehicle options for VehicleId: {vehicleOptions.VehicleId}. Error: {ex.Message}", ex);
                 throw new InvalidOperationException("An error occurred while adding the vehicle options.", ex);
             }
+        }
+
+        public async Task<VehicleOptions> GetVehicleOptionsById(long vehicleId)
+        {
+            return await _dbContext.VehicleOptions.FindAsync(vehicleId);
+        }
+
+        public async Task UpdateAsync(VehicleOptions vehicleOptions)
+        {
+            if (vehicleOptions == null)
+            {
+                _logger.LogError("Attempted to update a null list of vehicle options to the database.");
+                throw new ArgumentNullException(nameof(vehicleOptions), "Vehicle options cannot be null.");
+            }
+            try
+            {
+                _logger.LogInformation("Attempting to update a list of vehicle options to the database.");
+                _dbContext.VehicleOptions.Update(vehicleOptions);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"Vehicle with ID {vehicleOptions.Id} has been successfully updated.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error updating vehicle options: {ex.Message}");
+                throw new InvalidOperationException("An error occurred while updating the vehicle options.", ex);
+            }
+        }
+
+        public async Task DeleteAsync(VehicleOptions vehicleOptions)
+        {
+            if (vehicleOptions == null)
+            {
+                _logger.LogError("Attempted to delete a null list of vehicle options from the database.");
+                throw new ArgumentNullException(nameof(vehicleOptions), "Vehicle options cannot be null.");
+            }
+            try
+            {
+                _logger.LogInformation("Attempting to delete an vehicle from the database.");
+                _dbContext.VehicleOptions.Remove(vehicleOptions);
+                await _dbContext.SaveChangesAsync();
+                _logger.LogInformation($"Vehicle options with ID {vehicleOptions.Id} have been successfully deleted.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error deleting vehicle options : {ex.Message}");
+                throw new InvalidOperationException("An error occurred while deleting the vehicle options .", ex);
+            }
+        }
+
+        public async Task<bool> IsAliveAsync(long vehicleId)
+        {
+            return await _dbContext.VehicleOptions.AnyAsync(vo => vo.Id == vehicleId && vo.Active && !vo.Deleted);
+        }
+        public async Task<bool> IsDeadAsync(long vehicleId)
+        {
+            return await _dbContext.VehicleOptions.AnyAsync(vo => vo.Id == vehicleId && !vo.Active && vo.Deleted);
         }
     }
 }

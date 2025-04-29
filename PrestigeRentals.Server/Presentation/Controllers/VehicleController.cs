@@ -94,16 +94,12 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <returns>The details of the added vehicle.</returns>
         [Authorize(Roles = "Admin")]
         [HttpPost("")]
-        public async Task<IActionResult> AddVehicle([FromBody, Required] VehicleRequest vehicleRequest)
+        public async Task<ActionResult<VehicleDTO>> AddVehicle([FromBody, Required] VehicleRequest vehicleRequest)
         {
             try
             {
-                ActionResult? addVehicleOperation = await _vehicleService.AddVehicle(vehicleRequest);
-                if (addVehicleOperation != null)
-                {
-                    return BadRequest("Error: Vehicle could not be added.");
-                }
-                return Ok(vehicleRequest);
+                var vehicleDto = await _vehicleService.AddVehicle(vehicleRequest);
+                return Ok(vehicleDto); // returns 200 OK with the DTO
             }
             catch (Exception ex)
             {
