@@ -3,6 +3,8 @@ using PrestigeRentals.Application.Services;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Application.Services.Services;
+using PrestigeRentals.Domain.Interfaces;
+using PrestigeRentals.Infrastructure.Repositories;
 
 namespace PrestigeRentals.Application.DependencyInjection
 {
@@ -29,6 +31,7 @@ namespace PrestigeRentals.Application.DependencyInjection
             // Repositories
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IVehicleOptionsRepository, VehicleOptionsRepository>();
+            services.AddScoped<IVehiclePhotosRepository, VehiclePhotosRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserDetailsRepository, UserDetailsRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();

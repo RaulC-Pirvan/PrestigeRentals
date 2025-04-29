@@ -30,7 +30,7 @@ namespace PrestigeRentals.Domain.Entities
         /// Engine size in liters (e.g., 2.0, 3.5).
         /// </summary>
         [Required]
-        public decimal EngineSize { get; set; }
+        public int EngineSize { get; set; }
 
         /// <summary>
         /// Type of fuel the vehicle uses (e.g., Petrol, Diesel, Electric).

@@ -21,7 +21,7 @@ namespace PrestigeRentals.Application.Requests
         /// <summary>
         /// Gets or sets the engine size of the vehicle (e.g., 2.5, 3.0, etc.).
         /// </summary>
-        public decimal EngineSize { get; set; }
+        public int EngineSize { get; set; }
 
         /// <summary>
         /// Gets or sets the fuel type of the vehicle (e.g., Petrol, Diesel, Electric).

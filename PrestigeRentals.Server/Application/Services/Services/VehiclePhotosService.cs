@@ -4,12 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Domain.Entities;
+using PrestigeRentals.Domain.Interfaces;
 using PrestigeRentals.Infrastructure.Persistence;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PrestigeRentals.Application.Services.Services
 {
@@ -18,18 +14,18 @@ namespace PrestigeRentals.Application.Services.Services
     /// </summary>
     public class VehiclePhotosService : IVehiclePhotosService
     {
-        private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<VehiclePhotosService> _logger;
+        private readonly IVehiclePhotosRepository _vehiclePhotosRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VehiclePhotosService"/> class.
         /// </summary>
         /// <param name="dbContext">The database context.</param>
         /// <param name="logger">Logger instance for logging service activities.</param>
-        public VehiclePhotosService(ApplicationDbContext dbContext, ILogger<VehiclePhotosService> logger)
+        public VehiclePhotosService (ILogger<VehiclePhotosService> logger, IVehiclePhotosRepository vehiclePhotosRepository)
         {
-            _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), "Database context cannot be null.");
             _logger = logger ?? throw new ArgumentNullException(nameof(logger), "Logger cannot be null.");
+            _vehiclePhotosRepository = vehiclePhotosRepository;
         }
 
         /// <summary>
@@ -37,14 +33,12 @@ namespace PrestigeRentals.Application.Services.Services
         /// </summary>
         /// <param name="vehicleId">The ID of the vehicle whose photos are being requested.</param>
         /// <returns>A list of base64 encoded strings representing the vehicle's photos, or a <see cref="NotFoundResult"/> if no photos are found.</returns>
-        public async Task<ActionResult<List<string>>> GetVehiclePhotosAsBase64(int vehicleId)
+        public async Task<ActionResult<List<string>>> GetVehiclePhotosAsBase64(long vehicleId)
         {
             try
             {
                 // Retrieve vehicle photos from the database
-                List<VehiclePhotos> vehiclePhotos = await _dbContext.VehiclePhotos
-                    .Where(v => v.VehicleId == vehicleId)
-                    .ToListAsync();
+                var vehiclePhotos = await _vehiclePhotosRepository.GetPhotosByVehicleId(vehicleId);
 
                 if (vehiclePhotos == null || !vehiclePhotos.Any())
                 {
@@ -71,7 +65,7 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="vehicleId">The ID of the vehicle to which the photo is being uploaded.</param>
         /// <param name="base64Image">The base64 encoded image string representing the photo.</param>
         /// <returns>The <see cref="VehiclePhotos"/> entity if the upload is successful, or a <see cref="BadRequestObjectResult"/> if the image data is invalid.</returns>
-        public async Task<ActionResult<VehiclePhotos>> UploadVehiclePhoto(int vehicleId, string base64Image)
+        public async Task<ActionResult<VehiclePhotos>> UploadVehiclePhoto(long vehicleId, string base64Image)
         {
             // Validate base64 image string
             if (string.IsNullOrWhiteSpace(base64Image))
@@ -86,14 +80,20 @@ namespace PrestigeRentals.Application.Services.Services
                 VehiclePhotos vehiclePhoto = new VehiclePhotos
                 {
                     VehicleId = vehicleId,
-                    ImageData = Convert.FromBase64String(base64Image)
+                    ImageData = Convert.FromBase64String(base64Image),
+                    Active = true,
+                    Deleted = false
                 };
 
-                _dbContext.VehiclePhotos.Add(vehiclePhoto);
-                await _dbContext.SaveChangesAsync();
+                var result = await _vehiclePhotosRepository.AddAsync(vehiclePhoto);
 
                 _logger.LogInformation($"Photo uploaded for vehicle ID {vehicleId}");
-                return vehiclePhoto;
+                return result;
+            }
+            catch (FormatException)
+            {
+                _logger.LogWarning("Failed to convert image from base64.");
+                return new BadRequestObjectResult("Image data is not in a valid base64 format.");
             }
             catch (Exception ex)
             {
