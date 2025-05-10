@@ -127,5 +127,10 @@ namespace PrestigeRentals.Application.Services
                 throw new InvalidOperationException("An error occurred while deleting the order.", ex);
             }
         }
-    }
+
+        public async Task<List<Order>> GetActiveOrdersForVehicleAsync(long vehicleId, DateTime from, DateTime to)
+        {
+            return await _dbContext.Orders.Where(o => o.VehicleId == vehicleId && !o.IsCancelled && o.StartTime <= from && o.EndTime >= to).ToListAsync();
+        }
+    }   
 }

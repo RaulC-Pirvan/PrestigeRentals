@@ -42,5 +42,7 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         /// <param name="order">The order to delete.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
         Task DeleteAsync(Order order);
+
+        Task<List<Order>> GetActiveOrdersForVehicleAsync(long vehicleId, DateTime from,  DateTime to);
     }
 }

@@ -18,6 +18,7 @@ namespace PrestigeRentals.Application.Services.Services
         private readonly ILogger<VehicleService> _logger;
         private readonly IVehicleRepository _vehicleRepository;
         private readonly IVehicleOptionsRepository _vehicleOptionsRepository;
+        private readonly IOrderRepository _orderRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="VehicleService"/> class.
@@ -26,11 +27,12 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="logger">Logger instance for logging service operations.</param>
         /// <param name="vehicleRepository">Vehicle repository for accessing vehicle data.</param>
         /// <param name="vehicleOptionsRepository">Repository for accessing vehicle options data.</param>
-        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleOptionsRepository vehicleOptionsRepository)
+        public VehicleService(ILogger<VehicleService> logger, IVehicleRepository vehicleRepository, IVehicleOptionsRepository vehicleOptionsRepository, IOrderRepository orderRepository)
         {
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _vehicleRepository = vehicleRepository ?? throw new ArgumentNullException(nameof(vehicleRepository));
             _vehicleOptionsRepository = vehicleOptionsRepository ?? throw new ArgumentNullException(nameof(vehicleOptionsRepository));
+            _orderRepository = orderRepository;
         }
 
         /// <summary>
@@ -310,6 +312,33 @@ namespace PrestigeRentals.Application.Services.Services
             vehicleOptions.HeadsUpDisplay = request.HeadsUpDisplay ?? vehicleOptions.HeadsUpDisplay;
             vehicleOptions.HillAssist = request.HillAssist ?? vehicleOptions.HillAssist;
             vehicleOptions.CruiseControl = request.CruiseControl ?? vehicleOptions.CruiseControl;
+        }
+
+        public async Task<List<VehicleAvailabilityDTO>> GetVehiclesWithAvailability(DateTime now, bool? onlyActive = false)
+        {
+            var vehicles = await _vehicleRepository.GetAllVehiclesAsync(onlyActive);
+
+            // For each vehicle, get the active orders and determine availability
+            var vehicleAvailability = new List<VehicleAvailabilityDTO>();
+
+            foreach (var vehicle in vehicles)
+            {
+                var activeOrders = await _orderRepository.GetActiveOrdersForVehicleAsync(vehicle.Id, now, now);
+
+                var order = activeOrders.FirstOrDefault();
+                var availabilityDTO = new VehicleAvailabilityDTO
+                {
+                    VehicleID = vehicle.Id,
+                    Make = vehicle.Make,
+                    Model = vehicle.Model,
+                    IsAvailable = order == null,
+                    AvailableAt = order?.EndTime
+                };
+
+                vehicleAvailability.Add(availabilityDTO);
+            }
+
+            return vehicleAvailability;
         }
     }
 }

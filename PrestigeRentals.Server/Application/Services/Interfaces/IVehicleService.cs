@@ -68,5 +68,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <param name="vehicleUpdateRequest">The request object containing the updated vehicle details.</param>
         /// <returns>A task representing the asynchronous operation, containing the updated vehicle DTO.</returns>
         Task<VehicleDTO> UpdateVehicle(long vehicleId, VehicleUpdateRequest vehicleUpdateRequest);
+
+        Task<List<VehicleAvailabilityDTO>> GetVehiclesWithAvailability(DateTime now, bool? onlyActive);
     }
 }

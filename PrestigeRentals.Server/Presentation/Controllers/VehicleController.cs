@@ -209,5 +209,13 @@ namespace PrestigeRentals.Presentation.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
+        [HttpGet("availability")]
+        public async Task<IActionResult> GetVehiclesWithAvailability([FromQuery] bool? onlyActive = false)
+        {
+            var now = DateTime.UtcNow; // Or DateTime.Now depending on your use case
+            var vehicles = await _vehicleService.GetVehiclesWithAvailability(now, onlyActive);
+            return Ok(vehicles);
+        }
     }
 }
