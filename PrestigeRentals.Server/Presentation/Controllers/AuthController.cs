@@ -5,6 +5,7 @@ using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
+using PrestigeRentals.Application.Validators;
 using PrestigeRentals.Infrastructure.Persistence;
 using LoginRequest = PrestigeRentals.Application.Requests.LoginRequest;
 using RegisterRequest = PrestigeRentals.Application.Requests.RegisterRequest;
@@ -49,6 +50,24 @@ namespace PrestigeRentals.Presentation.Controllers
         {
             try
             {
+                // Validate email
+                if (!RegisterValidator.ValidateEmail(model.Email))
+                {
+                    return BadRequest("Invalid email format.");
+                }
+
+                // Validate password
+                if (!RegisterValidator.ValidatePassword(model.Password))
+                {
+                    return BadRequest("Password must be at least 6 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character (!@#).");
+                }
+
+                // Validate first and last name
+                if (!RegisterValidator.ValidateName(model.FirstName) || !RegisterValidator.ValidateName(model.LastName))
+                {
+                    return BadRequest("First name and last name are required.");
+                }
+
                 var token = await _authService.RegisterAsync(model);
 
                 return Ok(new { Token = token, Message = "Verification email sent." });
