@@ -1,0 +1,18 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 0 100px;
+    flex-direction: column;
+    height: 450px;
+    background-image: url('../../../assets/banner-button.jpg');
+    background-position: center;
+    background-size: cover;
+  }
+  
+  .title-container{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+  }
