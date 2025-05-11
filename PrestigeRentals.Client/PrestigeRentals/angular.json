@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "PrestigeRentals.Client": {
+    "PrestigeRentals": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/prestige-rentals.client",
+            "outputPath": "dist/prestige-rentals",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -69,10 +69,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "PrestigeRentals.Client:build:production"
+              "buildTarget": "PrestigeRentals:build:production"
             },
             "development": {
-              "buildTarget": "PrestigeRentals.Client:build:development"
+              "buildTarget": "PrestigeRentals:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -103,5 +103,8 @@
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "4b31a7b8-839b-4500-87fe-f2d110bfe4a4"
   }
 }
