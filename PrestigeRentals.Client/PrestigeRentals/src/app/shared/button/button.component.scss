@@ -18,4 +18,15 @@ button {
     background-color: $accent-colour;
     color: $text-colour;
   }
+
+  &.accent {
+    background-color: $accent-colour;
+    color: $text-colour;
+    border: 2px solid $accent-colour;
+  }
+
+  &.accent:hover {
+    background-color: transparent;
+    color: $accent-colour
+  }
 }
