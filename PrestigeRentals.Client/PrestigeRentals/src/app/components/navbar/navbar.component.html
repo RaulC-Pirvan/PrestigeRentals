@@ -3,13 +3,13 @@
         <img src="assets/logo.png" alt="logo">
     </div>
     <div class="navbar-buttons-container">
-        <button>HOME</button>
-        <button>INVENTORY</button>
-        <button>ABOUT US</button>
-        <button>CONTACT US</button>
+        <button (click)="navigateTo('')">HOME</button>
+        <button (click)="navigateTo('/Inventory')">INVENTORY</button>
+        <button (click)="navigateTo('/About')">ABOUT US</button>
+        <button (click)="navigateTo('/Contact')">CONTACT US</button>
     </div>
     <div class="auth-container">
-        <button class="accent-button">LOG IN</button>
-        <button>SIGN IN</button>
+        <button class="accent-button" (click)="navigateTo('/Login')">LOG IN</button>
+        <button (click)="navigateTo('/Register')">SIGN IN</button>
     </div>
 </div>

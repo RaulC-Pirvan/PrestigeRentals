@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ForbiddenAccessComponent } from './pages/forbidden-access/forbidden-access.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [ForbiddenAccessComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
