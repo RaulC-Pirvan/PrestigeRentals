@@ -1,0 +1,49 @@
+<div class="wrapper">
+  <div class="title-container">
+    <h1>LOGIN</h1>
+  </div>
+  <div class="card-container">
+    <div class="left-side-container"></div>
+    <div class="right-side-container">
+      <form action="" class="contact-form">
+        <div class="input-container">
+          <label for="">Email Address</label>
+          <input type="text" />
+        </div>
+        <div class="input-container">
+          <label for="">Password</label>
+          <input type="password" />
+        </div>
+      </form>
+      <div class="checkbox-container">
+        <input type="checkbox">
+        <label class="remember-tag" for="">Remember Me</label>
+      </div>
+      <div class="button-container">
+        <app-button
+          buttonText="LOGIN"
+          buttonType="accent"
+          (buttonClick)="(null)"
+        ></app-button>
+      </div>
+      <p>Forgot your password? <span class="heavy">Click here!</span></p>
+      <hr class="accent">
+      <div class="button-container">
+        <app-button
+        buttonText="SIGN IN WITH GOOGLE"
+        buttonType="accent"
+        (buttonClick)="(null)"
+      ></app-button>
+      </div>
+      <hr class="accent">
+      <p>Don't have an account?</p>
+      <div class="button-container">
+        <app-button
+        buttonText="CREATE ACCOUNT"
+        buttonType="transparent"
+        (buttonClick)="(null)"
+      ></app-button>
+      </div>
+    </div>
+  </div>
+</div>
