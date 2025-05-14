@@ -13,11 +13,11 @@ export const routes: Routes = [
     component: NotFoundComponent,
   },
   {
-    path: '**',
-    redirectTo: 'not-found',
-  },
-  {
     path: 'forbidden',
     component: ForbiddenAccessComponent,
+  },
+  {
+    path: '**',
+    redirectTo: 'not-found',
   },
 ];
