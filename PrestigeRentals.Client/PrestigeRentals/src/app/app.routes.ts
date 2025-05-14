@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ForbiddenAccessComponent } from './pages/forbidden-access/forbidden-access.component';
+import { ContactComponent } from './pages/contact/contact.component';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,10 @@ export const routes: Routes = [
   {
     path: 'forbidden',
     component: ForbiddenAccessComponent,
+  },
+  {
+    path: 'contact',
+    component: ContactComponent,
   },
   {
     path: '**',
