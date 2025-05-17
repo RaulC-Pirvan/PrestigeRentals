@@ -8,17 +8,9 @@
     height: auto;
     width: 100%;
     padding: 50px 100px;
-    margin-top: 60px;
     flex-direction: column;
     background-color: $primary-colour;
-}
-
-.title-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100px;
+    border: 2px solid red;
 }
 
 .card-container{
@@ -27,7 +19,9 @@
     align-items: start;
     flex-direction: row;
     width: 100%;
-    height: 600px;
+    height: 700px;
+    border: 2px solid red;
+    padding: 50px 0;
 }
 
 .left-side-container {
@@ -116,16 +110,22 @@ p {
 
 .checkbox-container {
     display: flex;
-    flex-direction: row;
-    justify-content: start;
     align-items: start;
     width: 100%;
+    padding: 0 20px;
 }
 
 .remember-tag {
     display: flex;
-    justify-content: center;
+    justify-content: start;
     align-items: center;
-    width: 80%;
+    width: auto;
+    margin-left: 10px;
     padding-bottom: 0;
+}
+
+.checkbox-entity {
+    width: 20px;
+    height: 20px;
+    display: flex;
 }
