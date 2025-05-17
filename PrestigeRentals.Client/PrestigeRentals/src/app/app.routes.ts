@@ -4,6 +4,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 import { ForbiddenAccessComponent } from './pages/forbidden-access/forbidden-access.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { LoginComponent } from './pages/login/login.component';
+import { AuthRedirectGuard } from './guards/auth-redirect.guard';
 
 export const routes: Routes = [
   {
@@ -25,6 +26,12 @@ export const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+    canActivate: [AuthRedirectGuard]
+  },
+  {
+    path: 'register',
+    component: LoginComponent,
+    canActivate: [AuthRedirectGuard]
   },
   {
     path: '**',
