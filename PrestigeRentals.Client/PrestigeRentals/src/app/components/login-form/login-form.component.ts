@@ -26,6 +26,7 @@ import { AuthService } from '../../services/auth.service';
 export class LoginFormComponent {
   loginForm: FormGroup;
 
+  rememberMe = false;
   notificationMessage: string | null = null;
   notificationType: 'success' | 'error' = 'success';
 
@@ -66,7 +67,7 @@ export class LoginFormComponent {
               sessionStorage.setItem('authToken', token);
             }
 
-            this.authService.login(token); // <-- notify the AuthService here
+            this.authService.login(token, rememberMe);
 
             this.showNotification('Login successful!', 'success');
             setTimeout(() => {

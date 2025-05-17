@@ -14,18 +14,27 @@ export class AuthService {
     return !!localStorage.getItem('authToken') || !!sessionStorage.getItem('authToken');
   }
 
-  login(token: string): void {
+  login(token: string, rememberMe: boolean): void {
     const isBrowser = typeof window !== 'undefined';
-    if (isBrowser) {
+
+    if(!isBrowser) return;
+
+    if (rememberMe) {
       localStorage.setItem('authToken', token);
-      this.loggedInSubject.next(true);
+      sessionStorage.removeItem('authToken');
+    } else {
+      sessionStorage.setItem('authToken', token);
+      localStorage.removeItem('authToken');
     }
+
+    this.loggedInSubject.next(true);
   }
 
   logout(): void {
     const isBrowser = typeof window !== 'undefined';
     if (isBrowser) {
       localStorage.removeItem('authToken');
+      sessionStorage.removeItem('authToken');
       this.loggedInSubject.next(false);
     }
   }
