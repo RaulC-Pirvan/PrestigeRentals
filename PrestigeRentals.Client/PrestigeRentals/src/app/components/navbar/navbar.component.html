@@ -17,8 +17,28 @@
     </ng-container>
 
     <ng-template #loggedInButtons>
-      <button (click)="navigateTo('/profile')">PROFILE</button>
-      <button (click)="logout()">LOG OUT</button>
+      <div
+        class="user-menu-container"
+        (mouseenter)="openMenu()"
+        (mouseleave)="closeMenu()"
+        (click)="toggleMenu()"
+        (document:click)="handleDocumentClick($event)"
+      >
+        <button class="user-button" (click)="toggleMenu()">
+          <img
+            [src]="'data:image/jpeg;base64,' + (user$ | async)?.photo"
+            class="user-photo"
+          />
+          <span class="user-name">{{ (user$ | async)?.name || "User" }}</span>
+        </button>
+
+        <div class="dropdown-menu" *ngIf="menuOpen">
+          <button (click)="navigateTo('/profile')">Profile</button>
+          <button (click)="navigateTo('/orders')">Orders</button>
+          <button (click)="navigateTo('/settings')">Settings</button>
+          <button (click)="logout()">Log Out</button>
+        </div>
+      </div>
     </ng-template>
   </div>
 </div>

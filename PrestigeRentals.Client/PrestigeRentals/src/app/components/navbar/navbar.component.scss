@@ -1,66 +1,120 @@
-@import '../../../styles.scss';
+@import "../../../styles.scss";
 
 .navbar {
-    display: flex;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-    background-color: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    justify-content: space-between;
-    align-content: center;
-    padding: 0 100px;
-    height: 60px;
+  display: flex;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  justify-content: space-between;
+  align-content: center;
+  padding: 0 100px;
+  height: 60px;
 }
 
 .navbar-buttons-container {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    width: 60%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 60%;
 }
 
 .auth-container {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    width: 20%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 20%;
 }
 
 .logo-container {
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    width: 20%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 20%;
 }
 
 button {
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    padding: 0 60px;
-    height: 100%;
-    color: $text-colour;
-    background-color: transparent;
-    transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0 60px;
+  height: 100%;
+  color: $text-colour;
+  background-color: transparent;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-    background-color: $accent-colour;
+  background-color: $accent-colour;
 }
 
 .accent-button {
-    background-color: $accent-colour;
-    transition: all 0.3s ease;
+  background-color: $accent-colour;
+  transition: all 0.3s ease;
 }
 
 .accent-button:hover {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 img {
-    height: 50px;
-    margin: 5px 0 0 0;
+  height: 50px;
+  margin: 5px 0 0 0;
+}
+
+.user-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%;
+}
+
+.user-photo {
+  border-radius: 50%;
+  border: 3px solid $accent-colour;
+  width: 42px;
+  height: auto;
+  margin-bottom: 5px;
+}
+
+.user-name {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.user-menu-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 100%;
+  background-color: $secondary-colour;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  min-width: 160px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+
+  button {
+    background: none;
+    border: none;
+    text-align: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-weight: 500;
+
+    &:hover {
+      background-color: $accent-colour;
+    }
+  }
 }

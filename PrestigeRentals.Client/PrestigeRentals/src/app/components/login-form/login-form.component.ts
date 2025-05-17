@@ -9,16 +9,12 @@ import {
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService, User } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-login-form',
-  imports: [
-    ButtonComponent,
-    TitleComponent,
-    ReactiveFormsModule,
-  ],
+  imports: [ButtonComponent, TitleComponent, ReactiveFormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
 })
@@ -47,30 +43,27 @@ export class LoginFormComponent {
     if (this.loginForm.valid) {
       const { email, password, rememberMe } = this.loginForm.value;
 
-      this.http
-        .post<{ token: string }>('/api/login', { email, password })
-        .subscribe({
-          next: (response) => {
-            const token = response.token;
-            if (rememberMe) {
-              localStorage.setItem('authToken', token);
-            } else {
-              sessionStorage.setItem('authToken', token);
-            }
-            
-            this.authService.login(token, rememberMe);
-
-            this.notificationService.show('Login successful!', 'success', 1000);
-
-            setTimeout(() => {
-              this.router.navigate(['/']);
-            }, 1000);
-          },
-          error: (error) => {
-            console.error('Login failed', error);
-            this.notificationService.show('Invalid credentials. Please try again.', 'error', 1000);
-          },
-        });
+      this.http.post<{ token: string; firstName: string; lastName: string; imageData: string }>('/api/login', { email, password })
+      .subscribe({
+        next: (response) => {
+          const token = response.token;
+    
+          const user = {
+            name: `${response.firstName} ${response.lastName}`,
+            photo: response.imageData, // Only the base64 string
+          };
+    
+          this.authService.login(token, rememberMe);
+          this.notificationService.show('Login successful!', 'success');
+    
+          setTimeout(() => {
+            this.router.navigate(['/']);
+          }, 1000);
+        },
+        error: () => {
+          this.notificationService.show('Invalid credentials', 'error');
+        }
+      });
     }
   }
 }
