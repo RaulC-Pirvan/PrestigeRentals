@@ -9,8 +9,8 @@ import {
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { NotificationComponent } from '../notification/notification.component';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-login-form',
@@ -18,7 +18,6 @@ import { AuthService } from '../../services/auth.service';
     ButtonComponent,
     TitleComponent,
     ReactiveFormsModule,
-    NotificationComponent,
   ],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
@@ -34,22 +33,14 @@ export class LoginFormComponent {
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private notificationService: NotificationService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
       password: ['', Validators.required],
       rememberMe: [false],
     });
-  }
-
-  showNotification(message: string, type: 'success' | 'error') {
-    this.notificationMessage = message;
-    this.notificationType = type;
-
-    setTimeout(() => {
-      this.notificationMessage = null;
-    }, 3000);
   }
 
   onSubmit(): void {
@@ -66,17 +57,18 @@ export class LoginFormComponent {
             } else {
               sessionStorage.setItem('authToken', token);
             }
-
+            
             this.authService.login(token, rememberMe);
 
-            this.showNotification('Login successful!', 'success');
+            this.notificationService.show('Login successful!', 'success', 1000);
+
             setTimeout(() => {
               this.router.navigate(['/']);
             }, 1000);
           },
           error: (error) => {
-            this.showNotification('Invalid credentials', 'error');
             console.error('Login failed', error);
+            this.notificationService.show('Invalid credentials. Please try again.', 'error', 1000);
           },
         });
     }
