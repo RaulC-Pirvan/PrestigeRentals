@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
@@ -246,6 +247,20 @@ namespace PrestigeRentals.Application.Services.Services
                 _logger.LogWarning($"User with ID {userId} was not found.");
                 throw new UserNotFoundException();
             }
+        }
+
+        public async Task<UserProfileDTO> GetUserProfile(long userId)
+        {
+            var userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
+            if (userDetails == null)
+                throw new Exception("User details not found");
+
+            return new UserProfileDTO
+            {
+                FirstName = userDetails.FirstName,
+                LastName = userDetails.LastName,
+                ImageData = userDetails.ImageData
+            };
         }
     }
 }

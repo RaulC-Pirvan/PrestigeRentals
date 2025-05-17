@@ -10,6 +10,7 @@ import {
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { NotificationComponent } from '../notification/notification.component';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-form',
@@ -31,7 +32,8 @@ export class LoginFormComponent {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
@@ -46,7 +48,7 @@ export class LoginFormComponent {
 
     setTimeout(() => {
       this.notificationMessage = null;
-    }, 3000); 
+    }, 3000);
   }
 
   onSubmit(): void {
@@ -63,6 +65,9 @@ export class LoginFormComponent {
             } else {
               sessionStorage.setItem('authToken', token);
             }
+
+            this.authService.login(token); // <-- notify the AuthService here
+
             this.showNotification('Login successful!', 'success');
             setTimeout(() => {
               this.router.navigate(['/']);

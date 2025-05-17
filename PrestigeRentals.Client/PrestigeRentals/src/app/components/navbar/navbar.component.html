@@ -1,15 +1,24 @@
 <div class="navbar">
-    <div class="logo-container">
-        <img src="assets/logo.png" alt="logo">
-    </div>
-    <div class="navbar-buttons-container">
-        <button (click)="navigateTo('')">HOME</button>
-        <button (click)="navigateTo('/Inventory')">INVENTORY</button>
-        <button (click)="navigateTo('/About')">ABOUT US</button>
-        <button (click)="navigateTo('/contact')">CONTACT US</button>
-    </div>
-    <div class="auth-container">
-        <button class="accent-button" (click)="navigateTo('/login')">LOG IN</button>
-        <button (click)="navigateTo('/Register')">SIGN IN</button>
-    </div>
+  <div class="logo-container">
+    <img src="assets/logo.png" alt="logo" />
+  </div>
+  <div class="navbar-buttons-container">
+    <button (click)="navigateTo('')">HOME</button>
+    <button (click)="navigateTo('/Inventory')">INVENTORY</button>
+    <button (click)="navigateTo('/About')">ABOUT US</button>
+    <button (click)="navigateTo('/contact')">CONTACT US</button>
+  </div>
+  <div class="auth-container">
+    <ng-container *ngIf="!(isLoggedIn$ | async); else loggedInButtons">
+      <button (click)="navigateTo('/login')" class="accent-button">
+        LOG IN
+      </button>
+      <button (click)="navigateTo('/register')">SIGN UP</button>
+    </ng-container>
+
+    <ng-template #loggedInButtons>
+      <button (click)="navigateTo('/profile')">PROFILE</button>
+      <button (click)="logout()">LOG OUT</button>
+    </ng-template>
+  </div>
 </div>

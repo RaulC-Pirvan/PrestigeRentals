@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
 
 namespace PrestigeRentals.Application.Services.Interfaces

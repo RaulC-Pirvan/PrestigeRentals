@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
 
 namespace PrestigeRentals.Application.Services.Interfaces
@@ -67,5 +68,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <param name="updateUserDetailsRequest">The request containing the new details for the user.</param>
         /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
         Task<bool> UpdateUserDetails(long userId, UpdateUserDetailsRequest updateUserDetailsRequest);
+
+        Task<UserProfileDTO> GetUserProfile(long userId);
     }
 }

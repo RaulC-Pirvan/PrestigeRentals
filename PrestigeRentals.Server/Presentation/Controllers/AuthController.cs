@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
@@ -365,6 +366,17 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
+        }
+
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetProfile()
+        {
+            var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
+                return Unauthorized();
+
+            var profile = await _userManagementService.GetUserProfile(userId);
+            return Ok(profile);
         }
     }
 }
