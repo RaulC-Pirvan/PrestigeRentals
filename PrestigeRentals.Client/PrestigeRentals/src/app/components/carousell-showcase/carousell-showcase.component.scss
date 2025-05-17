@@ -6,23 +6,14 @@
     align-items: center;
     flex-direction: column;
     height: auto;
-    width: 100%;
+    width: auto;
     padding: 0 100px;
     flex-direction: column;
     background-color: $secondary-colour;
 }
 
-.title-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
-    width: 100%;
-}
-
 .carousel-container {
     height: 70%;
-    padding: 20px;
     width: 100%;
     gap: 75px;
     display: flex;
@@ -30,6 +21,7 @@
     justify-content: space-between;
     flex-wrap: wrap;
     flex-direction: row;
+    padding: 50px;
 }
 
 img {
