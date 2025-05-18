@@ -11,6 +11,7 @@ import { EmailSettingsFormComponent } from './pages/settings/components/email-se
 import { PasswordSettingsFormComponent } from './pages/settings/components/password-settings-form/password-settings-form.component';
 import { DeactivateAccountFormComponent } from './pages/settings/components/deactivate-account-form/deactivate-account-form.component';
 import { DeleteAccountFormComponent } from './pages/settings/components/delete-account-form/delete-account-form.component';
+import { AboutUsComponent } from './pages/about-us/about-us.component';
 
 export const routes: Routes = [
   {
@@ -69,6 +70,10 @@ export const routes: Routes = [
         component: DeleteAccountFormComponent
       },
     ]
+  },
+  {
+    path: 'about-us',
+    component: AboutUsComponent
   },
   {
     path: '**',
