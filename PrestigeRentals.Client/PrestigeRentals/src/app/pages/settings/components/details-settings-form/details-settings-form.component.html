@@ -1,0 +1,21 @@
+<div class="details-settings-wrapper">
+  <form class="contact-form">
+    <div class="fields-container">
+      <div class="input-container">
+        <label for="">First Name</label>
+        <input type="text" id="firstName" formControlName="firstName" />
+      </div>
+      <div class="input-container">
+        <label for="">Last Name</label>
+        <input type="text" id="lastName" formControlName="lastName" />
+      </div>
+    </div>
+    <div class="button-container">
+      <app-button
+        buttonText="SAVE CHANGES >"
+        buttonType="accent"
+        (buttonClick)="(null)"
+      ></app-button>
+    </div>
+  </form>
+</div>

@@ -1,3 +1,27 @@
 <app-navbar></app-navbar>
-<app-details-settings-form></app-details-settings-form>
+<div class="wrapper">
+  <app-title text="SETTINGS"></app-title>
+  <div class="card-container">
+    <div class="menu-container">
+      <button class="settings-button" (click)="navigateTo('settings/details')">
+        CHANGE DETAILS
+      </button>
+      <button class="settings-button" routerLink="email">CHANGE EMAIL</button>
+      <button class="settings-button" routerLink="password">
+        CHANGE PASSWORD
+      </button>
+      <button class="settings-button" routerLink="deactivate">
+        DEACTIVATE ACCOUNT
+      </button>
+      <button class="settings-button" routerLink="delete">
+        DELETE ACCOUNT
+      </button>
+    </div>
+    <hr class="accent" />
+    <div class="settings-container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
 <app-footer></app-footer>

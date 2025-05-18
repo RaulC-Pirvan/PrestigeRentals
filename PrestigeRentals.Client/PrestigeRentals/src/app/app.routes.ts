@@ -6,6 +6,7 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthRedirectGuard } from './guards/auth-redirect.guard';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { DetailsSettingsFormComponent } from './pages/settings/components/details-settings-form/details-settings-form.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,12 @@ export const routes: Routes = [
   {
     path: 'settings',
     component: SettingsComponent,
+    children: [
+      {
+        path:'details',
+        component: DetailsSettingsFormComponent
+      },
+    ]
   },
   {
     path: '**',
