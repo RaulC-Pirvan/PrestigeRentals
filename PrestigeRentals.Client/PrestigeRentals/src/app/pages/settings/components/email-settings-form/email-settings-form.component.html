@@ -1,0 +1,21 @@
+<div class="details-settings-wrapper">
+  <form class="contact-form">
+    <div class="fields-container">
+      <div class="input-container">
+        <label for="">Old Email Address</label>
+        <input type="text" id="oldEmailAddress" formControlName="oldEmailAddress" />
+      </div>
+      <div class="input-container">
+        <label for="">New Email Address</label>
+        <input type="text" id="newEmailAddress" formControlName="newEmailAddress" />
+      </div>
+    </div>
+    <div class="button-container">
+      <app-button
+        buttonText="SAVE CHANGES >"
+        buttonType="accent"
+        (buttonClick)="(null)"
+      ></app-button>
+    </div>
+  </form>
+</div>

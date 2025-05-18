@@ -30,4 +30,15 @@ button {
     background-color: transparent;
     color: $accent-colour
   }
+
+  &.red {
+    background-color: #dc3545;
+    color: $text-colour;
+    border: 2px solid #dc3545;
+  }
+
+  &.red:hover {
+    background-color: transparent;
+    color: $text-colour
+  }
 }
