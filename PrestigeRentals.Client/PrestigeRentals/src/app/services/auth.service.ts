@@ -9,7 +9,7 @@ export interface User {
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  public loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedInSubject.asObservable();
 
   private userSubject = new BehaviorSubject<User | null>(null);
@@ -21,7 +21,7 @@ export class AuthService {
     }
   }
 
-  private loadUserProfile() {
+  public loadUserProfile() {
     const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     if(!token) return;
 
@@ -61,10 +61,6 @@ export class AuthService {
       sessionStorage.setItem('authToken', token);
       localStorage.removeItem('authToken');
     }
-
-    
-    this.loggedInSubject.next(true);
-    this.loadUserProfile();
   }
 
   logout(): void {

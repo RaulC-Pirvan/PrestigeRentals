@@ -57,6 +57,8 @@ export class LoginFormComponent {
           this.notificationService.show('Login successful!', 'success');
     
           setTimeout(() => {
+            this.authService.loggedInSubject.next(true);
+            this.authService.loadUserProfile();
             this.router.navigate(['/']);
           }, 1000);
         },
