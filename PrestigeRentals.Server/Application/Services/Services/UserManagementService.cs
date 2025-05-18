@@ -232,6 +232,9 @@ namespace PrestigeRentals.Application.Services.Services
             userDetails.FirstName = string.IsNullOrWhiteSpace(request.FirstName) ? userDetails.FirstName : request.FirstName;
             userDetails.LastName = string.IsNullOrWhiteSpace(request.LastName) ? userDetails.LastName : request.LastName;
 
+            if (request.ImageData != null && request.ImageData.Length > 0)
+                userDetails.ImageData = request.ImageData;
+
             await _userDetailsRepository.UpdateAsync(userDetails);
             _logger.LogInformation($"User with ID {userId} has been updated.");
             return true;

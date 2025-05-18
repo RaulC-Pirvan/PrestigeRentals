@@ -1,6 +1,7 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services;

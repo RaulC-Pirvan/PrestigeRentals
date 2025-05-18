@@ -10,11 +10,13 @@ namespace PrestigeRentals.Application.Requests
         /// <summary>
         /// Gets or sets the first name of the user to be updated.
         /// </summary>
-        public string FirstName { get; set; }
+        public string? FirstName { get; set; }
 
         /// <summary>
         /// Gets or sets the last name of the user to be updated.
         /// </summary>
-        public string LastName { get; set; }
+        public string? LastName { get; set; }
+
+        public byte[]? ImageData { get; set; }
     }
 }

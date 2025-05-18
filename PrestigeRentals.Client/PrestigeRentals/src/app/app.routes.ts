@@ -5,6 +5,7 @@ import { ForbiddenAccessComponent } from './pages/forbidden-access/forbidden-acc
 import { ContactComponent } from './pages/contact/contact.component';
 import { LoginComponent } from './pages/login/login.component';
 import { AuthRedirectGuard } from './guards/auth-redirect.guard';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 export const routes: Routes = [
   {
@@ -32,6 +33,10 @@ export const routes: Routes = [
     path: 'register',
     component: LoginComponent,
     canActivate: [AuthRedirectGuard]
+  },
+  {
+    path: 'settings',
+    component: SettingsComponent,
   },
   {
     path: '**',
