@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../../services/auth.service';
+import { AuthService, UserDetailsRequest } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({

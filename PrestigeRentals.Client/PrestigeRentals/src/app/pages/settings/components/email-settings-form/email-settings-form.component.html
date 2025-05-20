@@ -1,20 +1,16 @@
-<div class="details-settings-wrapper">
-  <form class="contact-form">
+<div class="email-settings-wrapper">
+  <form class="update-email-form" [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="fields-container">
       <div class="input-container">
-        <label for="">Old Email Address</label>
-        <input type="text" id="oldEmailAddress" formControlName="oldEmailAddress" />
-      </div>
-      <div class="input-container">
-        <label for="">New Email Address</label>
-        <input type="text" id="newEmailAddress" formControlName="newEmailAddress" />
+        <label for="emailAddress">New Email Address</label>
+        <input type="text" id="emailAddress" formControlName="email" placeholder="Enter email address"/>
       </div>
     </div>
     <div class="button-container">
       <app-button
         buttonText="SAVE CHANGES >"
         buttonType="accent"
-        (buttonClick)="(null)"
+        (buttonClick)="onSubmit()"
       ></app-button>
     </div>
   </form>

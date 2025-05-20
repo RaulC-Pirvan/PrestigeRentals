@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService, User } from '../../services/auth.service';
+import { AuthService, UserDetailsRequest } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 import { NotificationService } from '../../services/notification.service';
 
@@ -15,7 +15,7 @@ export class NavbarComponent implements OnInit {
   isLoggedIn$!: Observable<boolean>;
   notificationMessage: string | null = null;
   notificationType: 'success' | 'error' = 'success';
-  user$!: Observable<User | null>;
+  user$!: Observable<UserDetailsRequest | null>;
   menuOpen = false;
 
   constructor(
@@ -33,7 +33,7 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
     this.isLoggedIn$ = this.authService.isLoggedIn$;
-    this.user$ = this.authService.user$;
+    this.user$ = this.authService.userDetails$;
 
     this.user$.subscribe((user) => {
       console.log('User data received in navbar:', user);

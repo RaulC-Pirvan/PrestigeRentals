@@ -165,7 +165,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isPasswordChanged = await _userManagementService.ChangePassword(userId, oldPassword, newPassword);
-                return Ok("Password changed successfully.");
+                return Ok(new { message = "Password changed successfully." });
             }
             catch (InvalidPasswordException ex)
             {
@@ -195,7 +195,7 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 bool isEmailChanged = await _userManagementService.ChangeEmail(userId, newEmail);
                 if (isEmailChanged)
-                    return Ok("Email changed successfully.");
+                    return Ok(new { message = "User successfully updated." });
                 return BadRequest("Error: Email could not be changed.");
             }
             catch (EmailAlreadyExistsException ex)
@@ -357,7 +357,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserUpdated = await _userManagementService.UpdateUserDetails(userId, updateUserDetailsRequest);
-                return Ok("User successfully updated.");
+                return Ok(new { message = "User successfully updated." });
             }
             catch (UserNotFoundException ex)
             {

@@ -260,6 +260,7 @@ namespace PrestigeRentals.Application.Services.Services
 
             return new UserProfileDTO
             {
+                UserId = userId,
                 FirstName = userDetails.FirstName,
                 LastName = userDetails.LastName,
                 ImageData = userDetails.ImageData

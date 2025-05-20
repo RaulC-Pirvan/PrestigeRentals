@@ -8,6 +8,7 @@ namespace PrestigeRentals.Application.DTO
 {
     public class UserProfileDTO
     {
+        public long UserId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public byte[] ImageData { get; set; }

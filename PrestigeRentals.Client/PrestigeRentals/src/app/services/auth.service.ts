@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 
-export interface User {
+export interface UserDetailsRequest {
+  id: number;
   name: string;
   photo: string;
+  email: string;
+}
+
+export interface UserEmailRequest {
+  id: number;
+  email: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -12,10 +20,10 @@ export class AuthService {
   public loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedInSubject.asObservable();
 
-  private userSubject = new BehaviorSubject<User | null>(null);
-  user$: Observable<User | null> = this.userSubject.asObservable();
+  private userSubject = new BehaviorSubject<UserDetailsRequest | null>(null);
+  userDetails$: Observable<UserDetailsRequest | null> = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     if (this.hasToken()) {
       this.loadUserProfile();
     }
@@ -32,9 +40,12 @@ export class AuthService {
       .get<any>('https://localhost:7093/api/auth/profile', { headers })
       .subscribe({
         next: (res) => {
-          const user: User = {
+          console.log('Full profiel API response: ', res);
+          const user: UserDetailsRequest = {
+            id: res.userId,
             name: `${res.firstName}`,
             photo: res.imageData,
+            email: res.email
           };
           this.userSubject.next(user);
         },
@@ -75,6 +86,7 @@ export class AuthService {
       sessionStorage.removeItem('authToken');
       this.loggedInSubject.next(false);
       this.userSubject.next(null);
+      this.router.navigate(['/']);
     }
   }
 
