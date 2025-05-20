@@ -276,7 +276,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDeleted = await _userManagementService.DeleteAccount(userId);
-                return Ok("User deleted successfully.");
+                return Ok(new { message = "User deleted successfully." });
             }
             catch (UserNotFoundException ex)
             {

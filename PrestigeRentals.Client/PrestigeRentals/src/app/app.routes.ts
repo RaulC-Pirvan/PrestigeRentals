@@ -12,6 +12,7 @@ import { PasswordSettingsFormComponent } from './pages/settings/components/passw
 import { DeactivateAccountFormComponent } from './pages/settings/components/deactivate-account-form/deactivate-account-form.component';
 import { DeleteAccountFormComponent } from './pages/settings/components/delete-account-form/delete-account-form.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 export const routes: Routes = [
   {
@@ -74,6 +75,10 @@ export const routes: Routes = [
   {
     path: 'about-us',
     component: AboutUsComponent
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent
   },
   {
     path: '**',

@@ -42,7 +42,7 @@ namespace PrestigeRentals.Application.Services
         /// <returns>A task that represents the asynchronous operation, with a result of the user details if found, or null if not.</returns>
         public async Task<UserDetails> GetUserDetailsById(long userId)
         {
-            return await _dbContext.UsersDetails.FirstOrDefaultAsync(ud => ud.Id == userId);
+            return await _dbContext.UsersDetails.FirstOrDefaultAsync(ud => ud.UserID == userId);
         }
 
         public async Task<bool> IsAliveAsync(long userId)

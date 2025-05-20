@@ -67,7 +67,7 @@ namespace PrestigeRentals.Application.Services.Services
 
             await _userRepository.AddAsync(user);
 
-            await _emailService.SendVerificationEmailAsync(registerRequest.Email, verificationCode);
+            //await _emailService.SendVerificationEmailAsync(registerRequest.Email, verificationCode);
 
             byte[] imageData = null;
             if (!string.IsNullOrWhiteSpace(registerRequest.ImageData))
