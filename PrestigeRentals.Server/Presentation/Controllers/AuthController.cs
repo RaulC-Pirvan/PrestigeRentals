@@ -220,7 +220,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDeactivated = await _userManagementService.DeactivateAccount(userId);
-                return Ok("User deactivated successfully.");
+                return Ok(new { message = "User deactivated successfully." });
             }
             catch (UserAlreadyDeactivatedException ex)
             {

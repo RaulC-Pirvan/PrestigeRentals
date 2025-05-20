@@ -66,4 +66,16 @@ export class UserService {
       headers,
     });
   }
+
+  setInactive(userId: number) {
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    if (!token) {
+      throw new Error('No auth token found');
+    }
+
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+
+    return this.http.patch(`${this.baseUrl}/${userId}/set-inactive`, null, { headers });
+  }
 }
