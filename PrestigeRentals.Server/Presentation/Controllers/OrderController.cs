@@ -8,7 +8,7 @@ using PrestigeRentals.Application.Services.Interfaces;
 
 namespace PrestigeRentals.Presentation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/order")]
     [ApiController]
     public class OrderController : ControllerBase
     {

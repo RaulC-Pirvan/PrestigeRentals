@@ -6,7 +6,7 @@ using PrestigeRentals.Application.Services.Interfaces;
 namespace PrestigeRentals.Presentation.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/ticket")]
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _ticketService;
@@ -35,8 +35,8 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(tickets);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTicketById([FromQuery] long id)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetTicketById(long id)
         {
             var ticket = await _ticketService.GetTicketByIdAsync(id);
             if (ticket == null)
