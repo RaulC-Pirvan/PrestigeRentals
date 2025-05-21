@@ -36,5 +36,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <param name="id">The ID of the order to cancel.</param>
         /// <returns>A boolean value indicating whether the cancellation was successful.</returns>
         Task<bool> CancelOrder(long id);
+
+        Task<IEnumerable<OrderDTO>> GetOrdersByUserIdAsync(long userId);
     }
 }

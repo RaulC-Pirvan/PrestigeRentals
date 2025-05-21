@@ -1,4 +1,5 @@
 ﻿
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.DTO;
@@ -36,7 +37,7 @@ namespace PrestigeRentals.Presentation.Controllers
                 return Ok(createdOrder);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
@@ -56,7 +57,7 @@ namespace PrestigeRentals.Presentation.Controllers
                 return Ok(orders);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
@@ -80,14 +81,14 @@ namespace PrestigeRentals.Presentation.Controllers
                 return Ok(order);
             }
 
-            catch(OrderNotFoundException ex)
+            catch (OrderNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error: " + ex.Message); 
+                return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
 
@@ -108,16 +109,37 @@ namespace PrestigeRentals.Presentation.Controllers
                 return NoContent();
             }
 
-            catch(OrderAlreadyCancelledException ex)
+            catch (OrderAlreadyCancelledException ex)
             {
                 return Conflict(ex.Message);
             }
 
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
-           
+
+        }
+
+        [HttpGet("user")]
+        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrdersForUser()
+        {
+            try
+            {
+                var userIdString = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (string.IsNullOrEmpty(userIdString) || !long.TryParse(userIdString, out var userId))
+                {
+                    return Unauthorized();
+                }
+
+                var orders = await _orderService.GetOrdersByUserIdAsync(userId);
+                return Ok(orders);
+            }
+
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
         }
 
     }

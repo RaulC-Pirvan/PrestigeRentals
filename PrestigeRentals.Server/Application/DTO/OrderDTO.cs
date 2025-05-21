@@ -36,5 +36,10 @@ namespace PrestigeRentals.Application.DTO
         /// Gets or sets a value indicating whether the order has been cancelled.
         /// </summary>
         public bool IsCancelled { get; set; }
+
+        public string VehicleMake { get; set; }
+        public string VehicleModel { get; set; }
+
+        public string VehicleImage { get; set; }
     }
 }

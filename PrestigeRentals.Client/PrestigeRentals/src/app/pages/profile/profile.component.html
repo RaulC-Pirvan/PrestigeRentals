@@ -1,26 +1,53 @@
 <app-navbar></app-navbar>
 <div class="wrapper">
-    <div class="title-container">
-        <h1>WELCOME BACK, <span class="accent">{{firstName.toUpperCase()}}</span>!</h1>
+  <div class="title-container">
+    <h1>
+      WELCOME BACK, <span class="accent">{{ firstName.toUpperCase() }}</span
+      >!
+    </h1>
+  </div>
+
+  <div class="card-container">
+    <div class="header-container">
+      <div class="profile-photo-container">img</div>
+      <div class="profile-name-container">
+        <h3 class="accent">USER</h3>
+        <h3>NAME</h3>
+      </div>
     </div>
-    <div class="card-container">
-        <div class="header-container">
-            <div class="profile-photo-container">
-                img
-            </div>
-            <div class="profile-name-container">
-                <h3 class="accent">USER</h3>
-                <h3>NAME</h3>
-            </div>
-        </div>
-        <hr class="hr-accent">
-        <div class="buttons-container">
-            <button class="list">My Orders</button>
-            <button class="list">My Reviews</button>
-        </div>
-        <div class="info-container">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugiat quae dolor nostrum quod unde est optio a beatae at tempore! Odio, perferendis aperiam. Atque aliquid quis praesentium eligendi, debitis necessitatibus.
-        </div>
+
+    <hr class="hr-accent" />
+
+    <div class="buttons-container">
+      <button class="list" (click)="switchView('orders')">My Orders</button>
+      <button class="list" (click)="switchView('reviews')">My Reviews</button>
     </div>
+
+    <div class="info-container">
+      <!-- Orders -->
+      <ng-container *ngIf="currentView === 'orders'">
+        <app-order-preview
+          *ngFor="let order of displayedOrders; let i = index"
+          [order]="order"
+          [orderNumber]="(currentPage - 1) * itemsPerPage + i + 1"
+        ></app-order-preview>
+      </ng-container>
+
+
+      <!-- Pagination -->
+      <div class="pagination-controls">
+        <button (click)="changePage(-1)" [disabled]="currentPage === 1">
+          &lt;
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+        <button
+          (click)="changePage(1)"
+          [disabled]="currentPage === totalPages()"
+        >
+          &gt;
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
 <app-footer></app-footer>

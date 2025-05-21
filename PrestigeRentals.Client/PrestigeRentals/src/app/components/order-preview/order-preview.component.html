@@ -1,0 +1,27 @@
+<div class="order-preview">
+  <div class="info-container">
+    <div class="title-container">TITLE</div>
+    <div class="data-container">
+      <div class="data-item-container">
+        <p><strong>Order ID</strong></p>
+        <hr />
+        <p>{{ order.id }}</p>
+      </div>
+      <div class="data-item-container">
+        <p><strong>Vehicle ID</strong></p>
+        <hr />
+        <p>{{ order.vehicleId }}</p>
+      </div>
+      <div class="data-item-container">
+        <p><strong>Start Time</strong></p>
+        <hr />
+        <p>{{ order.startTime | date : "short" }}</p>
+      </div>
+      <div class="data-item-container">
+        <p><strong>End Time</strong></p>
+        <hr />
+        <p>{{ order.endTime | date : "short" }}</p>
+      </div>
+    </div>
+  </div>
+</div>

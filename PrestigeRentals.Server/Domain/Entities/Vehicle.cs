@@ -61,5 +61,6 @@ namespace PrestigeRentals.Domain.Entities
         /// </summary>
         [Required]
         public bool Available { get; set; } = true;
+
     }
 }

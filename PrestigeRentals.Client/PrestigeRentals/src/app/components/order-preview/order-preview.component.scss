@@ -1,0 +1,69 @@
+@import "../../../styles.scss";
+
+.order-preview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 1200px;
+    height: 200px;
+    background-color: $primary-colour;
+    border: 2px solid $accent-colour;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: 100%;
+}
+
+.info-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 25%;
+    height: 100%;
+}
+
+.title-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    padding: 20px;
+}
+
+.data-item-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    width: 23%;
+    gap: 5px;
+}
+
+.data-container {
+    justify-content: space-around;
+    align-items: end;
+    display: flex;
+    height: 80%;
+    width: 100%;
+    padding: 20px 0;
+}
+
+hr {
+    width: 100%;
+    height: 2px;
+    background-color: $accent-colour;
+    border: none;
+}

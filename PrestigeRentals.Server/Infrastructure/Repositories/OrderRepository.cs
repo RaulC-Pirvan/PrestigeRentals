@@ -132,5 +132,10 @@ namespace PrestigeRentals.Application.Services
         {
             return await _dbContext.Orders.Where(o => o.VehicleId == vehicleId && !o.IsCancelled && o.StartTime <= from && o.EndTime >= to).ToListAsync();
         }
+
+        public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(long userId)
+        {
+            return await _dbContext.Orders.Where(o => o.UserId == userId).ToListAsync();
+        }
     }   
 }

@@ -127,7 +127,7 @@ namespace PrestigeRentals.Application.Services.Services
             // Update the order in the repository
             await _orderRepository.UpdateAsync(order);
             var vehicle = await _vehicleRepository.GetVehicleById(order.VehicleId);
-            if(vehicle != null)
+            if (vehicle != null)
             {
                 vehicle.Available = true;
                 await _vehicleRepository.UpdateAsync(vehicle);
@@ -135,6 +135,21 @@ namespace PrestigeRentals.Application.Services.Services
 
             // Return true indicating the order was successfully cancelled
             return true;
+        }
+
+        public async Task<IEnumerable<OrderDTO>> GetOrdersByUserIdAsync(long userId)
+        {
+            var orders = await _orderRepository.GetOrdersByUserIdAsync(userId);
+
+            var orderDTOs = orders.Select(o => new OrderDTO
+            {
+                Id = o.Id,
+                UserId = o.UserId,
+                StartTime = o.StartTime,
+                EndTime = o.EndTime
+            });
+
+            return orderDTOs;
         }
     }
 }

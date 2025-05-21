@@ -44,5 +44,7 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         Task DeleteAsync(Order order);
 
         Task<List<Order>> GetActiveOrdersForVehicleAsync(long vehicleId, DateTime from,  DateTime to);
+
+        Task<IEnumerable<Order>> GetOrdersByUserIdAsync(long userId);
     }
 }

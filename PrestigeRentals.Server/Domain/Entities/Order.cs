@@ -44,5 +44,6 @@ namespace PrestigeRentals.Domain.Entities
         /// </summary>
         [Required]
         public bool IsCancelled { get; set; } = false;
+
     }
 }
