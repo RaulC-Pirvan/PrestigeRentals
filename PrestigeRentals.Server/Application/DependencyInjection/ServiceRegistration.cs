@@ -27,6 +27,7 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<IUserManagementService, UserManagementService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ITicketService, TicketService>();
 
             // Repositories
             services.AddScoped<IVehicleRepository, VehicleRepository>();
@@ -36,6 +37,7 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<IUserDetailsRepository, UserDetailsRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
             services.AddScoped<ILogEntryRepository, LogEntryRepository>();
+            services.AddScoped<ITicketRepository, TicketRepository>();
         }
     }
 }

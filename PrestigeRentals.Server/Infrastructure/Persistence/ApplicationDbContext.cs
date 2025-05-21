@@ -50,6 +50,8 @@ namespace PrestigeRentals.Infrastructure.Persistence
         /// </summary>
         public DbSet<Order> Orders { get; set; }
 
+        public DbSet<Ticket> Tickets { get; set; }
+
         /// <summary>
         /// Model configuration using Fluent API.
         /// </summary>
