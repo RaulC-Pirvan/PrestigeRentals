@@ -43,6 +43,7 @@ export class ProfileComponent implements OnInit {
     });
 
     this.loadOrders();
+    this.loadReviews();
     this.updateDisplayedItems();
   }
 

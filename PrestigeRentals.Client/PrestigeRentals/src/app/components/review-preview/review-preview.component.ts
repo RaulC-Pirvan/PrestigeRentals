@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component,  Input } from '@angular/core';
 
 @Component({
   selector: 'app-review-preview',
@@ -9,6 +9,8 @@ import { Component, Input } from '@angular/core';
   standalone: true,
 })
 export class ReviewPreviewComponent {
+
+
   @Input() review: any;
   @Input() reviewNumber!: number;
 }
