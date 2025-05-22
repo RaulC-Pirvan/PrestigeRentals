@@ -5,6 +5,7 @@ using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Application.Services.Services;
+using PrestigeRentals.Domain.Exceptions;
 using System.Security.Claims;
 
 namespace PrestigeRentals.Presentation.Controllers
@@ -68,7 +69,7 @@ namespace PrestigeRentals.Presentation.Controllers
                 return Ok(review);
             }
 
-            catch (OrderNotFoundException ex) // De adaugat exceptii custom pentru reviews
+            catch (ReviewNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
