@@ -6,11 +6,14 @@ import { OrderPreviewComponent } from '../../components/order-preview/order-prev
 import { ProfileService, UserProfile } from '../../services/profile.service';
 import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/order.model';
+import { ReviewService } from '../../services/review.service';
+import { Review } from '../../models/review.model';
+import { ReviewPreviewComponent } from '../../components/review-preview/review-preview.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, FooterComponent, OrderPreviewComponent],
+  imports: [CommonModule, NavbarComponent, FooterComponent, OrderPreviewComponent, ReviewPreviewComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
@@ -18,16 +21,16 @@ export class ProfileComponent implements OnInit {
   firstName: string = 'USER';
 
   orders: Order[] = [];
-  reviews: string[] = Array.from({ length: 14 }, (_, i) => `Review #${i + 1}`);
+  reviews: Review[] = []
 
   displayedOrders: Order[] = [];
-  displayedReviews: string[] = [];
+  displayedReviews: Review[] = [];
 
   currentView: 'orders' | 'reviews' = 'orders';
   currentPage: number = 1;
   itemsPerPage: number = 5;
 
-  constructor(private profileService: ProfileService, private orderService: OrderService) {}
+  constructor(private profileService: ProfileService, private orderService: OrderService, private reviewService: ReviewService) {}
 
   ngOnInit(): void {
     this.profileService.getProfile().subscribe({
@@ -51,6 +54,18 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading orders', err);
+      }
+    });
+  }
+
+    loadReviews() {
+    this.reviewService.getReviewsForCurrentUser().subscribe({
+      next: (reviews: Review[]) => {
+        this.reviews = reviews;
+        this.updateDisplayedItems();
+      },
+      error: (err) => {
+        console.error('Error loading reviews', err);
       }
     });
   }

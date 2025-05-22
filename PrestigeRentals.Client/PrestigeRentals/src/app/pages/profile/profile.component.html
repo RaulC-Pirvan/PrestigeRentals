@@ -33,6 +33,13 @@
         ></app-order-preview>
       </ng-container>
 
+      <ng-container *ngIf="currentView === 'reviews'">
+        <app-review-preview
+          *ngFor="let review of displayedReviews; let i = index"
+          [review]="review"
+          [reviewNumber]="(currentPage - 1) * itemsPerPage + i + 1"
+        ></app-review-preview>
+      </ng-container> 
 
       <!-- Pagination -->
       <div class="pagination-controls">
