@@ -13,15 +13,24 @@ import { ReviewPreviewComponent } from '../../components/review-preview/review-p
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, NavbarComponent, FooterComponent, OrderPreviewComponent, ReviewPreviewComponent],
+  imports: [
+    CommonModule,
+    NavbarComponent,
+    FooterComponent,
+    OrderPreviewComponent,
+    ReviewPreviewComponent,
+  ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
 export class ProfileComponent implements OnInit {
-  firstName: string = 'USER';
+  firstName: string = '';
+  lastName: string = '';
+  userId: number | null = null;
+  photoUrl: string = 'assets/default-avatar.jpg';
 
   orders: Order[] = [];
-  reviews: Review[] = []
+  reviews: Review[] = [];
 
   displayedOrders: Order[] = [];
   displayedReviews: Review[] = [];
@@ -30,18 +39,33 @@ export class ProfileComponent implements OnInit {
   currentPage: number = 1;
   itemsPerPage: number = 5;
 
-  constructor(private profileService: ProfileService, private orderService: OrderService, private reviewService: ReviewService) {}
+  constructor(
+    private profileService: ProfileService,
+    private orderService: OrderService,
+    private reviewService: ReviewService
+  ) {}
 
   ngOnInit(): void {
+    console.log('ProfileComponent initialized');
     this.profileService.getProfile().subscribe({
       next: (profile: UserProfile) => {
+        console.log('Profile retrieved:', profile);
         this.firstName = profile.firstName || 'USER';
+        this.lastName = profile.lastName || 'NAME';
+        this.userId = profile.userId;
+    
+        if (this.userId) {
+          console.log('Loading user photo for userId:', this.userId);
+          this.loadUserPhoto(this.userId); // ✅ only call here
+        } else {
+          console.warn('UserId is null or undefined');
+        }
       },
       error: (err) => {
         console.error('Error loading profile', err);
       },
     });
-
+  
     this.loadOrders();
     this.loadReviews();
     this.updateDisplayedItems();
@@ -55,11 +79,11 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading orders', err);
-      }
+      },
     });
   }
 
-    loadReviews() {
+  loadReviews() {
     this.reviewService.getReviewsForCurrentUser().subscribe({
       next: (reviews: Review[]) => {
         this.reviews = reviews;
@@ -67,7 +91,7 @@ export class ProfileComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading reviews', err);
-      }
+      },
     });
   }
 
@@ -83,7 +107,8 @@ export class ProfileComponent implements OnInit {
   }
 
   changePage(offset: number) {
-    const dataLength = this.currentView === 'orders' ? this.orders.length : this.reviews.length;
+    const dataLength =
+      this.currentView === 'orders' ? this.orders.length : this.reviews.length;
     const totalPages = Math.ceil(dataLength / this.itemsPerPage);
     const newPage = this.currentPage + offset;
 
@@ -100,7 +125,31 @@ export class ProfileComponent implements OnInit {
   }
 
   totalPages(): number {
-    const dataLength = this.currentView === 'orders' ? this.orders.length : this.reviews.length;
+    const dataLength =
+      this.currentView === 'orders' ? this.orders.length : this.reviews.length;
     return Math.ceil(dataLength / this.itemsPerPage);
+  }
+
+  loadUserPhoto(userId: number) {
+    console.log(`Fetching user image for userId: ${userId}`);
+  
+    this.profileService.getUserImageUrl(userId).subscribe({
+      next: (blob: Blob) => {
+        console.log('User image blob received:', blob);
+        const reader = new FileReader();
+        reader.onload = () => {
+          console.log('Image converted to data URL');
+          this.photoUrl = reader.result as string;
+          console.log('photoUrl set:', this.photoUrl);
+        };
+        reader.onerror = (error) => {
+          console.error('Error reading blob as data URL:', error);
+        };
+        reader.readAsDataURL(blob);
+      },
+      error: (err) => {
+        console.error('Error loading user photo', err);
+      },
+    });
   }
 }

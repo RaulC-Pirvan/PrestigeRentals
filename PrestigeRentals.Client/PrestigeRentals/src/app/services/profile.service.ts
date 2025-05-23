@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 
 export interface UserProfile {
   firstName: string;
-  imageData: string;
+  lastName: string;
+  userId: number;
 }
 
 @Injectable({
@@ -24,5 +25,15 @@ export class ProfileService {
     return this.http.get<UserProfile>(
       'https://localhost:7093/api/auth/profile', { headers }
     );
+  }
+
+  getUserImageUrl(userId: number): Observable<Blob> {
+    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    return this.http.get(`https://localhost:7093/api/image/user/${userId}`, {
+      responseType: 'blob',
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 }
