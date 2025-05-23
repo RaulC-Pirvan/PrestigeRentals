@@ -47,11 +47,8 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        /// <summary>
-        /// Profile image of the user, stored as a byte array.
-        /// </summary>
         [Required]
-        public byte[] ImageData { get; set; }
+        public string ProfileImageFileName { get; set; }
 
         /// <summary>
         /// Indicates whether this user details record is active.

@@ -26,7 +26,7 @@
       >
         <button class="user-button" (click)="toggleMenu()">
           <img
-            [src]="'data:image/jpeg;base64,' + (user$ | async)?.photo"
+            [src]="(user$ | async)?.photo || 'assets/default-avatar.png'"
             class="user-photo"
           />
           <span class="user-name">{{ (user$ | async)?.name || "User" }}</span>

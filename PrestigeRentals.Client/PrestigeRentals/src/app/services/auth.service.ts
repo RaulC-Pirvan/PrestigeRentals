@@ -44,7 +44,7 @@ export class AuthService {
           const user: UserDetailsRequest = {
             id: res.userId,
             name: `${res.firstName}`,
-            photo: res.imageData,
+            photo: `https://localhost:7093/api/image/user/${res.userId}`,
             email: res.email
           };
           this.userSubject.next(user);

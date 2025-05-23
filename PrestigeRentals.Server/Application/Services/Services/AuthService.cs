@@ -69,30 +69,14 @@ namespace PrestigeRentals.Application.Services.Services
 
             //await _emailService.SendVerificationEmailAsync(registerRequest.Email, verificationCode);
 
-            byte[] imageData = null;
-            if (!string.IsNullOrWhiteSpace(registerRequest.ImageData))
-            {
-                try
-                {
-                    imageData = Convert.FromBase64String(registerRequest.ImageData);
-                }
-                catch (FormatException)
-                {
-                    throw new InvalidPhotoFormatException();
-                }
-            }
-            else
-            {
-                imageData = Convert.FromBase64String(defaultProfilePictureBase64);
-            }
-
             var userDetails = new UserDetails
             {
                 UserID = user.Id,
                 FirstName = registerRequest.FirstName,
                 LastName = registerRequest.LastName,
-                DateOfBirth = registerRequest.DateOfBirth,
-                ImageData = imageData
+                DateOfBirth = registerRequest.DateOfBirth
+
+                // no ImagePath or ImageData set here
             };
 
             await _userDetailsRepository.AddAsync(userDetails);

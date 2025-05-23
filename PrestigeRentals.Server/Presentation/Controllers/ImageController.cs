@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using PrestigeRentals.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace PrestigeRentals.Presentation.Controllers
 {
@@ -12,10 +14,12 @@ namespace PrestigeRentals.Presentation.Controllers
     public class ImageController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
+        private readonly ApplicationDbContext _dbContext;
 
-        public ImageController(IWebHostEnvironment env)
+        public ImageController(IWebHostEnvironment env, ApplicationDbContext dbContext)
         {
             _env = env;
+            _dbContext = dbContext;
         }
 
         private string RootImages => Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "images");
@@ -35,6 +39,19 @@ namespace PrestigeRentals.Presentation.Controllers
             await using var stream = new FileStream(filePath, FileMode.Create);
             await image.CopyToAsync(stream);
 
+            if (long.TryParse(userId, out var userIdLong))
+            {
+                var userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(u => u.UserID == userIdLong);
+                if (userDetails != null)
+                {
+                    userDetails.ProfileImageFileName = fileName;
+                    await _dbContext.SaveChangesAsync();
+                }
+                else
+                    return NotFound($"User with id {userId} not found.");
+            }
+            else
+                return BadRequest("Invalid userId");
             return Ok(new { fileName });
         }
 

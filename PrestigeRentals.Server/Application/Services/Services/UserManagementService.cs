@@ -232,14 +232,13 @@ namespace PrestigeRentals.Application.Services.Services
             userDetails.FirstName = string.IsNullOrWhiteSpace(request.FirstName) ? userDetails.FirstName : request.FirstName;
             userDetails.LastName = string.IsNullOrWhiteSpace(request.LastName) ? userDetails.LastName : request.LastName;
 
-            if (request.ImageData != null && request.ImageData.Length > 0)
-                userDetails.ImageData = request.ImageData;
+            // Removed image update logic
 
             await _userDetailsRepository.UpdateAsync(userDetails);
             _logger.LogInformation($"User with ID {userId} has been updated.");
             return true;
         }
-        
+
         private async Task EnsureUserExists(long userId)
         {
             bool userAlive = await _userRepository.IsAliveAsync(userId);
@@ -263,7 +262,6 @@ namespace PrestigeRentals.Application.Services.Services
                 UserId = userId,
                 FirstName = userDetails.FirstName,
                 LastName = userDetails.LastName,
-                ImageData = userDetails.ImageData
             };
         }
     }
