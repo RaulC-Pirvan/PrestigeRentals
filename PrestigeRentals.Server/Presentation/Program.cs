@@ -115,6 +115,8 @@ namespace Presentation
             // Use Logging Middleware
             app.UseMiddleware<LoggingMiddleware>();
 
+            app.UseStaticFiles(); // enables wwwroot to serve images
+
             // Enable Swagger UI in development
             if (app.Environment.IsDevelopment())
             {

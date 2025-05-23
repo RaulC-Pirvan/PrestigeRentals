@@ -25,57 +25,65 @@ namespace PrestigeRentals.Presentation.Middleware
             var stopwatch = Stopwatch.StartNew();
             var originalBodyStream = context.Response.Body;
 
-            // Enable request body buffering to read it multiple times
+            // Enable request body buffering
             context.Request.EnableBuffering();
 
-            string requestBody = string.Empty;
-
-            // Read the request body
-            context.Request.Body.Seek(0, SeekOrigin.Begin);
-            using (var reader = new StreamReader(context.Request.Body, leaveOpen: true))
+            string requestBody;
+            if (context.Request.ContentType != null &&
+                context.Request.ContentType.StartsWith("multipart/form-data", StringComparison.OrdinalIgnoreCase))
             {
+                requestBody = "[multipart/form-data content omitted]";
+            }
+            else
+            {
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
+                using var reader = new StreamReader(context.Request.Body, leaveOpen: true);
                 requestBody = await reader.ReadToEndAsync();
+                context.Request.Body.Seek(0, SeekOrigin.Begin);
             }
-            context.Request.Body.Seek(0, SeekOrigin.Begin); // Reset so downstream can read the body
 
-            using (var memoryStream = new MemoryStream())
+            using var memoryStream = new MemoryStream();
+            context.Response.Body = memoryStream;
+
+            await _next(context);
+
+            stopwatch.Stop();
+
+            string responseBody;
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Only try to read response body if it’s text (you can customize this check)
+            if (context.Response.ContentType != null &&
+                context.Response.ContentType.StartsWith("application/json", StringComparison.OrdinalIgnoreCase))
             {
-                context.Response.Body = memoryStream;
-
-                // Call the next middleware in the pipeline
-                await _next(context);
-
-                stopwatch.Stop();
-
-                // Read the response body
+                using var reader = new StreamReader(memoryStream, leaveOpen: true);
+                responseBody = await reader.ReadToEndAsync();
                 memoryStream.Seek(0, SeekOrigin.Begin);
-                var responseBody = await new StreamReader(memoryStream).ReadToEndAsync();
-
-                using (var scope = _scopeFactory.CreateScope())
-                {
-                    var logRepo = scope.ServiceProvider.GetRequiredService<ILogEntryRepository>();
-
-                    // Create a new log entry
-                    var logEntry = new LogEntry
-                    {
-                        Path = context.Request.Path,
-                        Method = context.Request.Method,
-                        StatusCode = context.Response.StatusCode,
-                        RequestBody = requestBody,
-                        ResponseBody = responseBody,
-                        UserId = context.User?.Identity?.Name ?? "Anonymous", // Ensure UserId is captured
-                        DurationMs = stopwatch.ElapsedMilliseconds,
-                        Timestamp = DateTime.UtcNow
-                    };
-
-                    // Save the log entry to the database
-                    await logRepo.AddAsync(logEntry);
-                }
-
-                // Copy the content of the memory stream to the original response stream
-                memoryStream.Seek(0, SeekOrigin.Begin);
-                await memoryStream.CopyToAsync(originalBodyStream);
             }
+            else
+            {
+                responseBody = "[non-text response content omitted]";
+            }
+
+            using var scope = _scopeFactory.CreateScope();
+            var logRepo = scope.ServiceProvider.GetRequiredService<ILogEntryRepository>();
+
+            var logEntry = new LogEntry
+            {
+                Path = context.Request.Path,
+                Method = context.Request.Method,
+                StatusCode = context.Response.StatusCode,
+                RequestBody = requestBody,
+                ResponseBody = responseBody,
+                UserId = context.User?.Identity?.Name ?? "Anonymous",
+                DurationMs = stopwatch.ElapsedMilliseconds,
+                Timestamp = DateTime.UtcNow
+            };
+
+            await logRepo.AddAsync(logEntry);
+
+            memoryStream.Seek(0, SeekOrigin.Begin);
+            await memoryStream.CopyToAsync(originalBodyStream);
         }
 
         // Helper method to get request body (if needed for debugging)
