@@ -20,6 +20,9 @@ namespace PrestigeRentals.Application.Requests
         /// </summary>
         public string? Model { get; set; }
 
+        public string? Chassis { get; set; }
+
+        public int? Horsepower { get; set; }
         /// <summary>
         /// Gets or sets the engine size of the vehicle (e.g., 2.5, 3.0).
         /// This is an optional field for updating the vehicle.

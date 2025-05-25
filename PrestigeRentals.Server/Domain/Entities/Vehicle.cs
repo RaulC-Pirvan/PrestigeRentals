@@ -26,6 +26,12 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public string Model { get; set; }
 
+        [Required]
+        public string Chassis { get; set; }
+
+        [Required]
+        public int Horsepower { get; set; }
+
         /// <summary>
         /// Engine size in liters (e.g., 2.0, 3.5).
         /// </summary>

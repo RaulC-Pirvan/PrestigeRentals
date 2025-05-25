@@ -65,3 +65,60 @@ select {
     width: 100%;
     gap: 20px;
 }
+
+.inventory-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: $secondary-colour;
+    flex-direction: column;
+}
+
+.top-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.bottom-container {
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    width: 100%;
+    padding: 20px 50px;
+    border: 2px solid red;
+}
+
+.search-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    width: 80%;
+    gap: 5px;
+}
+
+.sort-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    width: 10%;
+}
+
+.search-input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    width: 100%;
+    height: 30px;
+    background-color: $primary-colour;
+    padding: 0 10px;
+    color: $text-colour;
+}
+

@@ -1,0 +1,25 @@
+<div *ngIf="loading">Loading vehicles...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="pagedVehicles.length > 0" class="vehicles-list">
+  <app-vehicle-card
+    *ngFor="let vehicle of pagedVehicles"
+    [vehicleId]="vehicle.id">
+  </app-vehicle-card>
+</div>
+
+<div *ngIf="!loading && pagedVehicles.length === 0">
+  No vehicles found.
+</div>
+
+<div class="pagination-controls" *ngIf="totalPages > 1">
+  <button (click)="setPage(currentPage - 1)" [disabled]="currentPage === 1">
+    Previous
+  </button>
+
+  <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+  <button (click)="setPage(currentPage + 1)" [disabled]="currentPage === totalPages">
+    Next
+  </button>
+</div>

@@ -17,6 +17,10 @@ namespace PrestigeRentals.Application.Requests
         /// Gets or sets the model of the vehicle (e.g., Camry, Focus, etc.).
         /// </summary>
         public string Model { get; set; }
+        
+        public string Chassis { get; set; }
+
+        public int Horsepower { get; set; }
 
         /// <summary>
         /// Gets or sets the engine size of the vehicle (e.g., 2.5, 3.0, etc.).

@@ -6,6 +6,8 @@ export interface Vehicle {
   id: number;
   make: string;
   model: string;
+  chassis: string;
+  horsepower: number;
   engineSize: number;
   fuelType: string;
   transmission: string;
@@ -42,5 +44,10 @@ export class VehicleService {
       headers,
       responseType: 'blob',
     });
+  }
+
+  getAllVehicles(onlyActive: boolean = true): Observable<Vehicle[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<Vehicle[]>(`${this.baseUrl}/vehicle?onlyActive=${onlyActive}`, { headers });
   }
 }

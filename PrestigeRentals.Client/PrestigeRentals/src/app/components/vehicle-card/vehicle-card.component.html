@@ -1,0 +1,51 @@
+<div class="wrapper">
+    <div class="image-container">
+        <img [src]="vehicleImageUrl" alt="Vehicle image" />
+    </div>
+    <div class="text-container">
+        {{ vehicleData?.make }} {{ vehicleData?.model }}
+    </div>
+    <div class="title-container"></div>
+    <hr>
+    <div class="info-container">
+        <div class="info-element">
+            <div class="picture-element">
+                <img src="assets/map-car-fuel 1.png" alt="">
+            </div>
+            <div class="details-element">
+                {{ vehicleData?.fuelType }}
+            </div>
+        </div>
+        <div class="info-element">
+            <div class="picture-element">
+                <img src="assets/car 1.png" alt="">
+            </div>
+            <div class="details-element">
+                {{ vehicleData?.chassis }}
+            </div>
+        </div>
+        <div class="info-element">
+            <div class="picture-element">
+                <img src="assets/gearshift 1.png" alt="">
+            </div>
+            <div class="details-element">
+                {{ vehicleData?.transmission }}
+            </div>
+        </div>
+        <div class="info-element">
+            <div class="picture-element">
+                <img src="assets/lightning-bolt 1.png" alt="">
+            </div>
+            <div class="details-element">
+                {{ vehicleData?.horsepower }}
+            </div>
+        </div>
+    </div>
+    <div class="button-container">
+        <app-button
+        buttonText="SEE MORE >"
+        buttonType="accent"
+        (buttonClick)="(null)"
+      ></app-button>
+    </div>
+</div>

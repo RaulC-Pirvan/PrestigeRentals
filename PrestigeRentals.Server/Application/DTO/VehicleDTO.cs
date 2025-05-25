@@ -19,6 +19,10 @@ namespace PrestigeRentals.Application.DTO
         /// </summary>
         public string Model { get; set; }
 
+        public string Chassis { get; set; }
+
+        public int Horsepower { get; set; }
+
         /// <summary>
         /// Gets or sets the engine size of the vehicle in liters.
         /// </summary>

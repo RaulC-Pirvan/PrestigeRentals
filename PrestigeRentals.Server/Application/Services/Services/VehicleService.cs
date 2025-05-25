@@ -201,6 +201,8 @@ namespace PrestigeRentals.Application.Services.Services
             {
                 Make = vehicleRequest.Make,
                 Model = vehicleRequest.Model,
+                Chassis = vehicleRequest.Chassis,
+                Horsepower = vehicleRequest.Horsepower,
                 EngineSize = vehicleRequest.EngineSize,
                 FuelType = vehicleRequest.FuelType,
                 Transmission = vehicleRequest.Transmission
@@ -226,6 +228,8 @@ namespace PrestigeRentals.Application.Services.Services
                 Id = vehicle.Id,
                 Make = vehicle.Make,
                 Model = vehicle.Model,
+                Chassis = vehicle.Chassis,
+                Horsepower = vehicle.Horsepower,
                 EngineSize = vehicle.EngineSize,
                 FuelType = vehicle.FuelType,
                 Transmission = vehicle.Transmission,
@@ -281,6 +285,8 @@ namespace PrestigeRentals.Application.Services.Services
                 Id = vehicle.Id,
                 Make = vehicle.Make,
                 Model = vehicle.Model,
+                Chassis = vehicle.Chassis,
+                Horsepower = vehicle.Horsepower,
                 EngineSize = vehicle.EngineSize,
                 FuelType = vehicle.FuelType,
                 Transmission = vehicle.Transmission,
@@ -301,6 +307,8 @@ namespace PrestigeRentals.Application.Services.Services
         {
             vehicle.Make = request.Make ?? vehicle.Make;
             vehicle.Model = request.Model ?? vehicle.Model;
+            vehicle.Chassis = request.Chassis ?? vehicle.Chassis;
+            vehicle.Horsepower = request.Horsepower ?? vehicle.Horsepower;
             vehicle.EngineSize = request.EngineSize ?? vehicle.EngineSize;
             vehicle.FuelType = request.FuelType ?? vehicle.FuelType;
             vehicle.Transmission = request.Transmission ?? vehicle.Transmission;

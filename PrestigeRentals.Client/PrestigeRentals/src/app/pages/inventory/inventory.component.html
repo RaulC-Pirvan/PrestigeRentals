@@ -38,16 +38,34 @@
       </div>
     </div>
     <div class="button-container">
-        <app-button
+      <app-button
         buttonText="APPLY FILTERS >"
         buttonType="accent"
         (buttonClick)="(null)"
       ></app-button>
       <app-button
-      buttonText="RESET FILTERS >"
-      buttonType="transparent"
-      (buttonClick)="(null)"
-    ></app-button>
+        buttonText="RESET FILTERS >"
+        buttonType="transparent"
+        (buttonClick)="(null)"
+      ></app-button>
+    </div>
+  </div>
+
+  <div class="inventory-container">
+    <div class="top-container">
+      <div class="search-container">
+        <label for="search">SEARCH</label>
+        <input type="text" class="search-input" />
+      </div>
+      <div class="sort-container">
+        <label for="sort">SORT BY</label>
+        <select name="sort" id="sort-input">
+          <option value="">Any</option>
+        </select>
+      </div>
+    </div>
+    <div class="bottom-container">
+      <app-vehicles-list></app-vehicles-list>
     </div>
   </div>
 </div>
