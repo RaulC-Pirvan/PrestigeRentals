@@ -13,6 +13,7 @@ import { DeactivateAccountFormComponent } from './pages/settings/components/deac
 import { DeleteAccountFormComponent } from './pages/settings/components/delete-account-form/delete-account-form.component';
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { InventoryComponent } from './pages/inventory/inventory.component';
 
 export const routes: Routes = [
   {
@@ -26,6 +27,10 @@ export const routes: Routes = [
   {
     path: 'forbidden',
     component: ForbiddenAccessComponent,
+  },
+  {
+    path: 'inventory',
+    component: InventoryComponent
   },
   {
     path: 'contact',

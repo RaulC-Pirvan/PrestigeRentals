@@ -1,0 +1,67 @@
+@import "../../../styles.scss";
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: auto;
+  width: 100%;
+  padding: 50px 100px;
+  flex-direction: column;
+  background-color: $primary-colour;
+}
+
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  background-color: $secondary-colour;
+  padding: 20px;
+  margin: 50px;
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 10px;
+}
+
+.filter-row {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+}
+
+.filter-group {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    width: 18%;
+    flex-direction: column;
+    gap: 5px;
+}
+
+select {
+    width: 100%;
+    height: 30px;
+    border: none;
+    background-color: $primary-colour;
+    color: $text-colour;
+    padding: 0 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    width: 100%;
+    gap: 20px;
+}

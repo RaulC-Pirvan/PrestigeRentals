@@ -1,0 +1,54 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <app-title text="INVENTORY"></app-title>
+  <div class="filters-container">
+    <div class="title-container">
+      <h2>FILTERS</h2>
+    </div>
+    <div class="filter-row">
+      <div class="filter-group">
+        <label for="make">MAKE</label>
+        <select id="make">
+          <option value="">Any</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="model">MODEL</label>
+        <select id="model">
+          <option value="">Any</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="size">SIZE</label>
+        <select id="size">
+          <option value="">Any</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="transmission">TRANSMISSION</label>
+        <select id="transmission">
+          <option value="">Any</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label for="fuel">FUEL</label>
+        <select id="fuel">
+          <option value="">Any</option>
+        </select>
+      </div>
+    </div>
+    <div class="button-container">
+        <app-button
+        buttonText="APPLY FILTERS >"
+        buttonType="accent"
+        (buttonClick)="(null)"
+      ></app-button>
+      <app-button
+      buttonText="RESET FILTERS >"
+      buttonType="transparent"
+      (buttonClick)="(null)"
+    ></app-button>
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

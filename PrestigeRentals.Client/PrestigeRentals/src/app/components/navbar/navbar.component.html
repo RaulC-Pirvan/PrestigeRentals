@@ -4,7 +4,7 @@
   </div>
   <div class="navbar-buttons-container">
     <button (click)="navigateTo('')">HOME</button>
-    <button (click)="navigateTo('/Inventory')">INVENTORY</button>
+    <button (click)="navigateTo('/inventory')">INVENTORY</button>
     <button (click)="navigateTo('/about-us')">ABOUT US</button>
     <button (click)="navigateTo('/contact')">CONTACT US</button>
   </div>
@@ -34,7 +34,6 @@
 
         <div class="dropdown-menu" *ngIf="menuOpen">
           <button (click)="navigateTo('/profile')">Profile</button>
-          <button (click)="navigateTo('/orders')">Orders</button>
           <button (click)="navigateTo('/settings')">Settings</button>
           <button (click)="logout()">Log Out</button>
         </div>
