@@ -1,71 +1,69 @@
 <app-navbar></app-navbar>
-<div class="wrapper">
+<div class="wrapper" [formGroup]="filterForm">
   <app-title text="INVENTORY"></app-title>
   <div class="filters-container">
     <div class="title-container">
       <h2>FILTERS</h2>
     </div>
     <div class="filter-row">
-      <div class="filter-group">
-        <label for="make">MAKE</label>
-        <select id="make">
-          <option value="">Any</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label for="model">MODEL</label>
-        <select id="model">
-          <option value="">Any</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label for="size">SIZE</label>
-        <select id="size">
-          <option value="">Any</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label for="transmission">TRANSMISSION</label>
-        <select id="transmission">
-          <option value="">Any</option>
-        </select>
-      </div>
-      <div class="filter-group">
-        <label for="fuel">FUEL</label>
-        <select id="fuel">
-          <option value="">Any</option>
-        </select>
+      <div class="filter-row">
+        <div class="filter-group">
+          <label for="make">MAKE</label>
+          <select id="make" formControlName="make">
+            <option value="">Any</option>
+            <option *ngFor="let make of makes" [value]="make">{{ make }}</option>
+          </select>
+        </div>
+      
+        <div class="filter-group">
+          <label for="model">MODEL</label>
+          <select id="model" formControlName="model">
+            <option value="">Any</option>
+            <option *ngFor="let model of models" [value]="model">{{ model }}</option>
+          </select>
+        </div>
+      
+        <div class="filter-group">
+          <label for="size">SIZE</label>
+          <select id="size" formControlName="chassis">
+            <option value="">Any</option>
+            <option *ngFor="let size of chassis" [value]="size">{{ size }}</option>
+          </select>
+        </div>
+      
+        <div class="filter-group">
+          <label for="transmission">TRANSMISSION</label>
+          <select id="transmission" formControlName="transmission">
+            <option value="">Any</option>
+            <option *ngFor="let transmission of transmissions" [value]="transmission">
+              {{ transmission }}
+            </option>
+          </select>
+        </div>
+      
       </div>
     </div>
     <div class="button-container">
       <app-button
         buttonText="APPLY FILTERS >"
         buttonType="accent"
-        (buttonClick)="(null)"
+        (buttonClick)="applyFilters()"
       ></app-button>
       <app-button
         buttonText="RESET FILTERS >"
         buttonType="transparent"
-        (buttonClick)="(null)"
+        (buttonClick)="resetFilters()"
       ></app-button>
     </div>
   </div>
 
   <div class="inventory-container">
-    <div class="top-container">
-      <div class="search-container">
-        <label for="search">SEARCH</label>
-        <input type="text" class="search-input" />
-      </div>
-      <div class="sort-container">
-        <label for="sort">SORT BY</label>
-        <select name="sort" id="sort-input">
-          <option value="">Any</option>
-        </select>
-      </div>
-    </div>
     <div class="bottom-container">
-      <app-vehicles-list></app-vehicles-list>
+      <app-vehicles-list
+        [filters]="filters"
+        [searchTerm]="searchTerm"
+        [sortBy]="sortBy"
+      ></app-vehicles-list>
     </div>
   </div>
 </div>

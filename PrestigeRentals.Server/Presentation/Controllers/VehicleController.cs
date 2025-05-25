@@ -16,10 +16,12 @@ namespace PrestigeRentals.Presentation.Controllers
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
+        private readonly IVehicleFilterService _filterService;
 
-        public VehicleController(IVehicleService vehicleService)
+        public VehicleController(IVehicleService vehicleService, IVehicleFilterService filterService)
         {
             _vehicleService = vehicleService;
+            _filterService = filterService;
         }
 
         /// <summary>
@@ -216,6 +218,13 @@ namespace PrestigeRentals.Presentation.Controllers
             var now = DateTime.UtcNow; // Or DateTime.Now depending on your use case
             var vehicles = await _vehicleService.GetVehiclesWithAvailability(now, onlyActive);
             return Ok(vehicles);
+        }
+
+        [HttpGet("filter-options")]
+        public async Task<ActionResult<VehicleFilterOptionsDto>> GetFilterOptions(CancellationToken cancellationToken)
+        {
+            var result = await _filterService.GetFilterOptionsAsync(cancellationToken);
+            return Ok(result);
         }
     }
 }

@@ -16,6 +16,14 @@ export interface Vehicle {
   available: boolean;
 }
 
+export interface VehicleFilterOptions {
+  makes: string[];
+  models: string[];
+  fuelTypes: string[];
+  transmissions: string[];
+  chassis: string[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -49,5 +57,10 @@ export class VehicleService {
   getAllVehicles(onlyActive: boolean = true): Observable<Vehicle[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<Vehicle[]>(`${this.baseUrl}/vehicle?onlyActive=${onlyActive}`, { headers });
+  }
+
+  getFilterOptions(): Observable<VehicleFilterOptions> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<VehicleFilterOptions>(`${this.baseUrl}/vehicle/filter-options`, { headers });
   }
 }
