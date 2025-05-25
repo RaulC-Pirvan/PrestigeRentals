@@ -1,6 +1,14 @@
 <div class="order-preview">
+  <div class="image-container">
+    <img
+      [src]="vehicleImageUrl || 'assets/vehicle-placeholder.png'"
+      alt="Vehicle Image"
+    />
+  </div>
   <div class="info-container">
-    <div class="title-container">TITLE</div>
+    <div class="title-container">
+      {{ vehicleMakeModel || "Unknown Vehicle" }}
+    </div>
     <div class="data-container">
       <div class="data-item-container">
         <p><strong>Order ID</strong></p>

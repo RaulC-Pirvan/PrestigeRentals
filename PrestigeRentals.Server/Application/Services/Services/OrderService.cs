@@ -145,6 +145,7 @@ namespace PrestigeRentals.Application.Services.Services
             {
                 Id = o.Id,
                 UserId = o.UserId,
+                VehicleId = o.VehicleId,
                 StartTime = o.StartTime,
                 EndTime = o.EndTime
             });

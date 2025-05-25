@@ -72,10 +72,13 @@ export class ProfileComponent implements OnInit {
   }
 
   loadOrders() {
-    this.orderService.getOrdersForCurrentUser().subscribe({
+    this.orderService.getUserOrders().subscribe({
       next: (orders: Order[]) => {
         this.orders = orders;
-        this.updateDisplayedItems();
+        this.currentPage = 1; // <-- Reset pagination
+        if (this.currentView === 'orders') {
+          this.updateDisplayedItems(); // <-- Only update if 'orders' is the active view
+        }
       },
       error: (err) => {
         console.error('Error loading orders', err);

@@ -7,22 +7,21 @@ import { Order } from '../models/order.model';
   providedIn: 'root',
 })
 export class OrderService {
-  private baseUrl = 'https://localhost:7093/api/order/user';
+  private baseUrl = 'https://localhost:7093/api/order';
 
   constructor(private http: HttpClient) {}
 
-  getOrdersForCurrentUser(): Observable<Order[]> {
-    const token =
-      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    if (!token) throw new Error('No auth token found');
 
-    if (!token) {
-      throw new Error('No auth token found');
-    }
-
-    const headers = new HttpHeaders({
+    return new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
+  }
 
+  getUserOrders(): Observable<Order[]> {
+    const headers = this.getAuthHeaders();
     return this.http.get<Order[]>(this.baseUrl, { headers });
   }
 }

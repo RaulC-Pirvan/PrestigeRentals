@@ -1,6 +1,8 @@
 export interface Order {
     id: number;
+    userId: number;
     vehicleId: number;
-    startTime: number;
-    endTime: number;
+    startTime: string;
+    endTime: string;
+    isCancelled: boolean;
 }
