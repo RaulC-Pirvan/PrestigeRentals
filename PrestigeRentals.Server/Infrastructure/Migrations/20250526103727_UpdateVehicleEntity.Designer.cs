@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PrestigeRentals.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using PrestigeRentals.Infrastructure.Persistence;
 namespace PrestigeRentals.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250526103727_UpdateVehicleEntity")]
+    partial class UpdateVehicleEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,14 +81,8 @@ namespace PrestigeRentals.Infrastructure.Migrations
                     b.Property<bool>("IsCancelled")
                         .HasColumnType("boolean");
 
-                    b.Property<decimal>("PricePerHour")
-                        .HasColumnType("numeric");
-
                     b.Property<DateTime>("StartTime")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<decimal>("TotalCost")
-                        .HasColumnType("numeric");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");

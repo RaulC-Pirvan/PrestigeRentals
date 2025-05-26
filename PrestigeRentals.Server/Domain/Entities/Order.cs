@@ -38,6 +38,12 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public DateTime EndTime { get; set; }
 
+        [Required]
+        public decimal PricePerHour { get; set; }
+
+        [Required]
+        public decimal TotalCost { get; set; }
+
         /// <summary>
         /// Gets or sets a flag indicating whether the order has been cancelled.
         /// Default value is false.

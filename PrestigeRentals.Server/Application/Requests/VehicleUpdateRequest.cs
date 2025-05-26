@@ -22,6 +22,8 @@ namespace PrestigeRentals.Application.Requests
 
         public string? Chassis { get; set; }
 
+        public decimal? PricePerHour { get; set; }
+
         public int? Horsepower { get; set; }
         /// <summary>
         /// Gets or sets the engine size of the vehicle (e.g., 2.5, 3.0).

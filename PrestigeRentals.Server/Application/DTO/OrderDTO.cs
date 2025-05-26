@@ -32,6 +32,10 @@ namespace PrestigeRentals.Application.DTO
         /// </summary>
         public DateTime EndTime { get; set; }
 
+        public decimal PricePerHour { get; set; }
+
+        public decimal TotalCost { get; set; }
+
         /// <summary>
         /// Gets or sets a value indicating whether the order has been cancelled.
         /// </summary>

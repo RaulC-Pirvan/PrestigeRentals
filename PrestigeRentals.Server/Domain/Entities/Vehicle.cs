@@ -68,5 +68,8 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public bool Available { get; set; } = true;
 
+        [Required]
+        public decimal PricePerHour { get; set; }
+
     }
 }
