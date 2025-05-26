@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Review } from '../models/review.model';
 
 export interface Vehicle {
   id: number;
@@ -94,6 +95,24 @@ export class VehicleService {
   getVehicleOptions(vehicleId: number) {
     return this.http.get<VehicleOptions>(
       `${this.baseUrl}/vehicle/${vehicleId}/options`
+    );
+  }
+
+  getReviewsByVehicleId(vehicleId: number): Observable<Review[]> {
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+
+    if (!token) {
+      throw new Error('No auth token found');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<Review[]>(
+      `${this.baseUrl}/review/vehicle/${vehicleId}`,
+      { headers }
     );
   }
 }

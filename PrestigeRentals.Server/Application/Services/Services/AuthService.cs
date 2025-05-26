@@ -130,5 +130,7 @@ namespace PrestigeRentals.Application.Services.Services
             var hashInputPassword = HashPassword(inputPassword);
             return hashInputPassword == storedHash;
         }
+
+
     }
 }

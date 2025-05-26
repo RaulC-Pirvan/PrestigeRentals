@@ -7,6 +7,9 @@ import { FooterComponent } from '../../components/footer/footer.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { Review } from '../../models/review.model';
+import { ReviewCardComponent } from '../../components/review-card/review-card.component';
+import { ProfileService } from '../../services/profile.service';
 
 export interface VehicleOptions {
   navigation: boolean;
@@ -24,6 +27,7 @@ export interface VehicleOptions {
     NavbarComponent,
     FormsModule,
     ButtonComponent,
+    ReviewCardComponent,
   ],
   templateUrl: './vehicle-detail.component.html',
   styleUrls: ['./vehicle-detail.component.scss'],
@@ -38,12 +42,17 @@ export class VehicleDetailComponent implements OnInit {
   totalDays: number = 0;
   totalCost: number = 0;
 
+  reviews: Review[] = [];
+  currentPage = 1;
+  pageSize = 5;
+
   vehicleOptions: VehicleOptions | null = null;
   trueFeatures: string[] = [];
 
   constructor(
     private route: ActivatedRoute,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private profileService: ProfileService
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +63,7 @@ export class VehicleDetailComponent implements OnInit {
         this.vehicleData = data;
         this.loadVehicleImages();
         this.loadVehicleOptions();
+        this.loadReviewsForVehicle(this.vehicleId);
       });
     }
   }
@@ -165,5 +175,56 @@ export class VehicleDetailComponent implements OnInit {
       },
       error: (err) => console.error('Error fetching vehicle options', err),
     });
+  }
+
+  loadReviewsForVehicle(vehicleId: number) {
+    this.vehicleService.getReviewsByVehicleId(vehicleId).subscribe({
+      next: (fetchedReviews: Review[]) => {
+        fetchedReviews.forEach((review) => {
+          this.profileService.getUserProfileById(review.userId).subscribe({
+            next: (profile) => {
+              review.userFirstName = profile.firstName;
+              review.userLastName = profile.lastName;
+            },
+            error: (err) => console.error('Failed to fetch user profile', err),
+          });
+
+          this.profileService.getUserImageUrl(review.userId).subscribe({
+            next: (blob) => {
+              review.userProfilePhotoUrl = URL.createObjectURL(blob);
+            },
+            error: (err) => console.error('Failed to fetch user image', err),
+          });
+        });
+
+        this.reviews = fetchedReviews;
+      },
+      error: (err) => console.error('Error fetching reviews', err),
+    });
+  }
+
+  get pagedReviews(): Review[] {
+    const start = (this.currentPage - 1) * this.pageSize;
+    return this.reviews.slice(start, start + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.reviews.length / this.pageSize);
+  }
+
+  averageRating: number = 4.8;
+
+  getStarArray(rating: number): number[] {
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(2); // full star
+      } else if (rating >= i - 0.5) {
+        stars.push(1); // half star
+      } else {
+        stars.push(0); // empty star
+      }
+    }
+    return stars;
   }
 }

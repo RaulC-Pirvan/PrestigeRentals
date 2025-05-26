@@ -23,17 +23,31 @@ export class ProfileService {
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
     return this.http.get<UserProfile>(
-      'https://localhost:7093/api/auth/profile', { headers }
+      'https://localhost:7093/api/auth/profile',
+      { headers }
     );
   }
 
   getUserImageUrl(userId: number): Observable<Blob> {
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     return this.http.get(`https://localhost:7093/api/image/user/${userId}`, {
       responseType: 'blob',
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
+  }
+
+  getUserProfileById(userId: number): Observable<UserProfile> {
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    if (!token) throw new Error('No auth token found');
+
+    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+    return this.http.get<UserProfile>(
+      `https://localhost:7093/api/auth/profile/${userId}`,
+      { headers }
+    );
   }
 }

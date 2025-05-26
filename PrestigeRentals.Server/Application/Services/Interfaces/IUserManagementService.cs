@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
+using PrestigeRentals.Domain.Entities;
 
 namespace PrestigeRentals.Application.Services.Interfaces
 {
@@ -70,5 +71,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task<bool> UpdateUserDetails(long userId, UpdateUserDetailsRequest updateUserDetailsRequest);
 
         Task<UserProfileDTO> GetUserProfile(long userId);
+
     }
 }

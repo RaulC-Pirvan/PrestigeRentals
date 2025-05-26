@@ -13,5 +13,6 @@ namespace PrestigeRentals.Application.DTO
         public long VehicleId { get; set; }
         public int Rating { get; set; }
         public string Description { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

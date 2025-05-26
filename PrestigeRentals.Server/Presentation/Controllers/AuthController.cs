@@ -379,5 +379,23 @@ namespace PrestigeRentals.Presentation.Controllers
             var profile = await _userManagementService.GetUserProfile(userId);
             return Ok(profile);
         }
+
+        [HttpGet("profile/{userId}")]
+        public async Task<IActionResult> GetProfileByUserId(long userId)
+        {
+            try
+            {
+                var profile = await _userManagementService.GetUserProfile(userId);
+
+                if (profile == null)
+                    return NotFound();
+
+                return Ok(profile);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error retrieving user profile: {ex.Message}");
+            }
+        }
     }
 }

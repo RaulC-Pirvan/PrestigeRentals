@@ -101,5 +101,19 @@ namespace PrestigeRentals.Presentation.Controllers
 
             }
         }
+
+        [HttpGet("vehicle/{vehicleId}")]
+        public async Task<ActionResult> GetReviewsForVehicle(long vehicleId)
+        {
+            try
+            {
+                var reviews = await _reviewService.GetReviewsByVehicleIdAsync(vehicleId);
+                return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred while retrieving reviews: {ex.Message}");
+            }
+        }
     }
 }

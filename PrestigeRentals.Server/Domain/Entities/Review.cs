@@ -20,7 +20,11 @@ namespace PrestigeRentals.Domain.Entities
 
         [Required]
         public int Rating { get; set; }
+        
         [Required]
         public string Description { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
     }
 }

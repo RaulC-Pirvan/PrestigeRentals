@@ -266,16 +266,49 @@
       <h1>REVIEWS</h1>
     </div>
     <div class="rating-container">
-      <div class="stars-container">stea</div>
-      <div class="score-container">scor</div>
+      <div class="stars-container">
+        <ng-container
+          *ngFor="let star of getStarArray(averageRating); let i = index"
+        >
+          <span
+            [ngClass]="{
+              'full-star': star === 2,
+              'half-star': star === 1,
+              'empty-star': star === 0
+            }"
+            >&#9733;</span
+          >
+        </ng-container>
+      </div>
+      <div class="score-container">{{ averageRating.toFixed(1) }} / 5</div>
     </div>
     <hr />
-    <div class="review-stack-container">
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, facilis
-      nostrum ratione exercitationem quasi dolorum architecto. Aliquid,
-      consectetur architecto voluptas culpa facilis accusantium alias, eos ab
-      expedita assumenda odio autem!
+    <div *ngFor="let review of pagedReviews">
+      <app-review-card [review]="review"></app-review-card>
     </div>
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button
+        (click)="currentPage = currentPage - 1"
+        [disabled]="currentPage === 1"
+        class="reviewsButton"
+      >
+        &#10094;
+      </button>
+
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+      <button
+        (click)="currentPage = currentPage + 1"
+        [disabled]="currentPage === totalPages"
+        class="reviewsButton"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <ng-template #noReviews>
+      <div class="review-stack-container">No reviews yet for this vehicle.</div>
+    </ng-template>
   </div>
 </div>
 <app-footer></app-footer>

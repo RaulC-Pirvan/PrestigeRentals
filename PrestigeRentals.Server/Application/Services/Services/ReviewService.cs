@@ -85,11 +85,29 @@ namespace PrestigeRentals.Application.Services.Services
             var reviewDTOs = reviews.Select(r => new ReviewDTO
             {
                 Id = r.Id,
-                UserId = r.Id,
+                UserId = r.UserId,
                 VehicleId = r.VehicleId,
                 Rating = r.Rating,
-                Description = r.Description
+                Description = r.Description,
+                CreatedAt = r.CreatedAt
             });
+
+            return reviewDTOs;
+        }
+
+        public async Task<List<ReviewDTO>> GetReviewsByVehicleIdAsync(long vehicleId)
+        {
+            var reviews = await _reviewRepository.GetReviewsByVehicleIdAsync(vehicleId);
+
+            var reviewDTOs = reviews.Select(r => new ReviewDTO
+            {
+                Id = r.Id,
+                UserId = r.UserId,
+                VehicleId = r.VehicleId,
+                Rating = r.Rating,
+                Description = r.Description,
+                CreatedAt = r.CreatedAt
+            }).ToList();
 
             return reviewDTOs;
         }

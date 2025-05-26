@@ -1,0 +1,24 @@
+<div class="review-card">
+  <div class="review-user">
+    <img
+      *ngIf="review.userProfilePhotoUrl"
+      [src]="review.userProfilePhotoUrl"
+      alt="User photo"
+      class="user-photo"
+    />
+    <div class="user-info">
+      <div class="user-name">
+        {{ review.userFirstName }} {{ review.userLastName }}
+      </div>
+      <div class="review-date">{{ review.createdAt | date }}</div>
+    </div>
+  </div>
+  <div class="review-rating stars">
+    <ng-container *ngFor="let star of starsArray; let i = index">
+      <span [ngClass]="i < review.rating ? 'star-filled' : 'star-empty'"
+        >★</span
+      >
+    </ng-container>
+  </div>
+  <div class="review-description">{{ review.description }}</div>
+</div>

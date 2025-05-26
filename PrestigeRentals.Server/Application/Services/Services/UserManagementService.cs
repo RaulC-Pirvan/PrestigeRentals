@@ -264,5 +264,10 @@ namespace PrestigeRentals.Application.Services.Services
                 LastName = userDetails.LastName,
             };
         }
+
+        public async Task<User> GetUserByIdAsync(long userId)
+        {
+            return await _userRepository.GetUserById(userId);
+        }
     }
 }

@@ -20,5 +20,6 @@ namespace PrestigeRentals.Domain.Interfaces
         Task DeleteAsync(Review review);
 
         Task<IEnumerable<Review>> GetReviewsByUserIdAsync(long userId);
+        Task<IEnumerable<Review>> GetReviewsByVehicleIdAsync(long vehicleId);
     }
 }
