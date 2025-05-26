@@ -1,0 +1,167 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <div class="main-container">
+    <div class="image-container">
+      <div class="carousel" *ngIf="imageUrls.length > 0">
+        <button
+          (click)="prevImage()"
+          [disabled]="imageUrls.length <= 1"
+          class="carousel-btn left-btn"
+        >
+          &#10094;
+        </button>
+
+        <img
+          [src]="imageUrls[currentImageIndex]"
+          alt="Vehicle image"
+          class="carousel-image"
+        />
+
+        <button
+          (click)="nextImage()"
+          [disabled]="imageUrls.length <= 1"
+          class="carousel-btn right-btn"
+        >
+          &#10095;
+        </button>
+
+        <div class="carousel-bullets">
+          <span
+            *ngFor="let img of imageUrls; let i = index"
+            (click)="goToImage(i)"
+            [class.active]="i === currentImageIndex"
+            class="bullet"
+          >
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="info-container">
+      <div class="title-container">
+        <h1>{{ vehicleData?.make }} {{ vehicleData?.model }}</h1>
+      </div>
+      <div class="text-container">
+        <div class="left-side-container">
+          <div class="details-container">
+            <h3>DETAILS</h3>
+            <hr />
+            <div class="inner-main-container">
+              <div class="inner-left-container">
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>MAKE:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.make }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>MODEL:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.model }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>SIZE:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.chassis }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="inner-right-container">
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>FUEL:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.fuelType }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>TRANSMISSION:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.transmission }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>HORSEPOWER:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.horsepower }} HP</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="features-container">
+            <h3>FEATURES</h3>
+            <hr />
+            <p>FEATURES PLACEHOLDER</p>
+            <p>FEATURES PLACEHOLDER</p>
+          </div>
+        </div>
+        <hr class="middle-hr" />
+        <div class="right-side-container">
+          <div class="time-container">
+            <div class="start-time-container">
+              <label for="startTime">Start Date</label>
+              <input
+                class="time-selector"
+                name="startTime"
+                type="datetime-local"
+                placeholder="Select start time"
+              />
+            </div>
+            <div class="end-time-container">
+              <label for="startTime">End Date</label>
+              <input
+                class="time-selector"
+                name="startTime"
+                type="datetime-local"
+                placeholder="Select start time"
+              />
+            </div>
+          </div>
+          <hr />
+          <div class="total-time-container">TIME PLACEHOLDER</div>
+          <hr />
+          <div class="cost-container">COST PLACEHOLDER</div>
+          <hr />
+          <div class="terms-container">TERMS PLACEHOLDER</div>
+          <div class="button-container">BUTTON PLACEHOLDER</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="similar-container">
+    <div class="similar-title-container">
+      <H1>SIMILAR CARS</H1>
+    </div>
+    <hr class="padded" />
+    <div class="cards-container">CARDS PLACEHOLDER</div>
+  </div>
+  <div class="review-container">
+    <div class="review-title-container">
+      <h1>REVIEWS</h1>
+    </div>
+    <div class="rating-container">
+      <div class="stars-container">stea</div>
+      <div class="score-container">scor</div>
+    </div>
+    <hr />
+    <div class="review-stack-container">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, facilis
+      nostrum ratione exercitationem quasi dolorum architecto. Aliquid,
+      consectetur architecto voluptas culpa facilis accusantium alias, eos ab
+      expedita assumenda odio autem!
+    </div>
+  </div>
+</div>
+<app-footer></app-footer>

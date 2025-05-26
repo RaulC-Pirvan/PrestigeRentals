@@ -28,7 +28,7 @@ export interface VehicleFilterOptions {
   providedIn: 'root',
 })
 export class VehicleService {
-  private baseUrl = 'https://localhost:7093/api';
+  baseUrl = 'https://localhost:7093/api';
 
   constructor(private http: HttpClient) {}
 
@@ -52,6 +52,11 @@ export class VehicleService {
       headers,
       responseType: 'blob',
     });
+  }
+
+  getAdditionalVehicleImages(vehiclId: number): Observable<string[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<string[]>(`${this.baseUrl}/image/vehicle/${vehiclId}`, {headers});
   }
 
   getAllVehicles(onlyActive: boolean = true): Observable<Vehicle[]> {

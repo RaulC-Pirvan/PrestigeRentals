@@ -1,0 +1,334 @@
+@import "../../../styles.scss";
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  padding: 100px;
+  flex-direction: column;
+}
+
+.main-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  height: 1000px;
+  flex-direction: column;
+  background-color: $secondary-colour;
+  margin-bottom: 50px;
+}
+
+.image-container {
+  height: 500px;
+  width: 100%;
+}
+
+.info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  padding: 0 10px;
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+}
+
+.details-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  padding: 0 10px;
+  gap: 5px;
+}
+
+.text-container {
+  display: flex;
+  align-items: start;
+  flex-direction: row;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.left-side-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  gap: 30px;
+}
+
+.right-side-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  padding: 0 10px;
+}
+
+.inner-main-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.inner-left-container {
+  width: 50%;
+}
+
+.inner-right-container {
+  width: 50%;
+}
+
+.features-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  padding: 0 10px;
+  gap: 5px;
+}
+
+hr {
+  width: 100%;
+  height: 2px;
+  border: none;
+  background-color: $accent-colour;
+}
+
+.middle-hr {
+  height: 100%;
+  width: 2px;
+}
+
+.time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.start-time-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.time-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  background-color: $primary-colour;
+  color: $text-colour;
+  padding: 0 10px;
+  border: none;
+}
+
+.end-time-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.total-time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  flex-direction: column;
+  height: 100px;
+}
+
+.cost-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  flex-direction: column;
+  height: 100px;
+}
+
+.terms-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+}
+
+.similar-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  background-color: $secondary-colour;
+  margin-bottom: 50px;
+  padding: 0 20px;
+}
+
+.similar-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.review-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  background-color: $secondary-colour;
+  margin-bottom: 50px;
+  padding: 0 20px;
+}
+
+.review-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.rating-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    flex-direction: column;
+    padding-bottom: 20px;
+}
+
+.review-stack-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.info-entry {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    width: 80%;
+}
+
+.info-key {
+    width: 50%;
+}
+
+.info-value {
+    width: 50%;
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+button {
+  position: absolute;
+  top: 50%; 
+  transform: translateY(-50%);
+  background: transparent;
+  padding: 20px;
+  font-weight: 600;
+  font-size: 24px;
+  color: $accent-colour;
+  z-index: 9999;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  border: none;
+}
+
+button.left-btn {
+  left: 10px;
+}
+
+button.right-btn {
+  right: 10px;
+}
+
+.carousel-bullets {
+  text-align: center;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+}
+
+.bullet {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  border-radius: 50%;
+  background-color: $text-colour;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bullet.active {
+  background-color: $accent-colour;
+}

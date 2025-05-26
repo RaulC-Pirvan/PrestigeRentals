@@ -121,6 +121,24 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(files);
         }
 
+        [HttpGet("vehicle/file/{fileName}")]
+        public IActionResult GetVehicleImageByFileName(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                return BadRequest("Filename is required");
+
+            var vehiclePath = Path.Combine(RootImages, "vehicle");
+
+            var files = Directory.GetFiles(vehiclePath, fileName, SearchOption.AllDirectories);
+
+            if (files.Length == 0)
+                return NotFound();
+
+            var filePath = files[0];
+            var contentType = GetContentType(filePath);
+            return File(System.IO.File.OpenRead(filePath), contentType);
+        }
+
         // === Helpers ===
 
         private void ClearDirectory(string path)

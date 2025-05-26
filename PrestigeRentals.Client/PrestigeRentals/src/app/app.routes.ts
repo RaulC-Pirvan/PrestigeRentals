@@ -14,6 +14,7 @@ import { DeleteAccountFormComponent } from './pages/settings/components/delete-a
 import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { InventoryComponent } from './pages/inventory/inventory.component';
+import { VehicleDetailComponent } from './pages/vehicle-detail/vehicle-detail.component';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,10 @@ export const routes: Routes = [
   {
     path: 'inventory',
     component: InventoryComponent
+  },
+  {
+    path: 'vehicle/:id',
+    component: VehicleDetailComponent
   },
   {
     path: 'contact',
