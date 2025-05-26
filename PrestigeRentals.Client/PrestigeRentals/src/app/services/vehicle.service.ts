@@ -8,12 +8,22 @@ export interface Vehicle {
   model: string;
   chassis: string;
   horsepower: number;
+  pricePerDay: number;
   engineSize: number;
   fuelType: string;
   transmission: string;
   active: boolean;
   deleted: boolean;
   available: boolean;
+}
+
+export interface VehicleOptions {
+  id: number;
+  vehicleId: number;
+  navigation: boolean;
+  headsUpDisplay: boolean;
+  hillAssist: boolean;
+  cruiseControl: boolean;
 }
 
 export interface VehicleFilterOptions {
@@ -33,7 +43,8 @@ export class VehicleService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     if (!token) throw new Error('No auth token found');
 
     return new HttpHeaders({
@@ -43,7 +54,9 @@ export class VehicleService {
 
   getVehicleById(vehicleId: number): Observable<Vehicle> {
     const headers = this.getAuthHeaders();
-    return this.http.get<Vehicle>(`${this.baseUrl}/vehicle/${vehicleId}`, { headers });
+    return this.http.get<Vehicle>(`${this.baseUrl}/vehicle/${vehicleId}`, {
+      headers,
+    });
   }
 
   getVehicleImage(vehicleId: number): Observable<Blob> {
@@ -56,16 +69,31 @@ export class VehicleService {
 
   getAdditionalVehicleImages(vehiclId: number): Observable<string[]> {
     const headers = this.getAuthHeaders();
-    return this.http.get<string[]>(`${this.baseUrl}/image/vehicle/${vehiclId}`, {headers});
+    return this.http.get<string[]>(
+      `${this.baseUrl}/image/vehicle/${vehiclId}`,
+      { headers }
+    );
   }
 
   getAllVehicles(onlyActive: boolean = true): Observable<Vehicle[]> {
     const headers = this.getAuthHeaders();
-    return this.http.get<Vehicle[]>(`${this.baseUrl}/vehicle?onlyActive=${onlyActive}`, { headers });
+    return this.http.get<Vehicle[]>(
+      `${this.baseUrl}/vehicle?onlyActive=${onlyActive}`,
+      { headers }
+    );
   }
 
   getFilterOptions(): Observable<VehicleFilterOptions> {
     const headers = this.getAuthHeaders();
-    return this.http.get<VehicleFilterOptions>(`${this.baseUrl}/vehicle/filter-options`, { headers });
+    return this.http.get<VehicleFilterOptions>(
+      `${this.baseUrl}/vehicle/filter-options`,
+      { headers }
+    );
+  }
+
+  getVehicleOptions(vehicleId: number) {
+    return this.http.get<VehicleOptions>(
+      `${this.baseUrl}/vehicle/${vehicleId}/options`
+    );
   }
 }

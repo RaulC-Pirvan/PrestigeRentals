@@ -69,7 +69,7 @@ namespace PrestigeRentals.Domain.Entities
         public bool Available { get; set; } = true;
 
         [Required]
-        public decimal PricePerHour { get; set; }
+        public decimal PricePerDay { get; set; }
 
     }
 }

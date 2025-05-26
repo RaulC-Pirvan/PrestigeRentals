@@ -39,7 +39,7 @@ namespace PrestigeRentals.Domain.Entities
         public DateTime EndTime { get; set; }
 
         [Required]
-        public decimal PricePerHour { get; set; }
+        public decimal PricePerDay { get; set; }
 
         [Required]
         public decimal TotalCost { get; set; }

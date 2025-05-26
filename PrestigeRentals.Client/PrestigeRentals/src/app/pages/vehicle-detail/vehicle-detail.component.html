@@ -103,8 +103,16 @@
           <div class="features-container">
             <h3>FEATURES</h3>
             <hr />
-            <p>FEATURES PLACEHOLDER</p>
-            <p>FEATURES PLACEHOLDER</p>
+            <div class="features-details-container">
+              <ul *ngIf="trueFeatures.length > 0; else noFeatures">
+                <li *ngFor="let feature of trueFeatures">
+                  {{ feature }}
+                </li>
+              </ul>
+              <ng-template #noFeatures>
+                <p>No available features listed for this vehicle.</p>
+              </ng-template>
+            </div>
           </div>
         </div>
         <hr class="middle-hr" />
@@ -115,27 +123,133 @@
               <input
                 class="time-selector"
                 name="startTime"
-                type="datetime-local"
-                placeholder="Select start time"
+                type="date"
+                [(ngModel)]="startTime"
+                (ngModelChange)="calculateCostAndDuration()"
               />
             </div>
             <div class="end-time-container">
-              <label for="startTime">End Date</label>
+              <label for="endTime">End Date</label>
               <input
                 class="time-selector"
-                name="startTime"
-                type="datetime-local"
-                placeholder="Select start time"
+                name="endTime"
+                type="date"
+                [(ngModel)]="endTime"
+                (ngModelChange)="calculateCostAndDuration()"
               />
             </div>
           </div>
           <hr />
-          <div class="total-time-container">TIME PLACEHOLDER</div>
+          <div class="total-time-container">
+            <h1>TIME</h1>
+            <h2>{{ totalDays }} Day{{ totalDays > 1 ? "s" : "" }}</h2>
+          </div>
           <hr />
-          <div class="cost-container">COST PLACEHOLDER</div>
+          <div class="cost-container">
+            <h1>COST</h1>
+            <h2>
+              <span class="bold">{{ totalCost | currency }}</span> ({{
+                vehicleData?.pricePerDay | currency
+              }}/day)
+            </h2>
+          </div>
           <hr />
-          <div class="terms-container">TERMS PLACEHOLDER</div>
-          <div class="button-container">BUTTON PLACEHOLDER</div>
+          <div class="terms-container">
+            <div class="terms-checkbox-container">
+              <label>
+                <input type="checkbox" [(ngModel)]="termsAccepted" />
+                I have read and accept the
+                <b
+                  class="terms-link"
+                  (click)="openTermsPopup()"
+                  style="cursor: pointer"
+                  >terms of this agreement</b
+                >.
+              </label>
+            </div>
+            <div
+              *ngIf="showTermsPopup"
+              class="terms-popup-backdrop"
+              (click)="closeTermsPopup()"
+            >
+              <div class="terms-popup" (click)="$event.stopPropagation()">
+                <h2>Terms and Conditions</h2>
+                <p>
+                  By using this service, you agree to the following terms and
+                  conditions. Please read them carefully before proceeding with
+                  your booking.
+                </p>
+
+                <h3>1. Agreement to Terms</h3>
+                <p>
+                  These Terms and Conditions constitute a legally binding
+                  agreement made between you and [Your Company Name], concerning
+                  your access to and use of our vehicle rental services.
+                </p>
+
+                <h3>2. Rental Eligibility</h3>
+                <p>
+                  You must be at least 21 years old and hold a valid driver’s
+                  license. The license must be valid for the entire rental
+                  period.
+                </p>
+
+                <h3>3. Booking and Payment</h3>
+                <p>
+                  Full payment must be made at the time of booking. Prices are
+                  subject to change without prior notice, but once booked and
+                  paid, the cost is fixed.
+                </p>
+
+                <h3>4. Vehicle Use</h3>
+                <p>
+                  The vehicle must only be driven by the individual(s) named in
+                  the rental agreement. The renter agrees to operate the vehicle
+                  in a safe and lawful manner at all times.
+                </p>
+
+                <h3>5. Cancellations and Refunds</h3>
+                <p>
+                  Cancellations made more than 48 hours before the rental period
+                  will receive a full refund. No refunds will be issued for
+                  cancellations made within 48 hours of the rental start time.
+                </p>
+
+                <h3>6. Damages and Liability</h3>
+                <p>
+                  The renter is responsible for any damage to the vehicle during
+                  the rental period. Insurance may cover certain damages, but
+                  deductibles and exclusions apply.
+                </p>
+
+                <h3>7. Privacy</h3>
+                <p>
+                  Your personal data will be handled in accordance with our
+                  Privacy Policy. We do not share your information with third
+                  parties without your consent, except as required by law.
+                </p>
+
+                <h3>8. Modifications</h3>
+                <p>
+                  We reserve the right to modify these terms at any time.
+                  Continued use of the service after changes constitutes your
+                  acceptance of the new terms.
+                </p>
+
+                <p>
+                  If you do not agree with any of these terms, you should not
+                  proceed with the booking.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="button-container">
+            <app-button
+              buttonText="CONTINUE >"
+              buttonType="accent"
+              (buttonClick)="(null)"
+            ></app-button>
+          </div>
         </div>
       </div>
     </div>

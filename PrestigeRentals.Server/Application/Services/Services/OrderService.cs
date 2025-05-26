@@ -38,8 +38,8 @@ namespace PrestigeRentals.Application.Services.Services
             if (vehicle == null)
                 throw new ArgumentException("Vehicle not found");
 
-            var duration = (createOrderRequest.EndTime - createOrderRequest.StartTime).TotalHours;
-            var totalCost = (decimal)duration * vehicle.PricePerHour;
+            var duration = (createOrderRequest.EndTime - createOrderRequest.StartTime).TotalDays;
+            var totalCost = (decimal)duration * vehicle.PricePerDay;
 
             // Create a new order entity
             Order order = new Order
@@ -48,7 +48,7 @@ namespace PrestigeRentals.Application.Services.Services
                 VehicleId = createOrderRequest.VehicleId,
                 StartTime = createOrderRequest.StartTime,
                 EndTime = createOrderRequest.EndTime,
-                PricePerHour = vehicle.PricePerHour,
+                PricePerDay = vehicle.PricePerDay,
                 TotalCost = totalCost
             };
 
@@ -63,7 +63,7 @@ namespace PrestigeRentals.Application.Services.Services
                 VehicleId = order.VehicleId,
                 StartTime = order.StartTime,
                 EndTime = order.EndTime,
-                PricePerHour = order.PricePerHour,
+                PricePerDay = order.PricePerDay,
                 TotalCost = order.TotalCost
             };
         }
@@ -88,7 +88,7 @@ namespace PrestigeRentals.Application.Services.Services
                     VehicleId = order.VehicleId,
                     StartTime = order.StartTime,
                     EndTime = order.EndTime,
-                    PricePerHour = order.PricePerHour,
+                    PricePerDay = order.PricePerDay,
                     TotalCost = order.TotalCost,
                     IsCancelled = order.IsCancelled
                 });
@@ -118,7 +118,7 @@ namespace PrestigeRentals.Application.Services.Services
                 VehicleId = order.VehicleId,
                 StartTime = order.StartTime,
                 EndTime = order.EndTime,
-                PricePerHour = order.PricePerHour,
+                PricePerDay = order.PricePerDay,
                 TotalCost = order.TotalCost,
                 IsCancelled = order.IsCancelled
             };
@@ -162,7 +162,7 @@ namespace PrestigeRentals.Application.Services.Services
                 UserId = o.UserId,
                 VehicleId = o.VehicleId,
                 StartTime = o.StartTime,
-                PricePerHour = o.PricePerHour,
+                PricePerDay = o.PricePerDay,
                 TotalCost = o.TotalCost,
                 EndTime = o.EndTime
             });

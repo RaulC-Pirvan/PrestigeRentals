@@ -32,7 +32,7 @@ namespace PrestigeRentals.Application.DTO
         /// </summary>
         public DateTime EndTime { get; set; }
 
-        public decimal PricePerHour { get; set; }
+        public decimal PricePerDay { get; set; }
 
         public decimal TotalCost { get; set; }
 
