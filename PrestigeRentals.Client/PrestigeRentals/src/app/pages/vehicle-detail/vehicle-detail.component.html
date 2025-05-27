@@ -256,10 +256,34 @@
   </div>
   <div class="similar-container">
     <div class="similar-title-container">
-      <H1>SIMILAR CARS</H1>
+      <h1>SIMILAR CARS</h1>
     </div>
     <hr class="padded" />
-    <div class="cards-container">CARDS PLACEHOLDER</div>
+
+    <div class="carousel-wrapper">
+      <button
+        class="carousel-arrow left"
+        (click)="prevSlide()"
+        [disabled]="visibleStartIndex === 0"
+      >
+        &#10094;
+      </button>
+
+      <div class="cards-container">
+        <app-vehicle-suggestion
+          *ngFor="let id of visibleVehicles"
+          [vehicleId]="id"
+        ></app-vehicle-suggestion>
+      </div>
+
+      <button
+        class="carousel-arrow right"
+        (click)="nextSlide()"
+        [disabled]="visibleStartIndex + visibleCount >= similarVehicles.length"
+      >
+        &#10095;
+      </button>
+    </div>
   </div>
   <div class="review-container">
     <div class="review-title-container">

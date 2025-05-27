@@ -1,19 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { VehicleService, Vehicle } from '../../services/vehicle.service';
-import { DomSanitizer } from '@angular/platform-browser';
-import { ButtonComponent } from '../../shared/button/button.component';
-import { StringifyOptions } from 'querystring';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Vehicle, VehicleService } from '../../services/vehicle.service';
 import { Router } from '@angular/router';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ButtonComponent } from "../../shared/button/button.component";
 
 @Component({
-  selector: 'app-vehicle-card',
+  selector: 'app-vehicle-suggestion',
   imports: [ButtonComponent],
-  templateUrl: './vehicle-card.component.html',
-  styleUrl: './vehicle-card.component.scss',
+  templateUrl: './vehicle-suggestion.component.html',
+  styleUrl: './vehicle-suggestion.component.scss',
 })
-export class VehicleCardComponent implements OnInit {
-  @Input() vehicleId: number = 1;
-  @Input() vehicle?: Vehicle;
+export class VehicleSuggestionComponent implements OnInit {
+  @Input() vehicleId!: number;
 
   vehicleData?: Vehicle;
   vehicleImageUrl: string = 'assets/vehicle-placeholder.png';
@@ -25,14 +23,12 @@ export class VehicleCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(this.vehicle)
-    {
-      this.vehicleData = this.vehicle;
-    }
     this.loadVehicleData();
   }
 
   private loadVehicleData(): void {
+    if (!this.vehicleId) return;
+
     this.vehicleService.getVehicleById(this.vehicleId).subscribe({
       next: (vehicle) => {
         this.vehicleData = vehicle;
@@ -44,11 +40,7 @@ export class VehicleCardComponent implements OnInit {
 
     this.vehicleService.getVehicleImage(this.vehicleId).subscribe({
       next: (blob: Blob) => {
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.vehicleImageUrl = reader.result as string;
-        };
-        reader.readAsDataURL(blob);
+        this.vehicleImageUrl = URL.createObjectURL(blob);
       },
       error: () => {
         console.error('Failed to load vehicle image');
@@ -57,6 +49,6 @@ export class VehicleCardComponent implements OnInit {
   }
 
   goToDetails(id?: number) {
-    this.router.navigate(['/vehicle', id]);
+    if (id) this.router.navigate(['/vehicle', id]);
   }
 }

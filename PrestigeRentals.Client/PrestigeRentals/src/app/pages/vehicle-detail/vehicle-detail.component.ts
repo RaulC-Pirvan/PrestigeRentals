@@ -10,6 +10,9 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { Review } from '../../models/review.model';
 import { ReviewCardComponent } from '../../components/review-card/review-card.component';
 import { ProfileService } from '../../services/profile.service';
+import { forkJoin } from 'rxjs';
+import { VehicleCardComponent } from '../../components/vehicle-card/vehicle-card.component';
+import { VehicleSuggestionComponent } from '../../components/vehicle-suggestion/vehicle-suggestion.component';
 
 export interface VehicleOptions {
   navigation: boolean;
@@ -28,6 +31,7 @@ export interface VehicleOptions {
     FormsModule,
     ButtonComponent,
     ReviewCardComponent,
+    VehicleSuggestionComponent,
   ],
   templateUrl: './vehicle-detail.component.html',
   styleUrls: ['./vehicle-detail.component.scss'],
@@ -43,6 +47,8 @@ export class VehicleDetailComponent implements OnInit {
   totalCost: number = 0;
 
   averageRating: number = 0;
+
+  similarVehicles: number[] = [];
 
   reviews: Review[] = [];
   currentPage = 1;
@@ -66,6 +72,7 @@ export class VehicleDetailComponent implements OnInit {
         this.loadVehicleImages();
         this.loadVehicleOptions();
         this.loadReviewsForVehicle(this.vehicleId);
+        this.loadSimilarVehicles();
       });
     }
   }
@@ -215,8 +222,6 @@ export class VehicleDetailComponent implements OnInit {
     return Math.ceil(this.reviews.length / this.pageSize);
   }
 
-
-
   getStarArray(rating: number): number[] {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -242,5 +247,48 @@ export class VehicleDetailComponent implements OnInit {
       0
     );
     this.averageRating = totalStars / this.reviews.length;
+  }
+
+  loadSimilarVehicles() {
+    if (!this.vehicleData) return;
+
+    this.vehicleService
+      .getSimilarVehicleIds(
+        this.vehicleData.id,
+        this.vehicleData.chassis,
+        this.vehicleData.transmission
+      )
+      .subscribe({
+        next: (ids) => {
+          console.log('Similar vehicle IDs received:', ids);
+          this.similarVehicles = ids; // assign array of numbers here directly
+        },
+        error: (err) => console.error('Failed to get similar vehicle IDs', err),
+      });
+  }
+
+  visibleCount = 3;
+  visibleStartIndex = 0;
+
+  get visibleVehicles(): number[] {
+    return this.similarVehicles.slice(
+      this.visibleStartIndex,
+      this.visibleStartIndex + this.visibleCount
+    );
+  }
+
+  nextSlide() {
+    if (
+      this.visibleStartIndex + this.visibleCount <
+      this.similarVehicles.length
+    ) {
+      this.visibleStartIndex++;
+    }
+  }
+
+  prevSlide() {
+    if (this.visibleStartIndex > 0) {
+      this.visibleStartIndex--;
+    }
   }
 }

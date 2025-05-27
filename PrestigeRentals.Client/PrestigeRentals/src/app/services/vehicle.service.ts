@@ -115,4 +115,14 @@ export class VehicleService {
       { headers }
     );
   }
+
+  getSimilarVehicleIds(
+    id: number,
+    chassis: string,
+    transmission: string
+  ): Observable<number[]> {
+    return this.http.get<number[]>(`${this.baseUrl}/vehicle/similar`, {
+      params: { excludeId: id, chassis, transmission },
+    });
+  }
 }

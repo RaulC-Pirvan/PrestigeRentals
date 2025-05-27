@@ -1,0 +1,34 @@
+<div class="wrapper suggestion-card">
+  <div class="image-container">
+    <img [src]="vehicleImageUrl" alt="Vehicle image" />
+  </div>
+  <div class="text-container">
+    {{ vehicleData?.make }} {{ vehicleData?.model }}
+  </div>
+  <hr />
+  <div class="info-container">
+    <div class="info-element">
+      <img src="assets/map-car-fuel 1.png" alt="Fuel" />
+      <div>{{ vehicleData?.fuelType }}</div>
+    </div>
+    <div class="info-element">
+      <img src="assets/car 1.png" alt="Chassis" />
+      <div>{{ vehicleData?.chassis }}</div>
+    </div>
+    <div class="info-element">
+      <img src="assets/gearshift 1.png" alt="Transmission" />
+      <div>{{ vehicleData?.transmission }}</div>
+    </div>
+    <div class="info-element">
+      <img src="assets/lightning-bolt 1.png" alt="Horsepower" />
+      <div>{{ vehicleData?.horsepower }}</div>
+    </div>
+  </div>
+  <div class="button-container">
+    <app-button
+      buttonText="SEE MORE >"
+      buttonType="accent"
+      (buttonClick)="vehicleData && goToDetails(vehicleData.id)"
+    ></app-button>
+  </div>
+</div>

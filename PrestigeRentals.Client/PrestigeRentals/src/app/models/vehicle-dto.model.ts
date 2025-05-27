@@ -5,7 +5,7 @@ export interface VehicleDto {
     chassis: string;
     horsepower: number;
     pricePerDay: number;
-    engineSize?: number;     
+    engineSize: number;     
     fuelType: string;
     transmission: string;
     active?: boolean;
