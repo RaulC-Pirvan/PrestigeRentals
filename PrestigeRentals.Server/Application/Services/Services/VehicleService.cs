@@ -352,5 +352,10 @@ namespace PrestigeRentals.Application.Services.Services
 
             return vehicleAvailability;
         }
+
+        public Task<List<long>> GetSimilarVehicleIdsAsync(long excludeId, string chassis, string transmission)
+        {
+            return _vehicleRepository.GetSimilarVehicleIdsAsync(excludeId, chassis, transmission);
+        }
     }
 }

@@ -127,5 +127,10 @@ namespace PrestigeRentals.Application.Services
         {
             return await _dbContext.Vehicles.AnyAsync(v => v.Id == vehicleId && !v.Active && v.Deleted);
         }
+
+        public async Task<List<long>> GetSimilarVehicleIdsAsync(long excludeId, string chassis, string transmission)
+        {
+            return await _dbContext.Vehicles.Where(v => v.Id != excludeId && v.Chassis == chassis && v.Transmission == transmission).Select(v => v.Id).ToListAsync();
+        }
     }
 }

@@ -226,5 +226,12 @@ namespace PrestigeRentals.Presentation.Controllers
             var result = await _filterService.GetFilterOptionsAsync(cancellationToken);
             return Ok(result);
         }
+
+        [HttpGet("similar")]
+        public async Task<IActionResult> GetSimilarVehicleIds([FromQuery] long excludeId, [FromQuery] string chassis, [FromQuery] string transmission)
+        {
+            var ids = await _vehicleService.GetSimilarVehicleIdsAsync(excludeId, chassis, transmission);
+            return Ok(ids);
+        }
     }
 }

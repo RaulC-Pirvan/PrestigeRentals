@@ -70,5 +70,7 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task<VehicleDTO> UpdateVehicle(long vehicleId, VehicleUpdateRequest vehicleUpdateRequest);
 
         Task<List<VehicleAvailabilityDTO>> GetVehiclesWithAvailability(DateTime now, bool? onlyActive);
+
+        Task<List<long>> GetSimilarVehicleIdsAsync(long excludeId, string chassis, string transmission);
     }
 }

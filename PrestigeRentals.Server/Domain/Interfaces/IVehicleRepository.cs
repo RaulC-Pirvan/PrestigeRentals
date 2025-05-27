@@ -26,5 +26,6 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         Task<VehicleOptions?> GetVehicleOptionsByVehicleId(long vehicleId);
         Task<bool> IsAliveAsync(long vehicleId);
         Task<bool> IsDeadAsync(long vehicleId);
+        Task<List<long>> GetSimilarVehicleIdsAsync(long excludeId, string chassis, string transmission);
     }
 }
