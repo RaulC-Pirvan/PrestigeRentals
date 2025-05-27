@@ -42,6 +42,8 @@ export class VehicleDetailComponent implements OnInit {
   totalDays: number = 0;
   totalCost: number = 0;
 
+  averageRating: number = 0;
+
   reviews: Review[] = [];
   currentPage = 1;
   pageSize = 5;
@@ -198,6 +200,7 @@ export class VehicleDetailComponent implements OnInit {
         });
 
         this.reviews = fetchedReviews;
+        this.calculateAverageRating();
       },
       error: (err) => console.error('Error fetching reviews', err),
     });
@@ -212,7 +215,7 @@ export class VehicleDetailComponent implements OnInit {
     return Math.ceil(this.reviews.length / this.pageSize);
   }
 
-  averageRating: number = 4.8;
+
 
   getStarArray(rating: number): number[] {
     const stars = [];
@@ -226,5 +229,18 @@ export class VehicleDetailComponent implements OnInit {
       }
     }
     return stars;
+  }
+
+  calculateAverageRating(): void {
+    if (this.reviews.length === 0) {
+      this.averageRating = 0;
+      return;
+    }
+
+    const totalStars = this.reviews.reduce(
+      (sum, review) => sum + review.rating,
+      0
+    );
+    this.averageRating = totalStars / this.reviews.length;
   }
 }

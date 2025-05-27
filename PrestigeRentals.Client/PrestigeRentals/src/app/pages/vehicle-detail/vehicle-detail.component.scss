@@ -406,3 +406,31 @@ h2 {
   user-select: none;
   border: none;
 }
+
+.stars-container {
+  display: flex;
+  gap: 4px;
+}
+
+.stars-container span {
+  font-size: 48px;
+  color: lightgray;
+}
+
+.stars-container span.full-star {
+  color: $accent-colour;
+}
+
+.half-star {
+  color: $accent-colour;
+  position: relative;
+}
+
+.half-star::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: $accent-colour;
+}
