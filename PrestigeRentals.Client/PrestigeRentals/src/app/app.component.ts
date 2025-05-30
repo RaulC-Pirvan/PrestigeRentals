@@ -1,7 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import {
+  Router,
+  NavigationStart,
+  NavigationEnd,
+  NavigationCancel,
+  NavigationError,
+} from '@angular/router';
 import { NotificationService } from './services/notification.service';
 import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -15,16 +22,37 @@ export class AppComponent implements OnInit {
   notificationMessage: string | null = null;
   notificationType: 'success' | 'error' = 'success';
 
-  constructor(private notificationService: NotificationService) {}
+  private hasReloaded = false;
+
+  constructor(
+    private notificationService: NotificationService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.notificationService.message$.subscribe(message => {
+    this.notificationService.message$.subscribe((message) => {
       this.notificationMessage = message;
     });
 
-    this.notificationService.type$.subscribe(type => {
+    this.notificationService.type$.subscribe((type) => {
       this.notificationType = type;
     });
-  }
 
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        const currentUrl = window.location.pathname;
+        if (!event.restoredState && event.url !== currentUrl && !this.hasReloaded) {
+          this.hasReloaded = true;
+          window.location.href = event.url;
+        }
+      }
+      if (
+        event instanceof NavigationEnd ||
+        event instanceof NavigationCancel ||
+        event instanceof NavigationError
+      ) {
+        this.hasReloaded = false;
+      }
+    });
+  }
 }

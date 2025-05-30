@@ -262,7 +262,7 @@ export class VehicleDetailComponent implements OnInit {
       .subscribe({
         next: (ids) => {
           console.log('Similar vehicle IDs received:', ids);
-          this.similarVehicles = ids; // assign array of numbers here directly
+          this.similarVehicles = ids; 
         },
         error: (err) => console.error('Failed to get similar vehicle IDs', err),
       });
@@ -308,6 +308,6 @@ export class VehicleDetailComponent implements OnInit {
       vehicleId: this.vehicleData!.id,
     });
 
-    this.router.navigate(['/order-checkout']);
+    window.location.href = "/order-checkout";
   }
 }

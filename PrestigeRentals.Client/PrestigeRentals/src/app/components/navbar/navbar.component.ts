@@ -68,7 +68,7 @@ export class NavbarComponent implements OnInit {
   }
 
   navigateTo(path: string) {
-    this.router.navigate([path]);
+    window.location.href = path;
   }
 
   logout() {
