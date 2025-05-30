@@ -30,6 +30,7 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<ITicketService, TicketService>();
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IVehicleFilterService, VehicleFilterService>();
+            services.AddScoped<IPaymentService, PaymentService>();
 
             // Repositories
             services.AddScoped<IVehicleRepository, VehicleRepository>();

@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 export interface UserDetailsRequest {
   id: number;
   name: string;
+  lastName: string;
   photo: string;
   email: string;
 }
@@ -44,6 +45,7 @@ export class AuthService {
           const user: UserDetailsRequest = {
             id: res.userId,
             name: `${res.firstName}`,
+            lastName: `${res.lastName}`,
             photo: `https://localhost:7093/api/image/user/${res.userId}`,
             email: res.email
           };

@@ -2,12 +2,26 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CheckoutDataService } from '../../services/checkout-data.service';
 import { VehicleService } from '../../services/vehicle.service';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AuthService, UserDetailsRequest } from '../../services/auth.service';
+
 import { CommonModule } from '@angular/common';
+import { NavbarComponent } from "../../components/navbar/navbar.component";
+import { FooterComponent } from "../../components/footer/footer.component";
+import { TitleComponent } from "../../shared/title/title.component";
+import { ButtonComponent } from "../../shared/button/button.component";
 
 @Component({
   selector: 'app-order-checkout',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NavbarComponent,
+    FooterComponent,
+    TitleComponent,
+    ButtonComponent
+  ],
   templateUrl: './order-checkout.component.html',
   styleUrl: './order-checkout.component.scss',
 })
@@ -18,14 +32,38 @@ export class OrderCheckoutComponent implements OnInit {
   makeModel!: string;
   vehicleId!: number;
   mainPhotoUrl: string = '';
+  checkoutForm!: FormGroup;
 
   constructor(
     private router: Router,
+    private fb: FormBuilder,
+    private authService: AuthService,
     private checkoutDataService: CheckoutDataService,
     private vehicleService: VehicleService
   ) {}
 
   ngOnInit() {
+    this.checkoutForm = this.fb.group({
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      cardHolder: ['', Validators.required],
+      cardNumber: ['', Validators.required],
+      expireDate: ['', Validators.required],
+      cvv: ['', Validators.required]
+    });
+
+    this.authService.userDetails$.subscribe((user: UserDetailsRequest | null) => {
+      if (user) {
+        const [firstName, ...lastNameParts] = user.name.split(' ');
+        const lastName = lastNameParts.join(' ') || '';
+        this.checkoutForm.patchValue({
+          firstName: user.name,
+          lastName: user.lastName,
+        });
+      }
+    });
+
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state as {
       startTime: string;
