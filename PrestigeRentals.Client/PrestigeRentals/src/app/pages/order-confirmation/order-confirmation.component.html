@@ -1,9 +1,14 @@
-<div class="confirmation-wrapper">
+<div class="confirmation-wrapper" *ngIf="bookingReference && qrCodeData; else noData">
   <h1>Thank you for your booking!</h1>
   <p>Your booking reference is: <strong>{{ bookingReference }}</strong></p>
 
-  <div class="qr-code-container" *ngIf="qrCodeData">
+  <div class="qr-code-container">
     <qrcode [qrdata]="qrCodeData" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
   </div>
-
 </div>
+
+<ng-template #noData>
+  <h2>No booking data found.</h2>
+  <p>Please return to the checkout page to complete your order.</p>
+  <button (click)="router.navigate(['/order-checkout'])">Go to Checkout</button>
+</ng-template>

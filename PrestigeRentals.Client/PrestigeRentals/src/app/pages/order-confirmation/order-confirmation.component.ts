@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
+import { BookingDataService } from '../../services/booking-data.service';
 
 @Component({
   selector: 'app-order-confirmation',
@@ -14,7 +15,11 @@ export class OrderConfirmationComponent implements OnInit {
   bookingReference: string = '';
   qrCodeData: string = '';
 
-   constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    public router: Router,
+    private bookingDataService: BookingDataService
+  ) {}
 
   ngOnInit(): void {
     const nav = this.router.getCurrentNavigation();
@@ -26,9 +31,22 @@ export class OrderConfirmationComponent implements OnInit {
     if (state) {
       this.bookingReference = state.bookingReference;
       this.qrCodeData = state.qrCodeData;
+
+      // De asemenea actualizează serviciul, dacă vrei să sincronizezi
+      this.bookingDataService.setBookingData(state);
+
+      console.log('QR Code Data (from navigation state):', this.qrCodeData);
     } else {
-      window.location.href = "/order-checkout";
+      // Încearcă să iei datele din serviciu
+      const storedData = this.bookingDataService.getBookingData();
+
+      if (storedData) {
+        this.bookingReference = storedData.bookingReference;
+        this.qrCodeData = storedData.qrCodeData;
+        console.log('QR Code Data (from stored data):', this.qrCodeData);
+      } else {
+        console.warn('No navigation state found, no stored booking data.');
+      }
     }
   }
-
 }

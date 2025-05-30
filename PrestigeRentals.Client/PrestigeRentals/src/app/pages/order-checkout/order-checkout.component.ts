@@ -11,6 +11,7 @@ import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { FooterComponent } from "../../components/footer/footer.component";
 import { TitleComponent } from "../../shared/title/title.component";
 import { ButtonComponent } from "../../shared/button/button.component";
+import { BookingDataService } from '../../services/booking-data.service';
 
 @Component({
   selector: 'app-order-checkout',
@@ -41,7 +42,8 @@ export class OrderCheckoutComponent implements OnInit {
     private authService: AuthService,
     private checkoutDataService: CheckoutDataService,
     private vehicleService: VehicleService,
-    private http: HttpClient
+    private http: HttpClient,
+    private bookingDataService: BookingDataService
   ) {}
 
   ngOnInit() {
@@ -119,9 +121,9 @@ export class OrderCheckoutComponent implements OnInit {
     }
 
     const payload = {
-      orderId: 1, // sau alt ID dacă îl ai
+      orderId: 1,
       totalCost: this.totalCost,
-      userId: 1, // ia din userDetails dacă vrei, acum hardcoded
+      userId: 1,
       vehicleId: this.vehicleId,
       firstName: this.checkoutForm.value.firstName,
       lastName: this.checkoutForm.value.lastName,
@@ -135,12 +137,14 @@ export class OrderCheckoutComponent implements OnInit {
     this.http.post<any>('https://localhost:7093/api/payment/mockpay', payload).subscribe({
       next: (res) => {
         if (res.success) {
-          this.router.navigate(['/order-confirmation'], {
-            state: {
-              bookingReference: res.bookingReference,
-              qrCodeData: res.qrCodeData
-            }
+          console.log(res);
+
+          this.bookingDataService.setBookingData({
+            bookingReference: res.bookingReference,
+            qrCodeData: res.qrCodeData
           });
+
+          this.router.navigate(['/order-confirmation']);
         } else {
           alert('Payment failed: ' + res.errorMessage);
         }
