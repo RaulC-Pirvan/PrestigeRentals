@@ -1,0 +1,14 @@
+<div class="checkout-container">
+  <h1>Checkout</h1>
+  <p>
+    <strong>Vehicle ID: {{ vehicleId }} </strong>
+  </p>
+
+  <div *ngIf="mainPhotoUrl">
+    <img [src]="mainPhotoUrl" alt="Vehicle Main Photo" class="checkout-photo" />
+  </div>
+  <p><strong>Make & Model: </strong> {{ makeModel }}</p>
+  <p><strong>Start Date:</strong> {{ startTime }}</p>
+  <p><strong>End Date:</strong> {{ endTime }}</p>
+  <p><strong>Total Cost:</strong> {{ totalCost }}</p>
+</div>

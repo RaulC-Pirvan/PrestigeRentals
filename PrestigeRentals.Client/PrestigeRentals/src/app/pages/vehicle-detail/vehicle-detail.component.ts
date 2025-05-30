@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleDto } from '../../models/vehicle-dto.model';
 import { CommonModule } from '@angular/common';
@@ -10,9 +10,8 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { Review } from '../../models/review.model';
 import { ReviewCardComponent } from '../../components/review-card/review-card.component';
 import { ProfileService } from '../../services/profile.service';
-import { forkJoin } from 'rxjs';
-import { VehicleCardComponent } from '../../components/vehicle-card/vehicle-card.component';
 import { VehicleSuggestionComponent } from '../../components/vehicle-suggestion/vehicle-suggestion.component';
+import { CheckoutDataService } from '../../services/checkout-data.service';
 
 export interface VehicleOptions {
   navigation: boolean;
@@ -60,7 +59,9 @@ export class VehicleDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private vehicleService: VehicleService,
-    private profileService: ProfileService
+    private profileService: ProfileService,
+    private router: Router,
+    private checkoutDataService: CheckoutDataService
   ) {}
 
   ngOnInit(): void {
@@ -290,5 +291,23 @@ export class VehicleDetailComponent implements OnInit {
     if (this.visibleStartIndex > 0) {
       this.visibleStartIndex--;
     }
+  }
+
+  canContinue(): boolean {
+    return this.totalDays > 0 && this.termsAccepted;
+  }
+
+  proceedToCheckout(): void {
+    this.checkoutDataService.clearCheckoutData();
+
+    this.checkoutDataService.setCheckoutData({
+      startTime: this.startTime,
+      endTime: this.endTime,
+      totalCost: this.totalCost,
+      makeModel: this.vehicleData?.make+ ' ' + this.vehicleData?.model,
+      vehicleId: this.vehicleData!.id,
+    });
+
+    this.router.navigate(['/order-checkout']);
   }
 }

@@ -15,6 +15,7 @@ import { AboutUsComponent } from './pages/about-us/about-us.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { InventoryComponent } from './pages/inventory/inventory.component';
 import { VehicleDetailComponent } from './pages/vehicle-detail/vehicle-detail.component';
+import { OrderCheckoutComponent } from './pages/order-checkout/order-checkout.component';
 
 export const routes: Routes = [
   {
@@ -40,6 +41,10 @@ export const routes: Routes = [
   {
     path: 'contact',
     component: ContactComponent,
+  },
+  {
+    path: 'order-checkout',
+    component: OrderCheckoutComponent
   },
   {
     path: 'login',

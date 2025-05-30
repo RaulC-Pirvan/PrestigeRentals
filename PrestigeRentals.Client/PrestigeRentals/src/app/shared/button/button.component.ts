@@ -9,14 +9,13 @@ import { CommonModule } from '@angular/common';
 })
 
 export class ButtonComponent {
-  // Input to dynamically set the button's text
   @Input() buttonText: string = 'Default Button'; 
   
-  // Input to define the button's type (e.g., "primary", "secondary")
   @Input() buttonType: string = 'primary'; 
   
-  // Output event when the button is clicked
   @Output() buttonClick = new EventEmitter<void>();
+
+  @Input() disabled: boolean = false;
 
   // Emit the button click event
   onClick() {

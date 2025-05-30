@@ -28,7 +28,7 @@ button {
 
   &.accent:hover {
     background-color: transparent;
-    color: $accent-colour
+    color: $accent-colour;
   }
 
   &.red {
@@ -39,6 +39,11 @@ button {
 
   &.red:hover {
     background-color: transparent;
-    color: $text-colour
+    color: $text-colour;
   }
+}
+
+button:disabled, button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

@@ -247,7 +247,8 @@
             <app-button
               buttonText="CONTINUE >"
               buttonType="accent"
-              (buttonClick)="(null)"
+              [disabled]="!canContinue()"
+              (buttonClick)="proceedToCheckout()"
             ></app-button>
           </div>
         </div>
