@@ -141,6 +141,7 @@
             buttonText="CHECKOUT >"
             buttonType="accent"
             [disabled]="checkoutForm.invalid"
+            (buttonClick)="onCheckoutClick()"
           ></app-button>
         </div>
       </div>

@@ -16,6 +16,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { InventoryComponent } from './pages/inventory/inventory.component';
 import { VehicleDetailComponent } from './pages/vehicle-detail/vehicle-detail.component';
 import { OrderCheckoutComponent } from './pages/order-checkout/order-checkout.component';
+import { OrderConfirmationComponent } from './pages/order-confirmation/order-confirmation.component';
 
 export const routes: Routes = [
   {
@@ -45,6 +46,10 @@ export const routes: Routes = [
   {
     path: 'order-checkout',
     component: OrderCheckoutComponent
+  },
+  {
+    path: 'order-confirmation',
+    component: OrderConfirmationComponent
   },
   {
     path: 'login',

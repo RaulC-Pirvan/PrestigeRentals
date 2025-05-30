@@ -1,0 +1,9 @@
+<div class="confirmation-wrapper">
+  <h1>Thank you for your booking!</h1>
+  <p>Your booking reference is: <strong>{{ bookingReference }}</strong></p>
+
+  <div class="qr-code-container" *ngIf="qrCodeData">
+    <qrcode [qrdata]="qrCodeData" [width]="200" [errorCorrectionLevel]="'M'"></qrcode>
+  </div>
+
+</div>

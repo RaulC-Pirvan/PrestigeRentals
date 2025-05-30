@@ -4,6 +4,7 @@ import { CheckoutDataService } from '../../services/checkout-data.service';
 import { VehicleService } from '../../services/vehicle.service';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AuthService, UserDetailsRequest } from '../../services/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
@@ -23,7 +24,7 @@ import { ButtonComponent } from "../../shared/button/button.component";
     ButtonComponent
   ],
   templateUrl: './order-checkout.component.html',
-  styleUrl: './order-checkout.component.scss',
+  styleUrls: ['./order-checkout.component.scss'],
 })
 export class OrderCheckoutComponent implements OnInit {
   startTime!: string;
@@ -39,7 +40,8 @@ export class OrderCheckoutComponent implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private checkoutDataService: CheckoutDataService,
-    private vehicleService: VehicleService
+    private vehicleService: VehicleService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
@@ -58,8 +60,9 @@ export class OrderCheckoutComponent implements OnInit {
         const [firstName, ...lastNameParts] = user.name.split(' ');
         const lastName = lastNameParts.join(' ') || '';
         this.checkoutForm.patchValue({
-          firstName: user.name,
-          lastName: user.lastName,
+          firstName: firstName,
+          lastName: lastName,
+          email: user.email
         });
       }
     });
@@ -106,6 +109,46 @@ export class OrderCheckoutComponent implements OnInit {
       error: (err) => {
         console.error('Error loading main photo:', err);
       },
+    });
+  }
+
+  onCheckoutClick() {
+    if (this.checkoutForm.invalid) {
+      this.checkoutForm.markAllAsTouched();
+      return;
+    }
+
+    const payload = {
+      orderId: 1, // sau alt ID dacă îl ai
+      totalCost: this.totalCost,
+      userId: 1, // ia din userDetails dacă vrei, acum hardcoded
+      vehicleId: this.vehicleId,
+      firstName: this.checkoutForm.value.firstName,
+      lastName: this.checkoutForm.value.lastName,
+      email: this.checkoutForm.value.email,
+      cardHolder: this.checkoutForm.value.cardHolder,
+      cardNumber: this.checkoutForm.value.cardNumber,
+      expireDate: this.checkoutForm.value.expireDate,
+      cvv: this.checkoutForm.value.cvv
+    };
+
+    this.http.post<any>('https://localhost:7093/api/payment/mockpay', payload).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.router.navigate(['/order-confirmation'], {
+            state: {
+              bookingReference: res.bookingReference,
+              qrCodeData: res.qrCodeData
+            }
+          });
+        } else {
+          alert('Payment failed: ' + res.errorMessage);
+        }
+      },
+      error: (err) => {
+        console.error('Payment error:', err);
+        alert('Payment error. Please try again.');
+      }
     });
   }
 }
