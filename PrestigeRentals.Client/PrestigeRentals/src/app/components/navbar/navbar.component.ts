@@ -37,6 +37,7 @@ export class NavbarComponent implements OnInit {
 
     this.user$.subscribe((user) => {
       console.log('User data received in navbar:', user);
+      console.log('User role:', user?.role);
 
       if (user?.photo) {
         console.log(

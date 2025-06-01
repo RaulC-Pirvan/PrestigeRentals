@@ -11,6 +11,7 @@ export interface UserDetailsRequest {
   lastName: string;
   photo: string;
   email: string;
+  role: 'User' | 'Admin';
 }
 
 export interface UserEmailRequest {
@@ -54,6 +55,7 @@ export class AuthService {
             lastName: `${res.lastName}`,
             photo: `https://localhost:7093/api/image/user/${res.userId}`,
             email: res.email,
+            role: res.role,
           };
           this.userSubject.next(user);
           this.loggedInSubject.next(true);

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ActionConstraints;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.DTO;
@@ -253,6 +254,10 @@ namespace PrestigeRentals.Application.Services.Services
 
         public async Task<UserProfileDTO> GetUserProfile(long userId)
         {
+            var user = await _userRepository.GetUserById(userId);
+            if (user == null)
+                throw new Exception("User not found");
+
             var userDetails = await _userDetailsRepository.GetUserDetailsById(userId);
             if (userDetails == null)
                 throw new Exception("User details not found");
@@ -262,6 +267,7 @@ namespace PrestigeRentals.Application.Services.Services
                 UserId = userId,
                 FirstName = userDetails.FirstName,
                 LastName = userDetails.LastName,
+                Role = user.Role,
             };
         }
 

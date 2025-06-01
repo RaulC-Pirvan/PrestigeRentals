@@ -31,9 +31,14 @@
           />
           <span class="user-name">{{ (user$ | async)?.name || "User" }}</span>
         </button>
-
         <div class="dropdown-menu" *ngIf="menuOpen">
           <button (click)="navigateTo('/profile')">Profile</button>
+          <button
+            *ngIf="(user$ | async)?.role === 'Admin'"
+            (click)="navigateTo('/admin-dashboard')"
+          >
+            Dashboard
+          </button>
           <button (click)="navigateTo('/settings')">Settings</button>
           <button (click)="logout()">Log Out</button>
         </div>
