@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthDialogComponent } from '../components/auth-dialog/auth-dialog.component';
+import { AuthDialogService } from './auth-dialog.service';
 
 export interface UserDetailsRequest {
   id: number;
@@ -22,9 +24,14 @@ export class AuthService {
   isLoggedIn$ = this.loggedInSubject.asObservable();
 
   private userSubject = new BehaviorSubject<UserDetailsRequest | null>(null);
-  userDetails$: Observable<UserDetailsRequest | null> = this.userSubject.asObservable();
+  userDetails$: Observable<UserDetailsRequest | null> =
+    this.userSubject.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private authDialog: AuthDialogService
+  ) {
     if (this.hasToken()) {
       this.loadUserProfile();
     }
@@ -41,18 +48,22 @@ export class AuthService {
       .get<any>('https://localhost:7093/api/auth/profile', { headers })
       .subscribe({
         next: (res) => {
-          console.log('Full profiel API response: ', res);
           const user: UserDetailsRequest = {
             id: res.userId,
             name: `${res.firstName}`,
             lastName: `${res.lastName}`,
             photo: `https://localhost:7093/api/image/user/${res.userId}`,
-            email: res.email
+            email: res.email,
           };
           this.userSubject.next(user);
+          this.loggedInSubject.next(true);
         },
         error: (err) => {
           console.error('Failed to fetch user profile:', err);
+          if (err.status === 401) {
+            this.logout();
+            this.authDialog.open();
+          }
         },
       });
   }
