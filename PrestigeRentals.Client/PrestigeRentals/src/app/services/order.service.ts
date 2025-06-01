@@ -12,7 +12,8 @@ export class OrderService {
   constructor(private http: HttpClient) {}
 
   private getAuthHeaders(): HttpHeaders {
-    const token = localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     if (!token) throw new Error('No auth token found');
 
     return new HttpHeaders({
@@ -22,6 +23,11 @@ export class OrderService {
 
   getUserOrders(): Observable<Order[]> {
     const headers = this.getAuthHeaders();
-    return this.http.get<Order[]>(this.baseUrl, { headers });
+    return this.http.get<Order[]>(`${this.baseUrl}/user`, { headers });
+  }
+
+  getAllOrders(): Observable<Order[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<Order[]>(`${this.baseUrl}`, { headers });
   }
 }
