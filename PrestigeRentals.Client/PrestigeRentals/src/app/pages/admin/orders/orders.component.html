@@ -2,6 +2,15 @@
   <div class="title-container">
     <app-title text="ORDERS"></app-title>
   </div>
+  <div class="pagination-controls">
+    <button (click)="changePage(-1)" [disabled]="currentPage === 1">
+      &lt;
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+    <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">
+      &gt;
+    </button>
+  </div>
   <app-admin-order-overview
     *ngFor="let order of displayedOrders"
     [order]="order"

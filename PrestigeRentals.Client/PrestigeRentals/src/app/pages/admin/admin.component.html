@@ -1,11 +1,21 @@
 <app-navbar></app-navbar>
 <div class="wrapper">
   <nav class="admin-subnavbar">
-    <button class="admin-navbar-button">ORDERS</button>
-    <button class="admin-navbar-button">REVIEWS</button>
-    <button class="admin-navbar-button">TICKETS</button>
-    <button class="admin-navbar-button">USERS</button>
-    <button class="admin-navbar-button">VEHICLES</button>
+    <button class="admin-navbar-button" [routerLink]="['/admin-dashboard/orders']">
+      ORDERS
+    </button>
+    <button class="admin-navbar-button" [routerLink]="['/admin-dashboard/reviews']">
+      REVIEWS
+    </button>
+    <button class="admin-navbar-button" [routerLink]="['/admin-dashboard/tickets']">
+      TICKETS
+    </button>
+    <button class="admin-navbar-button" [routerLink]="['/admin-dashboard/users']">
+      USERS
+    </button>
+    <button class="admin-navbar-button" [routerLink]="['/admin-dashboard/vehicles']">
+      VEHICLES
+    </button>
   </nav>
   <router-outlet></router-outlet>
 </div>
