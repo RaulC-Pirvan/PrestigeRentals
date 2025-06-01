@@ -71,7 +71,10 @@ img {
   align-items: center;
   flex-direction: row;
   gap: 10px;
-  width: 100%;
+  width: 250px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .user-photo {
@@ -85,6 +88,9 @@ img {
 .user-name {
   font-size: 24px;
   font-weight: 600;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .user-menu-container {

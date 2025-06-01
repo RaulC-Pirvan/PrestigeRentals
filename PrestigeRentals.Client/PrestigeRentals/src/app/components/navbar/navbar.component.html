@@ -24,7 +24,7 @@
         (click)="toggleMenu()"
         (document:click)="handleDocumentClick($event)"
       >
-        <button class="user-button" (click)="toggleMenu()">
+        <button class="user-button" (click)="navigateTo('/profile')">
           <img
             [src]="(user$ | async)?.photo || 'assets/default-avatar.png'"
             class="user-photo"
