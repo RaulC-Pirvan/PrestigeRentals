@@ -4,6 +4,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .title-container {
@@ -35,4 +36,5 @@
     border: none;
     background-color: $accent-colour;
     color: $text-colour;
+    cursor: pointer;
 }
