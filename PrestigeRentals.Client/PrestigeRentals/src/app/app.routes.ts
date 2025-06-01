@@ -17,6 +17,14 @@ import { InventoryComponent } from './pages/inventory/inventory.component';
 import { VehicleDetailComponent } from './pages/vehicle-detail/vehicle-detail.component';
 import { OrderCheckoutComponent } from './pages/order-checkout/order-checkout.component';
 import { OrderConfirmationComponent } from './pages/order-confirmation/order-confirmation.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { OverviewComponent } from './pages/admin/overview/overview.component';
+import { OrdersComponent } from './pages/admin/orders/orders.component';
+import { ReviewsComponent } from './pages/admin/reviews/reviews.component';
+import { TicketsComponent } from './pages/admin/tickets/tickets.component';
+import { UsersComponent } from './pages/admin/users/users.component';
+import { VehiclesComponent } from './pages/admin/vehicles/vehicles.component';
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
   {
@@ -91,6 +99,20 @@ export const routes: Routes = [
         component: DeleteAccountFormComponent
       },
     ]
+  },
+    {
+    path: 'admin-dashboard',
+    component: AdminComponent,
+    //canActivate: [AdminGuard], // mai jos îți zic cum faci AdminGuard
+    children: [
+      { path: '', redirectTo: 'overview', pathMatch: 'full' },
+      { path: 'overview', component: OverviewComponent },
+      { path: 'orders', component: OrdersComponent },
+      { path: 'reviews', component: ReviewsComponent },
+      { path: 'tickets', component: TicketsComponent },
+      { path: 'users', component: UsersComponent },
+      { path: 'vehicles', component: VehiclesComponent },
+    ],
   },
   {
     path: 'about-us',
