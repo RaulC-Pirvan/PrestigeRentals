@@ -44,7 +44,6 @@ namespace PrestigeRentals.Presentation.Controllers
                 var userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(u => u.UserID == userIdLong);
                 if (userDetails != null)
                 {
-                    userDetails.ProfileImageFileName = fileName;
                     await _dbContext.SaveChangesAsync();
                 }
                 else
@@ -137,6 +136,36 @@ namespace PrestigeRentals.Presentation.Controllers
             var filePath = files[0];
             var contentType = GetContentType(filePath);
             return File(System.IO.File.OpenRead(filePath), contentType);
+        }
+
+        [HttpPost("user/{userId}/default")]
+        public async Task<IActionResult> SetDefaultUserImage(string userId)
+        {
+            if (!long.TryParse(userId, out var userIdLong))
+                return BadRequest("Invalid userId");
+
+            var userImagePath = Path.Combine(RootImages, "user", userId);
+            Directory.CreateDirectory(userImagePath);
+
+            ClearDirectory(userImagePath);
+
+            var defaultImagePath = Path.Combine(RootImages, "default", "default-profile-account-unknown-icon-black-silhouette-free-vector.jpg");
+
+            if (!System.IO.File.Exists(defaultImagePath))
+                return NotFound("Default profile image not found.");
+
+            var destFileName = "profile" + Path.GetExtension(defaultImagePath);
+            var destFilePath = Path.Combine(userImagePath, destFileName);
+
+            System.IO.File.Copy(defaultImagePath, destFilePath, overwrite: true);
+
+            var userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(u => u.UserID == userIdLong);
+            if (userDetails == null)
+                return NotFound($"User with id {userId} not found.");
+
+            await _dbContext.SaveChangesAsync();
+
+            return Ok(new { message = "Default image set successfully." });
         }
 
         // === Helpers ===

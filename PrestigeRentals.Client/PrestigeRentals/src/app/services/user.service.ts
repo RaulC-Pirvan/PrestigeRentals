@@ -41,7 +41,7 @@ export class UserService {
     return this.http.patch(`${this.baseUrl}/${userId}/change-email`, null, {
       params: { newEmail },
       headers,
-      responseType: 'text' 
+      responseType: 'text',
     });
   }
 
@@ -76,7 +76,9 @@ export class UserService {
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
-    return this.http.patch(`${this.baseUrl}/${userId}/set-inactive`, null, { headers });
+    return this.http.patch(`${this.baseUrl}/${userId}/set-inactive`, null, {
+      headers,
+    });
   }
 
   deleteAccount(userId: number) {
@@ -89,5 +91,19 @@ export class UserService {
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
     return this.http.delete(`${this.baseUrl}/${userId}`, { headers });
+  }
+
+  uploadUserImage(userId: string, formData: FormData): Observable<any> {
+    return this.http.post(
+      `https://localhost:7093/api/image/user/${userId}`,
+      formData
+    );
+  }
+
+  uploadDefaultUserImage(userId: string): Observable<any> {
+    return this.http.post(
+      `https://localhost:7093/api/image/user/${userId}/default`,
+      {}
+    );
   }
 }

@@ -47,9 +47,6 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public DateTime DateOfBirth { get; set; }
 
-        [Required]
-        public string ProfileImageFileName { get; set; }
-
         /// <summary>
         /// Indicates whether this user details record is active.
         /// </summary>

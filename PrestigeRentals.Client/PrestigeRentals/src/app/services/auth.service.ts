@@ -108,4 +108,8 @@ export class AuthService {
   isLoggedIn(): boolean {
     return this.loggedInSubject.value;
   }
+
+  register(data: any): Observable<any> {
+    return this.http.post("https://localhost:7093/register", data);
+  }
 }

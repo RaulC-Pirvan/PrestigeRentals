@@ -31,11 +31,5 @@ namespace PrestigeRentals.Application.Requests
         /// Gets or sets the date of birth of the user registering for the application.
         /// </summary>
         public DateTime DateOfBirth { get; set; }
-
-        /// <summary>
-        /// Gets or sets the optional image data of the user registering for the application.
-        /// This could be a base64 encoded string representing the user's profile picture.
-        /// </summary>
-        public string? ImageData { get; set; }
     }
 }

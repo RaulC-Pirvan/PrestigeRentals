@@ -24,6 +24,8 @@ import { TicketsComponent } from './pages/admin/tickets/tickets.component';
 import { UsersComponent } from './pages/admin/users/users.component';
 import { VehiclesComponent } from './pages/admin/vehicles/vehicles.component';
 import { AdminGuard } from './guards/admin.guard';
+import { RegisterComponent } from './pages/register/register.component';
+import { RegisterSuccessComponent } from './pages/register-success/register-success.component';
 
 export const routes: Routes = [
   {
@@ -62,6 +64,14 @@ export const routes: Routes = [
     path: 'login',
     component: LoginComponent,
     canActivate: [AuthRedirectGuard]
+  },
+  {
+    path: 'register',
+    component: RegisterComponent
+  },
+  {
+    path: 'register-success',
+    component: RegisterSuccessComponent
   },
   {
     path: 'register',

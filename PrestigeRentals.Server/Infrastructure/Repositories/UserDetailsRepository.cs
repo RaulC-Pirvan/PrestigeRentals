@@ -31,8 +31,16 @@ namespace PrestigeRentals.Application.Services
         /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task AddAsync(UserDetails userDetails)
         {
-            await _dbContext.UsersDetails.AddAsync(userDetails);
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.UsersDetails.AddAsync(userDetails);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+
         }
 
         /// <summary>

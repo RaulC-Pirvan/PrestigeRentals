@@ -1,0 +1,25 @@
+<div *ngIf="step === 1">
+  <h2>Let's start easy</h2>
+  <form [formGroup]="userForm">
+    <input formControlName="firstName" placeholder="First Name" />
+    <input formControlName="lastName" placeholder="Last Name" />
+    <input formControlName="dateOfBirth" type="date" />
+    <input type="file" (change)="onImageSelected($event)" />
+    <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" width="100" />
+    <button (click)="nextStep()">Next</button>
+  </form>
+</div>
+
+<div *ngIf="step === 2">
+  <h2>Wonderful! Now let's talk about credentials</h2>
+  <form [formGroup]="credentialsForm">
+    <input formControlName="email" type="email" placeholder="Email" />
+    <input formControlName="password" type="password" placeholder="Password" />
+    <input formControlName="repeatPassword" type="password" placeholder="Repeat Password" />
+    <label>
+      <input type="checkbox" formControlName="agreeToTerms" /> I agree to terms
+    </label>
+    <button type="button" (click)="previousStep()">Back</button>
+    <button type="submit" (click)="submit()">Register</button>
+  </form>
+</div>
