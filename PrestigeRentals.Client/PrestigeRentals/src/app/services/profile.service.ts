@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
 export interface UserProfile {
   firstName: string;
@@ -12,25 +13,32 @@ export interface UserProfile {
   providedIn: 'root',
 })
 export class ProfileService {
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
-  getProfile(): Observable<UserProfile> {
-    const token =
-      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-    if (!token) {
-      throw new Error('No auth token found');
+  private getToken(): string | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null; 
     }
-
-    const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
-    return this.http.get<UserProfile>(
-      'https://localhost:7093/api/auth/profile',
-      { headers }
+    return (
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken')
     );
   }
 
+getProfile(): Observable<UserProfile> {
+  const token = this.getToken();
+  if (!token) {
+    return of(null as unknown as UserProfile); 
+  }
+
+  const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
+  return this.http.get<UserProfile>('https://localhost:7093/api/auth/profile', { headers });
+}
+
   getUserImageUrl(userId: number): Observable<Blob> {
-    const token =
-      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    const token = this.getToken();
     return this.http.get(`https://localhost:7093/api/image/user/${userId}`, {
       responseType: 'blob',
       headers: {
@@ -40,8 +48,7 @@ export class ProfileService {
   }
 
   getUserProfileById(userId: number): Observable<UserProfile> {
-    const token =
-      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    const token = this.getToken();
     if (!token) throw new Error('No auth token found');
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });

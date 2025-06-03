@@ -17,7 +17,6 @@ export class ButtonComponent {
 
   @Input() disabled: boolean = false;
 
-  // Emit the button click event
   onClick() {
     this.buttonClick.emit();
   }

@@ -10,10 +10,21 @@ import { AuthService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FooterComponent } from '../../components/footer/footer.component';
+import { TitleComponent } from '../../shared/title/title.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
   selector: 'app-register',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    NavbarComponent,
+    FooterComponent,
+    TitleComponent,
+    ButtonComponent,
+  ],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss',
 })
@@ -181,5 +192,15 @@ export class RegisterComponent {
     const decodedPayload = atob(payload);
     const obj = JSON.parse(decodedPayload);
     return obj['userId'] || obj['sub'] || '';
+  }
+
+  showTosModal = false;
+
+  openTos() {
+    this.showTosModal = true;
+  }
+
+  closeTos() {
+    this.showTosModal = false;
   }
 }

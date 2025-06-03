@@ -1,38 +1,145 @@
-<div *ngIf="step === 1">
-  <h2>Let's start easy</h2>
-  <form [formGroup]="userForm">
-    <input formControlName="firstName" placeholder="First Name" />
-    <input formControlName="lastName" placeholder="Last Name" />
-    <input formControlName="dateOfBirth" type="date" />
-    <input type="file" (change)="onImageSelected($event)" />
-    <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" width="100" />
-    <button (click)="nextStep()">Next</button>
-  </form>
-</div>
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <app-title text="REGISTER"></app-title>
+  <div class="card-container">
+    <div class="register-card">
+      <div *ngIf="step === 1">
+        <div class="title-container">
+          <h2>Let's start with something easy!</h2>
+        </div>
+        <form [formGroup]="userForm" class="register-form">
+          <div class="input-container">
+            <label for="">First Name</label>
+            <input type="text" id="firstName" formControlName="firstName" />
+          </div>
 
-<div *ngIf="step === 2">
-  <h2>Wonderful! Now let's talk about credentials</h2>
-  <form [formGroup]="credentialsForm">
-    <input formControlName="email" type="email" placeholder="Email" />
-    <input formControlName="password" type="password" placeholder="Password" />
-    <input formControlName="repeatPassword" type="password" placeholder="Repeat Password" />
-    <label>
-      <input type="checkbox" formControlName="agreeToTerms" /> I agree to terms
-    </label>
-    <button type="button" (click)="previousStep()">Back</button>
-    <button type="submit" (click)="submit()">Register</button>
-  </form>
-</div>
+          <div class="input-container">
+            <label for="">Last Name</label>
+            <input type="text" id="lastName" formControlName="lastName" />
+          </div>
+          <div class="input-container">
+            <label for="">Date of Birth</label>
+            <input type="date" id="dateOfBirth" formControlName="dateOfBirth" />
+          </div>
+          <div class="input-container">
+            <label for="">Profile Picture</label>
+            <input type="file" (change)="onImageSelected($event)" />
+            <div class="image-preview-container">
+              <img
+                [src]="imagePreviewUrl || 'assets/default-avatar.jpg'"
+                width="100"
+                class="image-preview"
+              />
+            </div>
+          </div>
+        </form>
+        <div class="button-container">
+          <app-button
+            buttonText="NEXT >"
+            buttonType="accent"
+            (buttonClick)="nextStep()"
+          ></app-button>
+        </div>
+      </div>
 
-<div *ngIf="step === 3">
-  <h2>Final step: Upload your ID card</h2>
-  <input type="file" (change)="onIdCardSelected($event)" />
-  <div *ngIf="idCardPreviewUrl">
-    <p>Preview:</p>
-    <img [src]="idCardPreviewUrl" width="200" />
+      <div *ngIf="step === 2">
+        <div class="title-container">
+          <h2>Wonderful, now let's talk about credentials!</h2>
+        </div>
+        <form [formGroup]="credentialsForm" class="register-form">
+          <div class="input-container">
+            <label for="">Email Address</label>
+            <input type="email" id="email" formControlName="email" />
+          </div>
+
+          <div class="input-container">
+            <label for="">Password</label>
+            <input type="password" id="password" formControlName="password" />
+          </div>
+
+          <div class="input-container">
+            <label for="">Confirm Password</label>
+            <input
+              type="password"
+              id="password"
+              formControlName="repeatPassword"
+            />
+          </div>
+
+          <div class="checkbox-container">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              formControlName="agreeToTerms"
+              class="checkbox-entity"
+            />
+            <label class="remember-tag" for="agreeToTerms">
+              I have read and accept the
+              <span class="tos-link" (click)="openTos()"
+                >&nbsp;terms of this agreement</span
+              >.
+            </label>
+            <div
+              class="tos-modal-overlay"
+              *ngIf="showTosModal"
+              (click)="closeTos()"
+            >
+              <div class="tos-modal" (click)="$event.stopPropagation()">
+                <h3>Terms of Service</h3>
+                <p>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit...
+                </p>
+                <p>
+                  You must agree to these terms to continue using the service.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="button-container">
+            <app-button
+              buttonText="< PREVIOUS"
+              buttonType="transparent"
+              (buttonClick)="previousStep()"
+            ></app-button>
+            <app-button
+              buttonText="NEXT >"
+              buttonType="accent"
+              (buttonClick)="submit()"
+            ></app-button>
+          </div>
+        </form>
+      </div>
+
+      <div *ngIf="step === 3">
+        <div class="title-container">
+          <h2>Final step: Upload your ID card</h2>
+        </div>
+        <div class="title-container">
+          <h3 class="light">This will be used to validate your age.</h3>
+        </div>
+
+        <div class="input-container">
+          <label for="">ID Card Photo</label>
+          <input type="file" (change)="onIdCardSelected($event)" />
+        </div>
+        <div class="preview-container">
+          <p>Preview:</p>
+          <img [src]="idCardPreviewUrl" width="200" />
+        </div>
+
+        <div class="ocr-result-container">
+          <p *ngIf="ocrResult === null">Waiting for verification...</p>
+          <p *ngIf="ocrResult === false" class="error-text">
+            You must be over 18 to register.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="image-card">
+      <img src="assets/volvo-image.png" alt="" />
+    </div>
   </div>
-  <p *ngIf="ocrResult === null">Waiting for verification...</p>
-  <p *ngIf="ocrResult === false" class="error-text">
-    You must be over 18 to register.
-  </p>
 </div>
+
+<app-footer></app-footer>

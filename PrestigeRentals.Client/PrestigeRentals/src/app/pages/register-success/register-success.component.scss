@@ -1,0 +1,54 @@
+@import "../../../styles.scss";
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: auto;
+  width: 100%;
+  padding: 50px 100px;
+  flex-direction: column;
+  background-color: $primary-colour;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
+  width: 700px;
+  padding: 20px;
+  background-color: $secondary-colour;
+  margin-top: 40px;
+  height: 700px;
+}
+
+.headline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding-bottom: 20px;
+}
+
+.subtext {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  text-align: center;
+}
+
+.checkmark-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.checkmark {
+  font-size: 256px;
+  color: #4caf50; /* verde de succes */
+  font-weight: bold;
+}
