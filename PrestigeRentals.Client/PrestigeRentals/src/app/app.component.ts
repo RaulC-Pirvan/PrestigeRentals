@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import {
   Router,
   NavigationStart,
@@ -7,7 +7,7 @@ import {
   NavigationError,
 } from '@angular/router';
 import { NotificationService } from './services/notification.service';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -26,7 +26,8 @@ export class AppComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private router: Router
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -40,10 +41,12 @@ export class AppComponent implements OnInit {
 
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationStart) {
-        const currentUrl = window.location.pathname;
-        if (!event.restoredState && event.url !== currentUrl && !this.hasReloaded) {
-          this.hasReloaded = true;
-          window.location.href = event.url;
+        if (isPlatformBrowser(this.platformId)) {
+          const currentUrl = window.location.pathname;
+          if (!event.restoredState && event.url !== currentUrl && !this.hasReloaded) {
+            this.hasReloaded = true;
+            window.location.href = event.url;
+          }
         }
       }
       if (

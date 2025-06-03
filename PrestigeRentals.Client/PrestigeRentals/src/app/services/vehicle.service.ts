@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Review } from '../models/review.model';
+import { isPlatformBrowser } from '@angular/common';
 
 export interface Vehicle {
   id: number;
@@ -41,11 +42,23 @@ export interface VehicleFilterOptions {
 export class VehicleService {
   baseUrl = 'https://localhost:7093/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {}
 
-  private getAuthHeaders(): HttpHeaders {
+  private getToken(): string | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
     const token =
       localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    console.log('Retrieved token:', token);
+    return token;
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.getToken();
     if (!token) throw new Error('No auth token found');
 
     return new HttpHeaders({

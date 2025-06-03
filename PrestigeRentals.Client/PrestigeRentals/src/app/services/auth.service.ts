@@ -24,6 +24,9 @@ export class AuthService {
   public loggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   isLoggedIn$ = this.loggedInSubject.asObservable();
 
+  private userLoadedSubject = new BehaviorSubject<boolean>(false);
+  userLoaded$ = this.userLoadedSubject.asObservable();
+
   private userSubject = new BehaviorSubject<UserDetailsRequest | null>(null);
   userDetails$: Observable<UserDetailsRequest | null> =
     this.userSubject.asObservable();
@@ -38,10 +41,17 @@ export class AuthService {
     }
   }
 
+  get currentUser(): UserDetailsRequest | null {
+    return this.userSubject.value;
+  }
+
   public loadUserProfile() {
     const token =
       localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-    if (!token) return;
+    if (!token) {
+      this.userLoadedSubject.next(true); // fără token, marchez ca încărcat ca să nu blocheze
+      return;
+    }
 
     const headers = new HttpHeaders({ Authorization: `Bearer ${token}` });
 
@@ -59,6 +69,7 @@ export class AuthService {
           };
           this.userSubject.next(user);
           this.loggedInSubject.next(true);
+          this.userLoadedSubject.next(true); // marchez ca încărcat
         },
         error: (err) => {
           console.error('Failed to fetch user profile:', err);
@@ -66,6 +77,7 @@ export class AuthService {
             this.logout();
             this.authDialog.open();
           }
+          this.userLoadedSubject.next(true); // marchez ca încărcat chiar dacă e eroare
         },
       });
   }
@@ -110,6 +122,6 @@ export class AuthService {
   }
 
   register(data: any): Observable<any> {
-    return this.http.post("https://localhost:7093/register", data);
+    return this.http.post('https://localhost:7093/register', data);
   }
 }

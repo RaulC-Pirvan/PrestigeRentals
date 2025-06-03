@@ -23,9 +23,10 @@ import { ReviewsComponent } from './pages/admin/reviews/reviews.component';
 import { TicketsComponent } from './pages/admin/tickets/tickets.component';
 import { UsersComponent } from './pages/admin/users/users.component';
 import { VehiclesComponent } from './pages/admin/vehicles/vehicles.component';
-import { AdminGuard } from './guards/admin.guard';
 import { RegisterComponent } from './pages/register/register.component';
 import { RegisterSuccessComponent } from './pages/register-success/register-success.component';
+import { UserGuard } from './guards/user.guard';
+
 
 export const routes: Routes = [
   {
@@ -41,75 +42,76 @@ export const routes: Routes = [
     component: ForbiddenAccessComponent,
   },
   {
-    path: 'inventory',
-    component: InventoryComponent
-  },
-  {
-    path: 'vehicle/:id',
-    component: VehicleDetailComponent
-  },
-  {
     path: 'contact',
     component: ContactComponent,
   },
-  {
-    path: 'order-checkout',
-    component: OrderCheckoutComponent
-  },
-  {
-    path: 'order-confirmation',
-    component: OrderConfirmationComponent
-  },
+
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [AuthRedirectGuard]
+    canActivate: [AuthRedirectGuard],
   },
   {
     path: 'register',
-    component: RegisterComponent
+    component: RegisterComponent,
+    canActivate: [AuthRedirectGuard]
   },
   {
     path: 'register-success',
-    component: RegisterSuccessComponent
+    component: RegisterSuccessComponent,
   },
   {
-    path: 'register',
-    component: LoginComponent,
-    canActivate: [AuthRedirectGuard]
+    path: 'about-us',
+    component: AboutUsComponent,
+  },
+  {
+    path: 'inventory',
+    component: InventoryComponent,
+  },
+  {
+    path: 'vehicle/:id',
+    component: VehicleDetailComponent,
+  },
+  {
+    path: 'order-checkout',
+    component: OrderCheckoutComponent,
+  },
+  {
+    path: 'order-confirmation',
+    component: OrderConfirmationComponent,
   },
   {
     path: 'settings',
     component: SettingsComponent,
     children: [
       {
-        path:'',
+        path: '',
         pathMatch: 'full',
-        redirectTo: 'details'
+        redirectTo: 'details',
       },
       {
-        path:'details',
-        component: DetailsSettingsFormComponent
+        path: 'details',
+        component: DetailsSettingsFormComponent,
       },
       {
-        path:'email',
-        component: EmailSettingsFormComponent
+        path: 'email',
+        component: EmailSettingsFormComponent,
       },
       {
-        path:'password',
-        component: PasswordSettingsFormComponent
+        path: 'password',
+        component: PasswordSettingsFormComponent,
       },
       {
-        path:'deactivate',
-        component: DeactivateAccountFormComponent
+        path: 'deactivate',
+        component: DeactivateAccountFormComponent,
       },
       {
-        path:'delete',
-        component: DeleteAccountFormComponent
+        path: 'delete',
+        component: DeleteAccountFormComponent,
       },
-    ]
+    ],
   },
-    {
+  {
     path: 'admin-dashboard',
     component: AdminComponent,
     children: [
@@ -121,13 +123,10 @@ export const routes: Routes = [
       { path: 'vehicles', component: VehiclesComponent },
     ],
   },
-  {
-    path: 'about-us',
-    component: AboutUsComponent
-  },
+
   {
     path: 'profile',
-    component: ProfileComponent
+    component: ProfileComponent,
   },
   {
     path: '**',

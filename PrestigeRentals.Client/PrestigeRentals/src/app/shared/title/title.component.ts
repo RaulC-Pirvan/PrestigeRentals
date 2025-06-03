@@ -6,7 +6,7 @@ import { ProfileService, UserProfile } from '../../services/profile.service';
   selector: 'app-title',
   imports: [CommonModule],
   templateUrl: './title.component.html',
-  styleUrl: './title.component.scss'
+  styleUrls: ['./title.component.scss'] 
 })
 export class TitleComponent implements OnInit {
   @Input() text: string = 'Default Title';
@@ -16,11 +16,16 @@ export class TitleComponent implements OnInit {
 
   ngOnInit(): void {
     this.profileService.getProfile().subscribe({
-      next: (profile: UserProfile) => {
-        this.username = profile.firstName;
+      next: (profile: UserProfile | null) => {
+        if (profile && profile.firstName) {
+          this.username = profile.firstName;
+        } else {
+          this.username = 'Guest';
+        }
       },
       error: (err) => {
         console.error('Failed to load user profile', err);
+        this.username = 'Guest';
       }
     });
   }

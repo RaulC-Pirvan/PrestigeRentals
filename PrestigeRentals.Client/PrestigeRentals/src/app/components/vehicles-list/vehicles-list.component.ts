@@ -1,14 +1,21 @@
-import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  OnInit,
+} from '@angular/core';
 import { Vehicle, VehicleService } from '../../services/vehicle.service';
 import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-vehicles-list',
   standalone: true,
   imports: [VehicleCardComponent, CommonModule],
   templateUrl: './vehicles-list.component.html',
-  styleUrls: ['./vehicles-list.component.scss']
+  styleUrls: ['./vehicles-list.component.scss'],
 })
 export class VehiclesListComponent implements OnInit, OnChanges {
   @Input() filters: any = {};
@@ -24,10 +31,17 @@ export class VehiclesListComponent implements OnInit, OnChanges {
   currentPage = 1;
   pageSize = 9;
 
-  constructor(private vehicleService: VehicleService) {}
+  constructor(
+    private vehicleService: VehicleService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
-    this.loadVehicles();
+    this.authService.userLoaded$.subscribe((loaded) => {
+      if (loaded) {
+        this.loadVehicles();
+      }
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -48,7 +62,7 @@ export class VehiclesListComponent implements OnInit, OnChanges {
         this.error = 'Failed to load vehicles.';
         console.error(err);
         this.loading = false;
-      }
+      },
     });
   }
 
@@ -59,16 +73,19 @@ export class VehiclesListComponent implements OnInit, OnChanges {
     for (const key of Object.keys(this.filters)) {
       const value = this.filters[key];
       if (value) {
-        results = results.filter((v: any) => (v[key] ?? '').toLowerCase() === value.toLowerCase());
+        results = results.filter(
+          (v: any) => (v[key] ?? '').toLowerCase() === value.toLowerCase()
+        );
       }
     }
 
     // Apply search
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      results = results.filter(vehicle =>
-        vehicle.make.toLowerCase().includes(term) ||
-        vehicle.model.toLowerCase().includes(term)
+      results = results.filter(
+        (vehicle) =>
+          vehicle.make.toLowerCase().includes(term) ||
+          vehicle.model.toLowerCase().includes(term)
       );
     }
 

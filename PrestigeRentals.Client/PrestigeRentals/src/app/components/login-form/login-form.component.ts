@@ -47,12 +47,7 @@ export class LoginFormComponent {
       .subscribe({
         next: (response) => {
           const token = response.token;
-    
-          const user = {
-            name: `${response.firstName} ${response.lastName}`,
-            photo: response.imageData, // Only the base64 string
-          };
-    
+
           this.authService.login(token, rememberMe);
           this.notificationService.show('Login successful!', 'success');
     
