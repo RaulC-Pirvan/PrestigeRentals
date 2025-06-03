@@ -11,6 +11,8 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using PrestigeRentals.Presentation.Middleware;
 using PrestigeRentals.Infrastructure.DependencyInjection;
+using Swashbuckle.AspNetCore.Filters;
+
 
 namespace Presentation
 {

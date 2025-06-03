@@ -106,4 +106,18 @@ export class UserService {
       {}
     );
   }
+
+  uploadUserIdCardImage(userId: string, formData: FormData): Observable<any> {
+    return this.http.post(
+      `https://localhost:7093/api/image/user/${userId}/idcard`,
+      formData
+    );
+  }
+
+  verifyCnp(userId: string): Observable<boolean> {
+    return this.http.post<boolean>(
+      `https://localhost:7093/api/auth/extract-cnp/${userId}`,
+      null
+    );
+  }
 }

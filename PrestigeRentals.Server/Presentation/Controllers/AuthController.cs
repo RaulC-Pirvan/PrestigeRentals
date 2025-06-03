@@ -1,6 +1,8 @@
 ﻿using System.Security.Claims;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using OpenCvSharp;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
@@ -9,6 +11,7 @@ using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Application.Validators;
 using PrestigeRentals.Infrastructure.Persistence;
+using Tesseract;
 using LoginRequest = PrestigeRentals.Application.Requests.LoginRequest;
 using RegisterRequest = PrestigeRentals.Application.Requests.RegisterRequest;
 
@@ -27,19 +30,26 @@ namespace PrestigeRentals.Presentation.Controllers
         private readonly IEmailService _emailService;
         private readonly IUserRepository _userRepository;
 
+        private readonly IWebHostEnvironment _env;
+        private string RootImages => Path.Combine(_env.WebRootPath ?? Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"), "images");
+
+
+        private readonly string tessDataPath = @"C:\Program Files\Tesseract-OCR\tessdata";
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AuthController"/> class.
         /// </summary>
         /// <param name="authService">The authentication service used for user registration and login.</param>
         /// <param name="userManagementService">The user management service for user account operations.</param>
         /// <param name="dbContext">The application's database context.</param>
-        public AuthController(IAuthService authService, IUserManagementService userManagementService, ApplicationDbContext dbContext, IEmailService emailService, IUserRepository userRepository)
+        public AuthController(IAuthService authService, IUserManagementService userManagementService, ApplicationDbContext dbContext, IEmailService emailService, IUserRepository userRepository, IWebHostEnvironment env)
         {
             _authService = authService;
             _userManagementService = userManagementService;
             _dbContext = dbContext;
             _emailService = emailService;
             _userRepository = userRepository;
+            _env = env;
         }
 
         /// <summary>
@@ -396,6 +406,111 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 return StatusCode(500, $"Error retrieving user profile: {ex.Message}");
             }
+        }
+
+        [HttpPost("extract-cnp/{userId}")]
+        public IActionResult ExtractCnp(string userId)
+        {
+            // Construim calea către poza buletinului
+            var idCardPath = Path.Combine(RootImages, "user", userId, "idcard", "idcard.jpg");
+
+            if (!System.IO.File.Exists(idCardPath))
+                return NotFound("Imaginea buletinului nu a fost găsită pentru acest user.");
+
+            try
+            {
+                // Prelucrare imagine cu OpenCV
+                var preprocessedPath = PreprocessImage(idCardPath);
+
+                // OCR cu Tesseract
+                using var engine = new TesseractEngine(tessDataPath, "ron", EngineMode.Default);
+                using var pix = Pix.LoadFromFile(preprocessedPath);
+                using var page = engine.Process(pix);
+
+                string ocrText = page.GetText();
+
+                // Caută CNP (13 cifre)
+                var match = Regex.Match(ocrText, @"\b\d{13}\b");
+
+                if (match.Success)
+                {
+                    // Aici poți face validarea de 18+ ani
+                    bool isAdult = IsAdultBasedOnCnp(match.Value);
+                    return Ok(new { isAdult });
+                }
+                else
+                {
+                    return Ok(new { isAdult = false, message = "CNP nu a fost detectat." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "A apărut o eroare: " + ex.Message);
+            }
+        }
+
+        private string PreprocessImage(string inputPath)
+        {
+            var outputPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(inputPath) + "_preprocessed.jpg");
+            var src = Cv2.ImRead(inputPath, ImreadModes.Grayscale);
+            Cv2.Resize(src, src, new OpenCvSharp.Size(src.Width * 3, src.Height * 3));
+            Cv2.GaussianBlur(src, src, new OpenCvSharp.Size(3, 3), 0);
+            Cv2.Threshold(src, src, 0, 255, ThresholdTypes.Binary | ThresholdTypes.Otsu);
+            Cv2.ImWrite(outputPath, src);
+            return outputPath;
+        }
+
+        private bool IsAdultBasedOnCnp(string cnp)
+        {
+            if (string.IsNullOrWhiteSpace(cnp) || cnp.Length != 13)
+                return false;
+
+            char sexDigit = cnp[0];
+
+            int yearPrefix;
+            switch (sexDigit)
+            {
+                case '1':
+                case '2':
+                    yearPrefix = 1900;
+                    break;
+                case '3':
+                case '4':
+                    yearPrefix = 1800;
+                    break;
+                case '5':
+                case '6':
+                    yearPrefix = 2000;
+                    break;
+                default:
+                    return false;
+            }
+
+            if (!int.TryParse(cnp.Substring(1, 2), out int year))
+                return false;
+            year += yearPrefix;
+
+            if (!int.TryParse(cnp.Substring(3, 2), out int month) || month < 1 || month > 12)
+                return false;
+
+            if (!int.TryParse(cnp.Substring(5, 2), out int day) || day < 1 || day > 31)
+                return false;
+
+            DateTime birthDate;
+            try
+            {
+                birthDate = new DateTime(year, month, day);
+            }
+            catch
+            {
+                return false;
+            }
+
+            var today = DateTime.Today;
+            int age = today.Year - birthDate.Year;
+            if (birthDate > today.AddYears(-age)) age--;
+
+            return age >= 18;
         }
     }
 }

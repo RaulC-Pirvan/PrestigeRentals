@@ -70,6 +70,22 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(new { fileName });
         }
 
+        [HttpPost("user/{userId}/idcard")]
+        public async Task<IActionResult> UploadUserIdCardImage(string userId, IFormFile image)
+        {
+            var path = Path.Combine(RootImages, "user", userId, "idcard");
+            Directory.CreateDirectory(path);
+            ClearDirectory(path); // opțional, dacă vrei să păstrezi doar o singură poză de buletin
+
+            var fileName = "idcard" + Path.GetExtension(image.FileName);
+            var filePath = Path.Combine(path, fileName);
+
+            await using var stream = new FileStream(filePath, FileMode.Create);
+            await image.CopyToAsync(stream);
+
+            return Ok(new { fileName });
+        }
+
         [HttpPost("vehicle/{vehicleId}")]
         public async Task<IActionResult> UploadVehicleImage(string vehicleId, IFormFile image)
         {

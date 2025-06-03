@@ -23,3 +23,16 @@
     <button type="submit" (click)="submit()">Register</button>
   </form>
 </div>
+
+<div *ngIf="step === 3">
+  <h2>Final step: Upload your ID card</h2>
+  <input type="file" (change)="onIdCardSelected($event)" />
+  <div *ngIf="idCardPreviewUrl">
+    <p>Preview:</p>
+    <img [src]="idCardPreviewUrl" width="200" />
+  </div>
+  <p *ngIf="ocrResult === null">Waiting for verification...</p>
+  <p *ngIf="ocrResult === false" class="error-text">
+    You must be over 18 to register.
+  </p>
+</div>

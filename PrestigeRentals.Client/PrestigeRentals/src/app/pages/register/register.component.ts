@@ -27,6 +27,11 @@ export class RegisterComponent {
   selectedImageFile: File | null = null;
   imagePreviewUrl: string | null = null;
 
+  idCardFile: File | null = null;
+  idCardPreviewUrl: string | null = null;
+
+  ocrResult: boolean | null = null; // true if over 18, false if not, null if not verified
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -49,13 +54,64 @@ export class RegisterComponent {
   }
 
   nextStep() {
-    if (this.userForm.valid) {
+    if (this.step === 1 && this.userForm.valid) {
       this.step = 2;
+    } else if (this.step === 2 && this.credentialsForm.valid) {
+      if (
+        this.credentialsForm.value.password !==
+        this.credentialsForm.value.repeatPassword
+      ) {
+        alert('Passwords do not match');
+        return;
+      }
+      this.step = 3;
     }
   }
 
+  onIdCardSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file || !this.tempUserId) return;
+
+    this.idCardFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => (this.idCardPreviewUrl = reader.result as string);
+    reader.readAsDataURL(file);
+
+    const formData = new FormData();
+    formData.append('image', file, file.name);
+
+    // 1. Upload imagine buletin
+    this.userService
+      .uploadUserIdCardImage(this.tempUserId, formData)
+      .subscribe({
+        next: () => {
+          console.log('✅ ID card uploaded. Starting OCR...');
+
+          // 2. Verificare CNP
+          this.userService.verifyCnp(this.tempUserId!).subscribe({
+            next: (res: boolean) => {
+              this.ocrResult = res;
+              if (res) {
+                console.log('✅ Over 18, redirecting...');
+                this.router.navigate(['/register-success']);
+              } else {
+                alert('❌ You must be over 18 to register.');
+              }
+            },
+            error: () => {
+              alert('❌ Failed to verify age. Please try again.');
+            },
+          });
+        },
+        error: () => {
+          alert('❌ Failed to upload ID card.');
+        },
+      });
+  }
+
   previousStep() {
-    this.step = 1;
+    if (this.step > 1) this.step--;
   }
 
   onImageSelected(event: any) {
@@ -68,13 +124,17 @@ export class RegisterComponent {
     }
   }
 
+  tempUserId: string | null = null;
+
   async submit() {
     if (
       !this.credentialsForm.valid ||
       this.credentialsForm.value.password !==
         this.credentialsForm.value.repeatPassword
-    )
+    ) {
+      alert('Please fix the errors before submitting.');
       return;
+    }
 
     this.isLoading = true;
 
@@ -90,6 +150,7 @@ export class RegisterComponent {
       next: async (res: any) => {
         const token = res.token || res.Token;
         const userId = this.getUserIdFromToken(token);
+        this.tempUserId = userId;
 
         if (this.selectedImageFile) {
           const formData = new FormData();
@@ -98,17 +159,17 @@ export class RegisterComponent {
             this.selectedImageFile,
             this.selectedImageFile.name
           );
-
           await this.userService.uploadUserImage(userId, formData).toPromise();
         } else {
           await this.userService.uploadDefaultUserImage(userId).toPromise();
         }
 
         this.isLoading = false;
-        this.router.navigate(['/register-success']);
+        this.step = 3; // Move to OCR step
       },
       error: () => {
         this.isLoading = false;
+        alert('Registration failed. Please try again.');
       },
     });
   }
