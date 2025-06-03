@@ -17,7 +17,7 @@ export class VerticalShowcaseComponent {
   goToInventoryOrLogin() {
     if (this.authService.isLoggedIn())
     {
-      this.router.navigate(['/Inventory']);
+      this.router.navigate(['/inventory']);
     } else {
       this.router.navigate(['/login']);
     }
