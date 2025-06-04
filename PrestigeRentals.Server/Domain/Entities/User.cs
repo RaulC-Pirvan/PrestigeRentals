@@ -59,5 +59,7 @@ namespace PrestigeRentals.Domain.Entities
         /// Indicates whether the user's email has been confirmed.
         /// </summary>
         public bool EmailConfirmed { get; set; } = false;
+
+        public bool Banned { get; set; } = false;
     }
 }

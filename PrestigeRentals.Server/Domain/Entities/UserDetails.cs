@@ -58,5 +58,6 @@ namespace PrestigeRentals.Domain.Entities
         /// </summary>
         [Required]
         public bool Deleted { get; set; } = false;
+
     }
 }

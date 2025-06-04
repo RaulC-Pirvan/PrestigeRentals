@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OpenCvSharp;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
@@ -161,6 +162,21 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
+        [HttpGet("users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                var users = await _userManagementService.GetAllUsersAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         /// <summary>
         /// Changes a user's password.
         /// </summary>
@@ -310,7 +326,8 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserPromoted = await _userManagementService.MakeAdmin(userId);
-                return Ok("User successfully promoted to Admin.");
+                return Ok(new { message = "User successfully promoted to Admin." });
+
             }
             catch (UserAlreadyAdminException ex)
             {
@@ -338,7 +355,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDemoted = await _userManagementService.RevertToUser(userId);
-                return Ok("User successfully demoted to User.");
+                return Ok(new {message = "User successfully demoted to User." });
             }
             catch (UserAlreadyUserException ex)
             {
@@ -352,6 +369,31 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{userId}/ban")]
+        public async Task<IActionResult> BanUser(long userId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+            if (user == null) return NotFound();
+
+            user.Banned = true;
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("{userId}/unban")]
+        public async Task<IActionResult> UnbanUser(long userId)
+        {
+            var user = await _dbContext.Users.FindAsync(userId);
+            if (user == null) return NotFound();
+
+            user.Banned= false;
+            await _dbContext.SaveChangesAsync();
+
+            return Ok();
         }
 
         /// <summary>

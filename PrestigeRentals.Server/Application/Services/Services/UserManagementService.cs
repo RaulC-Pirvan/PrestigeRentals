@@ -26,6 +26,7 @@ namespace PrestigeRentals.Application.Services.Services
         private readonly IUserDetailsRepository _userDetailsRepository;
         private readonly ILogger<UserManagementService> _logger;
         private readonly IAuthService _authService;
+        private readonly ApplicationDbContext _dbContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UserManagementService"/> class.
@@ -35,12 +36,13 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="userDetailsRepository">The repository for interacting with user details.</param>
         /// <param name="dbContext">The database context used for querying and saving data.</param>
         /// <param name="logger">The logger for logging operations.</param>
-        public UserManagementService(IUserRepository userRepository, IAuthService authService, IUserDetailsRepository userDetailsRepository, ILogger<UserManagementService> logger)
+        public UserManagementService(IUserRepository userRepository, IAuthService authService, IUserDetailsRepository userDetailsRepository, ILogger<UserManagementService> logger, ApplicationDbContext dbContext)
         {
             _userRepository = userRepository;
             _userDetailsRepository = userDetailsRepository;
             _logger = logger;
             _authService = authService;
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -269,6 +271,23 @@ namespace PrestigeRentals.Application.Services.Services
                 LastName = userDetails.LastName,
                 Role = user.Role,
             };
+        }
+
+        public async Task<List<UserDTO>> GetAllUsersAsync()
+        {
+            return await _dbContext.Users
+               .Join(_dbContext.UsersDetails,
+                     user => user.Id,
+                     details => details.UserID,
+                     (user, details) => new UserDTO
+                     {
+                         Id = user.Id,
+                         FirstName = details.FirstName,
+                         LastName = details.LastName,
+                         Email = user.Email,
+                         Role = user.Role,
+                     })
+               .ToListAsync();
         }
 
         public async Task<User> GetUserByIdAsync(long userId)

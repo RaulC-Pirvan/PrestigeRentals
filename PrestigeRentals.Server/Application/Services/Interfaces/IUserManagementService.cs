@@ -72,5 +72,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
 
         Task<UserProfileDTO> GetUserProfile(long userId);
 
+        Task<List<UserDTO>> GetAllUsersAsync();
     }
 }
