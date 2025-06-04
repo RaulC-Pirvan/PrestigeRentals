@@ -41,6 +41,7 @@ export interface VehicleFilterOptions {
 })
 export class VehicleService {
   baseUrl = 'https://localhost:7093/api';
+  private cachedToken: string | null = null;
 
   constructor(
     private http: HttpClient,
@@ -48,13 +49,16 @@ export class VehicleService {
   ) {}
 
   private getToken(): string | null {
+    if (this.cachedToken) {
+      return this.cachedToken;
+    }
     if (!isPlatformBrowser(this.platformId)) {
       return null;
     }
-    const token =
+    this.cachedToken =
       localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
-    console.log('Retrieved token:', token);
-    return token;
+    console.log('Retrieved token once:', this.cachedToken);
+    return this.cachedToken;
   }
 
   private getAuthHeaders(): HttpHeaders {

@@ -124,4 +124,41 @@ export class AuthService {
   register(data: any): Observable<any> {
     return this.http.post('https://localhost:7093/register', data);
   }
+
+  getToken(): string | null {
+    return (
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken')
+    );
+  }
+
+  getUserRole(): 'Admin' | 'User' | 'Guest' {
+    const token = this.getToken();
+    if (!token) return 'Guest';
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const role =
+        payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
+      if (role === 'Admin' || role === 'User') return role;
+      return 'Guest';
+    } catch (e) {
+      return 'Guest';
+    }
+  }
+
+  isRole(role: 'Admin' | 'User'): boolean {
+    return this.getUserRole() === role;
+  }
+
+  isAuthenticated(): boolean {
+    return this.getUserRole() !== 'Guest';
+  }
+
+  get isAdmin(): boolean {
+    return this.getUserRole() === 'Admin';
+  }
+
+  get isUser(): boolean {
+    return this.getUserRole() === 'User';
+  }
 }

@@ -26,94 +26,47 @@ import { VehiclesComponent } from './pages/admin/vehicles/vehicles.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RegisterSuccessComponent } from './pages/register-success/register-success.component';
 import { UserGuard } from './guards/user.guard';
-
+import { AdminGuard } from './guards/admin.guard';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: LandingPageComponent,
-  },
-  {
-    path: 'not-found',
-    component: NotFoundComponent,
-  },
-  {
-    path: 'forbidden',
-    component: ForbiddenAccessComponent,
-  },
-  {
-    path: 'contact',
-    component: ContactComponent,
-  },
+  { path: '', component: LandingPageComponent },
 
-  {
-    path: 'login',
-    component: LoginComponent,
-    canActivate: [AuthRedirectGuard],
-  },
-  {
-    path: 'register',
-    component: RegisterComponent,
-    canActivate: [AuthRedirectGuard]
-  },
-  {
-    path: 'register-success',
-    component: RegisterSuccessComponent,
-  },
-  {
-    path: 'about-us',
-    component: AboutUsComponent,
-  },
-  {
-    path: 'inventory',
-    component: InventoryComponent,
-  },
-  {
-    path: 'vehicle/:id',
-    component: VehicleDetailComponent,
-  },
-  {
-    path: 'order-checkout',
-    component: OrderCheckoutComponent,
-  },
-  {
-    path: 'order-confirmation',
-    component: OrderConfirmationComponent,
-  },
+  { path: 'not-found', component: NotFoundComponent },
+  { path: 'forbidden', component: ForbiddenAccessComponent },
+  { path: 'contact', component: ContactComponent },
+  { path: 'about-us', component: AboutUsComponent },
+
+  // Public only when NOT authenticated
+  { path: 'login', component: LoginComponent, canActivate: [AuthRedirectGuard] },
+  { path: 'register', component: RegisterComponent, canActivate: [AuthRedirectGuard] },
+  { path: 'register-success', component: RegisterSuccessComponent },
+
+  // Authenticated users (User or Admin)
+  { path: 'inventory', component: InventoryComponent, canActivate: [UserGuard] },
+  { path: 'vehicle/:id', component: VehicleDetailComponent, canActivate: [UserGuard] },
+  { path: 'order-checkout', component: OrderCheckoutComponent, canActivate: [UserGuard] },
+  { path: 'order-confirmation', component: OrderConfirmationComponent, canActivate: [UserGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [UserGuard] },
+
   {
     path: 'settings',
     component: SettingsComponent,
+    canActivate: [UserGuard],
     children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'details',
-      },
-      {
-        path: 'details',
-        component: DetailsSettingsFormComponent,
-      },
-      {
-        path: 'email',
-        component: EmailSettingsFormComponent,
-      },
-      {
-        path: 'password',
-        component: PasswordSettingsFormComponent,
-      },
-      {
-        path: 'deactivate',
-        component: DeactivateAccountFormComponent,
-      },
-      {
-        path: 'delete',
-        component: DeleteAccountFormComponent,
-      },
+      { path: '', pathMatch: 'full', redirectTo: 'details' },
+      { path: 'details', component: DetailsSettingsFormComponent },
+      { path: 'email', component: EmailSettingsFormComponent },
+      { path: 'password', component: PasswordSettingsFormComponent },
+      { path: 'deactivate', component: DeactivateAccountFormComponent },
+      { path: 'delete', component: DeleteAccountFormComponent },
     ],
   },
+
+  // Admin-only
   {
     path: 'admin-dashboard',
     component: AdminComponent,
+    canActivate: [AdminGuard],
     children: [
       { path: '', redirectTo: 'orders', pathMatch: 'full' },
       { path: 'orders', component: OrdersComponent },
@@ -124,12 +77,5 @@ export const routes: Routes = [
     ],
   },
 
-  {
-    path: 'profile',
-    component: ProfileComponent,
-  },
-  {
-    path: '**',
-    redirectTo: 'not-found',
-  },
+  { path: '**', redirectTo: 'not-found' },
 ];
