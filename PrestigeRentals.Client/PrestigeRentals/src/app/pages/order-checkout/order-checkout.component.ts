@@ -2,16 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CheckoutDataService } from '../../services/checkout-data.service';
 import { VehicleService } from '../../services/vehicle.service';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AuthService, UserDetailsRequest } from '../../services/auth.service';
 import { HttpClient } from '@angular/common/http';
 
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from "../../components/navbar/navbar.component";
-import { FooterComponent } from "../../components/footer/footer.component";
-import { TitleComponent } from "../../shared/title/title.component";
-import { ButtonComponent } from "../../shared/button/button.component";
+import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { FooterComponent } from '../../components/footer/footer.component';
+import { TitleComponent } from '../../shared/title/title.component';
+import { ButtonComponent } from '../../shared/button/button.component';
 import { BookingDataService } from '../../services/booking-data.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-checkout',
@@ -22,7 +28,7 @@ import { BookingDataService } from '../../services/booking-data.service';
     NavbarComponent,
     FooterComponent,
     TitleComponent,
-    ButtonComponent
+    ButtonComponent,
   ],
   templateUrl: './order-checkout.component.html',
   styleUrls: ['./order-checkout.component.scss'],
@@ -35,6 +41,7 @@ export class OrderCheckoutComponent implements OnInit {
   vehicleId!: number;
   mainPhotoUrl: string = '';
   checkoutForm!: FormGroup;
+  userId!: number;
 
   constructor(
     private router: Router,
@@ -54,20 +61,30 @@ export class OrderCheckoutComponent implements OnInit {
       cardHolder: ['', Validators.required],
       cardNumber: ['', Validators.required],
       expireDate: ['', Validators.required],
-      cvv: ['', Validators.required]
+      cvv: ['', Validators.required],
     });
 
-    this.authService.userDetails$.subscribe((user: UserDetailsRequest | null) => {
-      if (user) {
-        const [firstName, ...lastNameParts] = user.name.split(' ');
-        const lastName = lastNameParts.join(' ') || '';
-        this.checkoutForm.patchValue({
-          firstName: firstName,
-          lastName: lastName,
-          email: user.email
-        });
+    this.authService.userDetails$.subscribe(
+      (user: UserDetailsRequest | null) => {
+        if (user) {
+          this.userId = user.id;
+        }
       }
-    });
+    );
+
+    this.authService.userDetails$.subscribe(
+      (user: UserDetailsRequest | null) => {
+        if (user) {
+          const [firstName, ...lastNameParts] = user.name.split(' ');
+          const lastName = lastNameParts.join(' ') || '';
+          this.checkoutForm.patchValue({
+            firstName: firstName,
+            lastName: lastName,
+            email: user.email,
+          });
+        }
+      }
+    );
 
     const nav = this.router.getCurrentNavigation();
     const state = nav?.extras?.state as {
@@ -114,45 +131,66 @@ export class OrderCheckoutComponent implements OnInit {
     });
   }
 
+  formatToISOString = (dateStr: string): string => {
+    const d = new Date(dateStr);
+    return d.toISOString();
+  };
+
   onCheckoutClick() {
     if (this.checkoutForm.invalid) {
       this.checkoutForm.markAllAsTouched();
       return;
     }
 
-    const payload = {
-      orderId: 1,
-      totalCost: this.totalCost,
-      userId: 1,
+    const orderPayload = {
+      userId: this.userId,
       vehicleId: this.vehicleId,
-      firstName: this.checkoutForm.value.firstName,
-      lastName: this.checkoutForm.value.lastName,
-      email: this.checkoutForm.value.email,
-      cardHolder: this.checkoutForm.value.cardHolder,
-      cardNumber: this.checkoutForm.value.cardNumber,
-      expireDate: this.checkoutForm.value.expireDate,
-      cvv: this.checkoutForm.value.cvv
+      startTime: this.formatToISOString(this.startTime),
+      endTime: this.formatToISOString(this.endTime),
     };
 
-    this.http.post<any>('https://localhost:7093/api/payment/mockpay', payload).subscribe({
-      next: (res) => {
-        if (res.success) {
-          console.log(res);
+    this.http
+      .post<{ id: number }>('https://localhost:7093/api/order', orderPayload)
+      .pipe(
+        switchMap((orderRes) => {
+          const orderId = orderRes.id;
 
-          this.bookingDataService.setBookingData({
-            bookingReference: res.bookingReference,
-            qrCodeData: res.qrCodeData
-          });
+          const paymentPayload = {
+            orderId: orderId,
+            totalCost: this.totalCost,
+            userId: this.userId,
+            vehicleId: this.vehicleId,
+            firstName: this.checkoutForm.value.firstName,
+            lastName: this.checkoutForm.value.lastName,
+            email: this.checkoutForm.value.email,
+            cardHolder: this.checkoutForm.value.cardHolder,
+            cardNumber: this.checkoutForm.value.cardNumber,
+            expireDate: this.checkoutForm.value.expireDate,
+            cvv: this.checkoutForm.value.cvv,
+          };
 
-          this.router.navigate(["/order-confirmation"]);
-        } else {
-          alert('Payment failed: ' + res.errorMessage);
-        }
-      },
-      error: (err) => {
-        console.error('Payment error:', err);
-        alert('Payment error. Please try again.');
-      }
-    });
+          return this.http.post<any>(
+            'https://localhost:7093/api/payment/mockpay',
+            paymentPayload
+          );
+        })
+      )
+      .subscribe({
+        next: (paymentRes) => {
+          if (paymentRes.success) {
+            this.bookingDataService.setBookingData({
+              bookingReference: paymentRes.bookingReference,
+              qrCodeData: paymentRes.qrCodeData,
+            });
+            this.router.navigate(['/order-confirmation']);
+          } else {
+            alert('Payment failed: ' + paymentRes.errorMessage);
+          }
+        },
+        error: (err) => {
+          console.error('Order or payment error:', err);
+          alert('An error occurred. Please try again.');
+        },
+      });
   }
 }
