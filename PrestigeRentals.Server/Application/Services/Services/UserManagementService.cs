@@ -286,6 +286,7 @@ namespace PrestigeRentals.Application.Services.Services
                          LastName = details.LastName,
                          Email = user.Email,
                          Role = user.Role,
+                         Banned = user.Banned
                      })
                .ToListAsync();
         }

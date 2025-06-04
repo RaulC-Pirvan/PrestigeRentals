@@ -5,5 +5,5 @@ export interface User {
   email: string;
   role: 'User' | 'Admin';
   photoUrl?: string;
-  isBanned?: boolean;
+  banned: boolean;
 }

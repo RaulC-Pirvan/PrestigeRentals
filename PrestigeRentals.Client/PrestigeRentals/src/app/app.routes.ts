@@ -36,12 +36,10 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'about-us', component: AboutUsComponent },
 
-  // Public only when NOT authenticated
   { path: 'login', component: LoginComponent, canActivate: [AuthRedirectGuard] },
   { path: 'register', component: RegisterComponent, canActivate: [AuthRedirectGuard] },
   { path: 'register-success', component: RegisterSuccessComponent },
 
-  // Authenticated users (User or Admin)
   { path: 'inventory', component: InventoryComponent, canActivate: [UserGuard] },
   { path: 'vehicle/:id', component: VehicleDetailComponent, canActivate: [UserGuard] },
   { path: 'order-checkout', component: OrderCheckoutComponent, canActivate: [UserGuard] },
