@@ -308,6 +308,7 @@ export class VehicleDetailComponent implements OnInit {
       vehicleId: this.vehicleData!.id,
     });
 
-    window.location.href = "/order-checkout";
+    this.router.navigate(['/order-checkout']);
+
   }
 }

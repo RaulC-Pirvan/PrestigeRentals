@@ -144,7 +144,7 @@ export class OrderCheckoutComponent implements OnInit {
             qrCodeData: res.qrCodeData
           });
 
-          window.location.href = "/order-confirmation";
+          this.router.navigate(["/order-confirmation"]);
         } else {
           alert('Payment failed: ' + res.errorMessage);
         }

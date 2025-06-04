@@ -55,6 +55,6 @@ export class OrderConfirmationComponent implements OnInit {
   }
 
   goHome() {
-    window.location.href = '/';
+    this.router.navigate(['/']);
   }
 }
