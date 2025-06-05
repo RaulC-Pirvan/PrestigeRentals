@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
-import { Vehicle, VehicleService } from '../../services/vehicle.service';
+import {  VehicleService } from '../../services/vehicle.service';
 import { Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ButtonComponent } from "../../shared/button/button.component";
+import { Vehicle } from '../../models/vehicle.model';
 
 @Component({
   selector: 'app-vehicle-suggestion',

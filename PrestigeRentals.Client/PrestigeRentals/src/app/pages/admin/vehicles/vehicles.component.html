@@ -1,1 +1,43 @@
-<p>vehicles works!</p>
+<div class="wrapper">
+  <div class="title-container">
+    <app-title text="VEHICLES"></app-title>
+  </div>
+
+  <div class="menu-toggle">
+    <button [class.active]="mode === 'overview'" (click)="setMode('overview')" class="primary">
+      Overview
+    </button>
+    <button [class.active]="mode === 'add'" (click)="setMode('add')" class="secondary">
+      Add
+    </button>
+  </div>
+
+  <ng-container *ngIf="mode === 'overview'">
+    <div class="pagination-controls">
+      <button (click)="changePage(-1)" [disabled]="currentPage === 1">
+        &lt;
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+      <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">
+        &gt;
+      </button>
+    </div>
+
+    <app-admin-vehicle-card
+      *ngFor="let vehicle of displayedVehicles"
+      [vehicle]="vehicle"
+    ></app-admin-vehicle-card>
+
+    <div class="pagination-controls">
+      <button (click)="changePage(-1)" [disabled]="currentPage === 1">
+        &lt;
+      </button>
+      <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+      <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">
+        &gt;
+      </button>
+    </div>
+  </ng-container>
+
+  <!-- <app-admin-vehicle-form *ngIf="mode === 'add'"></app-admin-vehicle-form> -->
+</div>

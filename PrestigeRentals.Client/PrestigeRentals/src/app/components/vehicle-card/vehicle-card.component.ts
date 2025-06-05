@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { VehicleService, Vehicle } from '../../services/vehicle.service';
+import { VehicleService } from '../../services/vehicle.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ButtonComponent } from '../../shared/button/button.component';
-import { StringifyOptions } from 'querystring';
 import { Router } from '@angular/router';
+import { Vehicle } from '../../models/vehicle.model';
 
 @Component({
   selector: 'app-vehicle-card',

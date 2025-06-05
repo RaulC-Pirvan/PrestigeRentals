@@ -1,0 +1,55 @@
+<div class="vehicle-card">
+  <div class="image-container">
+    <img [src]="vehicle.imageUrl" [alt]="vehicle.model" />
+  </div>
+
+  <div class="info-container">
+    <div class="title-container">
+      <h2>{{ vehicle.make }} {{ vehicle.model }}</h2>
+    </div>
+    <hr />
+    <div class="details-container">
+      <div class="technical-container">
+        <p><strong>Engine Size:</strong> {{ vehicle.engineSize }}</p>
+        <p><strong>Fuel Type:</strong> {{ vehicle.fuelType }}</p>
+        <p><strong>Transmission:</strong> {{ vehicle.transmission }}</p>
+        <p><strong>Chassis:</strong> {{ vehicle.chassis }}</p>
+        <p><strong>Horsepower:</strong> {{ vehicle.horsepower }}</p>
+        <p><strong>Price/Day:</strong> {{ vehicle.pricePerDay }}</p>
+      </div>
+      <div class="options-container">
+        <p>
+          <strong>Navigation:</strong> {{ vehicle.navigation ? "Yes" : "No" }}
+        </p>
+        <p>
+          <strong>Heads-up Display:</strong>
+          {{ vehicle.headsupDisplay ? "Yes" : "No" }}
+        </p>
+        <p>
+          <strong>Hill Assist:</strong> {{ vehicle.hillAssist ? "Yes" : "No" }}
+        </p>
+        <p>
+          <strong>Cruise Control:</strong>
+          {{ vehicle.cruiseControl ? "Yes" : "No" }}
+        </p>
+      </div>
+      <div class="buttons-container">
+        <app-button
+          buttonText="VIEW >"
+          buttonType="accent"
+          (buttonClick)="(null)"
+        ></app-button>
+        <app-button
+          buttonText="MODIFY >"
+          buttonType="transparent"
+          (buttonClick)="(null)"
+        ></app-button>
+        <app-button
+          buttonText="DELETE >"
+          buttonType="red"
+          (buttonClick)="(null)"
+        ></app-button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { VehicleService, Vehicle } from "../../services/vehicle.service";
+import { VehicleService } from "../../services/vehicle.service";
 import { Order } from "../../models/order.model";
 import { CommonModule } from "@angular/common";
+import { Vehicle } from "../../models/vehicle.model";
 
 @Component({
   selector: 'app-order-preview',

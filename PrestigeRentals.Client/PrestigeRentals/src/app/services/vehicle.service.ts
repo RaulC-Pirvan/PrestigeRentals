@@ -3,21 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Review } from '../models/review.model';
 import { isPlatformBrowser } from '@angular/common';
+import { Vehicle } from '../models/vehicle.model';
 
-export interface Vehicle {
-  id: number;
-  make: string;
-  model: string;
-  chassis: string;
-  horsepower: number;
-  pricePerDay: number;
-  engineSize: number;
-  fuelType: string;
-  transmission: string;
-  active: boolean;
-  deleted: boolean;
-  available: boolean;
-}
+
 
 export interface VehicleOptions {
   id: number;

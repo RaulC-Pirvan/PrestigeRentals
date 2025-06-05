@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Order } from '../../../../models/order.model';
-import { Vehicle, VehicleService } from '../../../../services/vehicle.service';
+import {  VehicleService } from '../../../../services/vehicle.service';
 import { CommonModule } from '@angular/common';
+import { Vehicle } from '../../../../models/vehicle.model';
 
 @Component({
   selector: 'app-admin-order-overview',

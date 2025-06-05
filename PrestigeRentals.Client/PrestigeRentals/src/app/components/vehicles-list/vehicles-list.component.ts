@@ -5,10 +5,11 @@ import {
   SimpleChanges,
   OnInit,
 } from '@angular/core';
-import { Vehicle, VehicleService } from '../../services/vehicle.service';
+import { VehicleService } from '../../services/vehicle.service';
 import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { Vehicle } from '../../models/vehicle.model';
 
 @Component({
   selector: 'app-vehicles-list',
