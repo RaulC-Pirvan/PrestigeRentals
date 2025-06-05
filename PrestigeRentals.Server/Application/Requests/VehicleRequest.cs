@@ -20,7 +20,7 @@ namespace PrestigeRentals.Application.Requests
         
         public string Chassis { get; set; }
 
-        public decimal PricePerHour { get; set; }
+        public decimal PricePerDay { get; set; }
 
         public int Horsepower { get; set; }
 

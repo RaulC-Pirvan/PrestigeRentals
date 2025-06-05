@@ -4,10 +4,18 @@
   </div>
 
   <div class="menu-toggle">
-    <button [class.active]="mode === 'overview'" (click)="setMode('overview')" class="primary">
+    <button
+      [class.active]="mode === 'overview'"
+      (click)="setMode('overview')"
+      class="primary"
+    >
       Overview
     </button>
-    <button [class.active]="mode === 'add'" (click)="setMode('add')" class="secondary">
+    <button
+      [class.active]="mode === 'add'"
+      (click)="setMode('add')"
+      class="secondary"
+    >
       Add
     </button>
   </div>
@@ -39,5 +47,9 @@
     </div>
   </ng-container>
 
-  <!-- <app-admin-vehicle-form *ngIf="mode === 'add'"></app-admin-vehicle-form> -->
+  <app-admin-add-vehicle
+    *ngIf="mode === 'add'"
+    (vehicleAdded)="handleVehicleAdded($event)"
+    (cancel)="setMode('overview')"
+  ></app-admin-add-vehicle>
 </div>

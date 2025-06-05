@@ -1,0 +1,35 @@
+<form [formGroup]="addVehicleForm" (ngSubmit)="submit()">
+  <label>Make: <input formControlName="make" /></label><br />
+  <label>Model: <input formControlName="model" /></label><br />
+  <label>Chassis: <input formControlName="chassis" /></label><br />
+  <label>Horsepower: <input type="number" formControlName="horsepower" /></label><br />
+  <label>Engine Size (cc): <input type="number" formControlName="engineSize" /></label><br />
+  <label>Fuel Type: <input formControlName="fuelType" /></label><br />
+  <label>Transmission: <input formControlName="transmission" /></label><br />
+  <label>Price/Day: <input type="number" formControlName="pricePerDay" /></label><br />
+
+  <label><input type="checkbox" formControlName="navigation" /> Navigation</label><br />
+  <label><input type="checkbox" formControlName="headsUpDisplay" /> Heads-up Display</label><br />
+  <label><input type="checkbox" formControlName="hillAssist" /> Hill Assist</label><br />
+  <label><input type="checkbox" formControlName="cruiseControl" /> Cruise Control</label><br />
+
+  <hr />
+
+  <label>Main Image:</label>
+  <input type="file" (change)="onMainImageSelected($event)" accept="image/*" />
+  <img *ngIf="mainImagePreview" [src]="mainImagePreview" alt="Main preview" width="150" />
+
+  <label>Secondary Images:</label>
+  <input
+    type="file"
+    (change)="onSecondaryImagesSelected($event)"
+    multiple
+    accept="image/*"
+  />
+  <div *ngFor="let img of secondaryImagesPreview">
+    <img [src]="img" alt="Secondary preview" width="100" />
+  </div>
+
+  <button type="submit" [disabled]="!addVehicleForm.valid">Add Vehicle</button>
+  <button type="button" (click)="onCancel()">Cancel</button>
+</form>

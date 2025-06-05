@@ -5,8 +5,6 @@ import { Review } from '../models/review.model';
 import { isPlatformBrowser } from '@angular/common';
 import { Vehicle } from '../models/vehicle.model';
 
-
-
 export interface VehicleOptions {
   id: number;
   vehicleId: number;
@@ -129,5 +127,61 @@ export class VehicleService {
     return this.http.get<number[]>(`${this.baseUrl}/vehicle/similar`, {
       params: { excludeId: id, chassis, transmission },
     });
+  }
+
+  createVehicle(vehicleData: any): Observable<Vehicle> {
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+
+    if (!token) {
+      throw new Error('No auth token found');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    return this.http.post<Vehicle>(`${this.baseUrl}/vehicle`, vehicleData, {
+      headers,
+    });
+  }
+
+  uploadMainImage(vehicleId: number, file: File): Observable<any> {
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+
+    if (!token) {
+      throw new Error('No auth token found');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http.post(
+      `${this.baseUrl}/image/vehicle/${vehicleId}/main`,
+      formData,
+      { headers }
+    );
+  }
+
+  uploadSecondaryImage(vehicleId: number, file: File): Observable<any> {
+    const token =
+      localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+
+    if (!token) {
+      throw new Error('No auth token found');
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+    const formData = new FormData();
+    formData.append('image', file);
+    return this.http.post(
+      `${this.baseUrl}/image/vehicle/${vehicleId}`,
+      formData, {headers}
+    );
   }
 }

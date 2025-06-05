@@ -203,7 +203,7 @@ namespace PrestigeRentals.Application.Services.Services
                 Model = vehicleRequest.Model,
                 Chassis = vehicleRequest.Chassis,
                 Horsepower = vehicleRequest.Horsepower,
-                PricePerDay = vehicleRequest.PricePerHour,
+                PricePerDay = vehicleRequest.PricePerDay,
                 EngineSize = vehicleRequest.EngineSize,
                 FuelType = vehicleRequest.FuelType,
                 Transmission = vehicleRequest.Transmission

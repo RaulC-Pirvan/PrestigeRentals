@@ -5,10 +5,16 @@ import { Vehicle } from '../../../models/vehicle.model';
 import { CommonModule } from '@angular/common';
 import { AdminVehicleCardComponent } from '../components/admin-vehicle-card/admin-vehicle-card.component';
 import { forkJoin, tap } from 'rxjs';
+import { AdminAddVehicleComponent } from '../../../components/admin-add-vehicle/admin-add-vehicle.component';
 
 @Component({
   selector: 'app-vehicles',
-  imports: [TitleComponent, CommonModule, AdminVehicleCardComponent],
+  imports: [
+    TitleComponent,
+    CommonModule,
+    AdminVehicleCardComponent,
+    AdminAddVehicleComponent
+  ],
   templateUrl: './vehicles.component.html',
   styleUrl: './vehicles.component.scss',
 })
@@ -52,7 +58,7 @@ export class VehiclesComponent {
 
       forkJoin(requests).subscribe(() => {
         console.log('Toate vehiculele au fost încărcate cu poze și dotări');
-        this.updateDisplayedVehicles(); 
+        this.updateDisplayedVehicles();
       });
     });
   }
@@ -73,6 +79,47 @@ export class VehiclesComponent {
   }
 
   setMode(mode: 'overview' | 'add') {
+    console.log('Set mode:', mode);
     this.mode = mode;
+  }
+
+  handleVehicleAdded(event: {
+    vehicleData: any;
+    mainImageFile?: File | undefined; // pune ? aici
+    secondaryImageFiles: File[];
+  }) {
+    // Trimite datele la backend
+
+    const { vehicleData, mainImageFile, secondaryImageFiles } = event;
+
+    this.vehicleService.createVehicle(vehicleData).subscribe({
+      next: (vehicle) => {
+        // Dacă ai nevoie să încarci pozele separat, fă asta după ce primești vehicle.id
+
+        if (mainImageFile) {
+          this.vehicleService
+            .uploadMainImage(vehicle.id, mainImageFile)
+            .subscribe(() => {
+              console.log('Main image uploaded');
+            });
+        }
+        if (secondaryImageFiles.length > 0) {
+          secondaryImageFiles.forEach((file) => {
+            this.vehicleService
+              .uploadSecondaryImage(vehicle.id, file)
+              .subscribe(() => {
+                console.log('Secondary image uploaded');
+              });
+          });
+        }
+
+        this.vehicles.push(vehicle);
+        this.setMode('overview');
+        this.updateDisplayedVehicles();
+      },
+      error: (err) => {
+        console.error('Error adding vehicle', err);
+      },
+    });
   }
 }
