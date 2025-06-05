@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, QueryList, ViewChildren } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -8,10 +8,11 @@ import {
 } from '@angular/forms';
 import { VehicleService } from '../../services/vehicle.service';
 import { HttpClient } from '@angular/common/http';
+import { ButtonComponent } from "../../shared/button/button.component";
 
 @Component({
   selector: 'app-admin-add-vehicle',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonComponent],
   templateUrl: './admin-add-vehicle.component.html',
   styleUrls: ['./admin-add-vehicle.component.scss'],
 })
@@ -22,7 +23,11 @@ export class AdminAddVehicleComponent {
     secondaryImageFiles: File[];
   }>();
   @Output() cancel = new EventEmitter<void>();
+  emptySlots = Array(9);
+  totalSlots = Array(9);
 
+  @ViewChildren('secondaryImageInput') secondaryImageInputs!: QueryList<ElementRef>;
+  
   addVehicleForm: FormGroup;
 
   mainImageFile?: File;
@@ -67,22 +72,18 @@ export class AdminAddVehicleComponent {
     }
   }
 
-  onSecondaryImagesSelected(event: any) {
-    const files: FileList = event.target.files;
-    this.secondaryImageFiles = [];
-    this.secondaryImagesPreview = [];
+onSecondaryImageSelected(event: any, index: number) {
+  const file = event.target.files[0];
+  if (file) {
+    this.secondaryImageFiles[index] = file;
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      this.secondaryImageFiles.push(file);
-
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.secondaryImagesPreview.push(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.secondaryImagesPreview[index] = reader.result;
+    };
+    reader.readAsDataURL(file);
   }
+}
 
   submit() {
     if (!this.addVehicleForm.valid) return;

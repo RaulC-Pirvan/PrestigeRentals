@@ -1,35 +1,123 @@
-<form [formGroup]="addVehicleForm" (ngSubmit)="submit()">
-  <label>Make: <input formControlName="make" /></label><br />
-  <label>Model: <input formControlName="model" /></label><br />
-  <label>Chassis: <input formControlName="chassis" /></label><br />
-  <label>Horsepower: <input type="number" formControlName="horsepower" /></label><br />
-  <label>Engine Size (cc): <input type="number" formControlName="engineSize" /></label><br />
-  <label>Fuel Type: <input formControlName="fuelType" /></label><br />
-  <label>Transmission: <input formControlName="transmission" /></label><br />
-  <label>Price/Day: <input type="number" formControlName="pricePerDay" /></label><br />
+<div class="container">
+  <form [formGroup]="addVehicleForm" (ngSubmit)="submit()">
+    <div class="photo-grid">
+      <!-- Main image upload box -->
+      <div class="upload-box main" (click)="mainImageInput.click()">
+        <ng-container *ngIf="mainImagePreview; else mainPlaceholder">
+          <img [src]="mainImagePreview" alt="Main preview" />
+        </ng-container>
+        <ng-template #mainPlaceholder>
+          <span>+</span>
+        </ng-template>
+        <input
+          type="file"
+          hidden
+          accept="image/*"
+          #mainImageInput
+          (change)="onMainImageSelected($event)"
+        />
+      </div>
 
-  <label><input type="checkbox" formControlName="navigation" /> Navigation</label><br />
-  <label><input type="checkbox" formControlName="headsUpDisplay" /> Heads-up Display</label><br />
-  <label><input type="checkbox" formControlName="hillAssist" /> Hill Assist</label><br />
-  <label><input type="checkbox" formControlName="cruiseControl" /> Cruise Control</label><br />
+      <!-- Unified secondary upload boxes -->
+      <ng-container *ngFor="let _ of totalSlots; let i = index">
+        <div
+          class="upload-box"
+          (click)="secondaryImageInputs.get(i)?.nativeElement.click()"
+        >
+          <ng-container *ngIf="secondaryImagesPreview[i]; else emptySlot">
+            <img [src]="secondaryImagesPreview[i]" alt="Secondary preview" />
+          </ng-container>
+          <ng-template #emptySlot>
+            <span>+</span>
+          </ng-template>
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            #secondaryImageInput
+            (change)="onSecondaryImageSelected($event, i)"
+          />
+        </div>
+      </ng-container>
+    </div>
 
-  <hr />
+    <div class="entries-container">
+      <div class="input-container">
+        <label for="">Make</label>
+        <input type="text" id="make" formControlName="make" />
+      </div>
+      <div class="input-container">
+        <label for="">Model</label>
+        <input type="text" id="model" formControlName="model" />
+      </div>
+      <div class="input-container">
+        <label for="">Chassis</label>
+        <input type="text" id="chassis" formControlName="chassis" />
+      </div>
+      <div class="input-container">
+        <label for="">Horsepower</label>
+        <input type="text" id="horsepower" formControlName="horsepower" />
+      </div>
+      <div class="input-container">
+        <label for="">Engine Size (cc)</label>
+        <input type="text" id="engineSize" formControlName="engineSize" />
+      </div>
+      <div class="input-container">
+        <label for="">Fuel Type</label>
+        <input type="text" id="fuelType" formControlName="fuelType" />
+      </div>
+      <div class="input-container">
+        <label for="">Transmission</label>
+        <input type="text" id="transmission" formControlName="transmission" />
+      </div>
+      <div class="input-container">
+        <label for="">Price/Day</label>
+        <input type="text" id="pricePerDay" formControlName="pricePerDay" />
+      </div>
+      <div class="checkbox-container">
+        <div class="checkbox-input-container">
+          <label for="">Navigation</label>
+          <input type="checkbox" id="navigation" formControlName="navigation" />
+        </div>
 
-  <label>Main Image:</label>
-  <input type="file" (change)="onMainImageSelected($event)" accept="image/*" />
-  <img *ngIf="mainImagePreview" [src]="mainImagePreview" alt="Main preview" width="150" />
+        <div class="checkbox-input-container">
+          <label for="">Heads-up Display</label>
+          <input
+            type="checkbox"
+            id="headsUpDisplay"
+            formControlName="headsUpDisplay"
+          />
+        </div>
+        <div class="checkbox-input-container">
+          <label for="">Hill Assist</label>
+          <input type="checkbox" id="hillAssist" formControlName="hillAssist" />
+        </div>
+        <div class="checkbox-input-container">
+          <label for="">Cruise Control</label>
+          <input
+            type="checkbox"
+            id="cruiseControl"
+            formControlName="cruiseControl"
+          />
+        </div>
+      </div>
+    </div>
 
-  <label>Secondary Images:</label>
-  <input
-    type="file"
-    (change)="onSecondaryImagesSelected($event)"
-    multiple
-    accept="image/*"
-  />
-  <div *ngFor="let img of secondaryImagesPreview">
-    <img [src]="img" alt="Secondary preview" width="100" />
-  </div>
+    <br />
 
-  <button type="submit" [disabled]="!addVehicleForm.valid">Add Vehicle</button>
-  <button type="button" (click)="onCancel()">Cancel</button>
-</form>
+    <div class="buttons-container">
+      <app-button
+        buttonText="Add Vehicle"
+        buttonType="accent"
+        [disabled]="!addVehicleForm.valid"
+        (buttonClick)="submit()"
+      ></app-button>
+
+      <app-button
+        buttonText="Cancel"
+        buttonType="secondary"
+        (buttonClick)="onCancel()"
+      ></app-button>
+    </div>
+  </form>
+</div>
