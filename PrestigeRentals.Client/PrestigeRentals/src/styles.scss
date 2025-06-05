@@ -1,20 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 
-$primary-colour: #1E1E1E;
+$primary-colour: #1e1e1e;
 $secondary-colour: #222222;
-$accent-colour: #F7C566;
-$text-colour: #F1F1F1;
+$accent-colour: #f7c566;
+$text-colour: #f1f1f1;
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
-    color: $text-colour;
-    background-color: $primary-colour;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: $text-colour;
+  background-color: $primary-colour;
+  height: 100%;
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
