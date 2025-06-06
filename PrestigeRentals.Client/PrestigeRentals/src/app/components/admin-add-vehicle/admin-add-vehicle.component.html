@@ -1,7 +1,6 @@
 <div class="container">
   <form [formGroup]="addVehicleForm" (ngSubmit)="submit()">
     <div class="photo-grid">
-      <!-- Main image upload box -->
       <div class="upload-box main" (click)="mainImageInput.click()">
         <ng-container *ngIf="mainImagePreview; else mainPlaceholder">
           <img [src]="mainImagePreview" alt="Main preview" />
@@ -18,7 +17,6 @@
         />
       </div>
 
-      <!-- Unified secondary upload boxes -->
       <ng-container *ngFor="let _ of totalSlots; let i = index">
         <div
           class="upload-box"
