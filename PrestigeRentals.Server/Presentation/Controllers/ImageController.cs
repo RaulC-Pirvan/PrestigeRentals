@@ -29,76 +29,105 @@ namespace PrestigeRentals.Presentation.Controllers
         [HttpPost("user/{userId}")]
         public async Task<IActionResult> UploadUserImage(string userId, IFormFile image)
         {
-            var path = Path.Combine(RootImages, "user", userId);
-            Directory.CreateDirectory(path);
-            ClearDirectory(path);
-
-            var fileName = "profile" + Path.GetExtension(image.FileName);
-            var filePath = Path.Combine(path, fileName);
-
-            await using var stream = new FileStream(filePath, FileMode.Create);
-            await image.CopyToAsync(stream);
-
-            if (long.TryParse(userId, out var userIdLong))
+            try
             {
-                var userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(u => u.UserID == userIdLong);
-                if (userDetails != null)
+                var path = Path.Combine(RootImages, "user", userId);
+                Directory.CreateDirectory(path);
+                ClearDirectory(path);
+
+                var fileName = "profile" + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(path, fileName);
+
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await image.CopyToAsync(stream);
+
+                if (long.TryParse(userId, out var userIdLong))
                 {
-                    await _dbContext.SaveChangesAsync();
+                    var userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(u => u.UserID == userIdLong);
+                    if (userDetails != null)
+                    {
+                        await _dbContext.SaveChangesAsync();
+                    }
+                    else
+                        return NotFound($"User with id {userId} not found.");
                 }
                 else
-                    return NotFound($"User with id {userId} not found.");
+                    return BadRequest("Invalid userId");
+
+                return Ok(new { fileName });
             }
-            else
-                return BadRequest("Invalid userId");
-            return Ok(new { fileName });
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("vehicle/{vehicleId}/main")]
         public async Task<IActionResult> UploadMainVehicleImage(string vehicleId, IFormFile image)
         {
-            var path = Path.Combine(RootImages, "vehicle", vehicleId, "main");
-            Directory.CreateDirectory(path);
-            ClearDirectory(path);
+            try
+            {
+                var path = Path.Combine(RootImages, "vehicle", vehicleId, "main");
+                Directory.CreateDirectory(path);
+                ClearDirectory(path);
 
-            var fileName = "main" + Path.GetExtension(image.FileName);
-            var filePath = Path.Combine(path, fileName);
+                var fileName = "main" + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(path, fileName);
 
-            await using var stream = new FileStream(filePath, FileMode.Create);
-            await image.CopyToAsync(stream);
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await image.CopyToAsync(stream);
 
-            return Ok(new { fileName });
+                return Ok(new { fileName });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("user/{userId}/idcard")]
         public async Task<IActionResult> UploadUserIdCardImage(string userId, IFormFile image)
         {
-            var path = Path.Combine(RootImages, "user", userId, "idcard");
-            Directory.CreateDirectory(path);
-            ClearDirectory(path); // opțional, dacă vrei să păstrezi doar o singură poză de buletin
+            try
+            {
+                var path = Path.Combine(RootImages, "user", userId, "idcard");
+                Directory.CreateDirectory(path);
+                ClearDirectory(path);
 
-            var fileName = "idcard" + Path.GetExtension(image.FileName);
-            var filePath = Path.Combine(path, fileName);
+                var fileName = "idcard" + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(path, fileName);
 
-            await using var stream = new FileStream(filePath, FileMode.Create);
-            await image.CopyToAsync(stream);
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await image.CopyToAsync(stream);
 
-            return Ok(new { fileName });
+                return Ok(new { fileName });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("vehicle/{vehicleId}")]
         public async Task<IActionResult> UploadVehicleImage(string vehicleId, IFormFile image)
         {
-            var path = Path.Combine(RootImages, "vehicle", vehicleId);
-            Directory.CreateDirectory(path);
+            try
+            {
+                var path = Path.Combine(RootImages, "vehicle", vehicleId);
+                Directory.CreateDirectory(path);
 
-            var fileName = Path.GetRandomFileName() + Path.GetExtension(image.FileName);
-            var filePath = Path.Combine(path, fileName);
+                var fileName = Path.GetRandomFileName() + Path.GetExtension(image.FileName);
+                var filePath = Path.Combine(path, fileName);
 
-            await using var stream = new FileStream(filePath, FileMode.Create);
-            await image.CopyToAsync(stream);
+                await using var stream = new FileStream(filePath, FileMode.Create);
+                await image.CopyToAsync(stream);
 
-            return Ok(new { fileName });
+                return Ok(new { fileName });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // === GET ===
@@ -106,82 +135,117 @@ namespace PrestigeRentals.Presentation.Controllers
         [HttpGet("user/{userId}")]
         public IActionResult GetUserImage(string userId)
         {
-            var path = Path.Combine(RootImages, "user", userId);
-            var file = Directory.GetFiles(path).FirstOrDefault();
-            if (file == null) return NotFound("No profile image found.");
+            try
+            {
+                var path = Path.Combine(RootImages, "user", userId);
+                var file = Directory.GetFiles(path).FirstOrDefault();
+                if (file == null) return NotFound("No profile image found.");
 
-            return File(System.IO.File.OpenRead(file), GetContentType(file));
+                return File(System.IO.File.OpenRead(file), GetContentType(file));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("vehicle/{vehicleId}/main")]
         public IActionResult GetMainVehicleImage(string vehicleId)
         {
-            var path = Path.Combine(RootImages, "vehicle", vehicleId, "main");
-            var file = Directory.GetFiles(path).FirstOrDefault();
-            if (file == null) return NotFound("No main image found.");
+            try
+            {
+                var path = Path.Combine(RootImages, "vehicle", vehicleId, "main");
+                var file = Directory.GetFiles(path).FirstOrDefault();
+                if (file == null) return NotFound("No main image found.");
 
-            return File(System.IO.File.OpenRead(file), GetContentType(file));
+                return File(System.IO.File.OpenRead(file), GetContentType(file));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("vehicle/{vehicleId}")]
         public IActionResult GetAllVehicleImages(string vehicleId)
         {
-            var path = Path.Combine(RootImages, "vehicle", vehicleId);
-            if (!Directory.Exists(path)) return NotFound();
+            try
+            {
+                var path = Path.Combine(RootImages, "vehicle", vehicleId);
+                if (!Directory.Exists(path)) return NotFound();
 
-            var files = Directory.GetFiles(path)
-                .Select(Path.GetFileName)
-                .ToList();
+                var files = Directory.GetFiles(path)
+                    .Select(Path.GetFileName)
+                    .ToList();
 
-            return Ok(files);
+                return Ok(files);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpGet("vehicle/file/{fileName}")]
         public IActionResult GetVehicleImageByFileName(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName))
-                return BadRequest("Filename is required");
+            try
+            {
+                if (string.IsNullOrEmpty(fileName))
+                    return BadRequest("Filename is required");
 
-            var vehiclePath = Path.Combine(RootImages, "vehicle");
+                var vehiclePath = Path.Combine(RootImages, "vehicle");
 
-            var files = Directory.GetFiles(vehiclePath, fileName, SearchOption.AllDirectories);
+                var files = Directory.GetFiles(vehiclePath, fileName, SearchOption.AllDirectories);
 
-            if (files.Length == 0)
-                return NotFound();
+                if (files.Length == 0)
+                    return NotFound();
 
-            var filePath = files[0];
-            var contentType = GetContentType(filePath);
-            return File(System.IO.File.OpenRead(filePath), contentType);
+                var filePath = files[0];
+                var contentType = GetContentType(filePath);
+                return File(System.IO.File.OpenRead(filePath), contentType);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost("user/{userId}/default")]
         public async Task<IActionResult> SetDefaultUserImage(string userId)
         {
-            if (!long.TryParse(userId, out var userIdLong))
-                return BadRequest("Invalid userId");
+            try
+            {
+                if (!long.TryParse(userId, out var userIdLong))
+                    return BadRequest("Invalid userId");
 
-            var userImagePath = Path.Combine(RootImages, "user", userId);
-            Directory.CreateDirectory(userImagePath);
+                var userImagePath = Path.Combine(RootImages, "user", userId);
+                Directory.CreateDirectory(userImagePath);
 
-            ClearDirectory(userImagePath);
+                ClearDirectory(userImagePath);
 
-            var defaultImagePath = Path.Combine(RootImages, "default", "default-profile-account-unknown-icon-black-silhouette-free-vector.jpg");
+                var defaultImagePath = Path.Combine(RootImages, "default", "default-profile-account-unknown-icon-black-silhouette-free-vector.jpg");
 
-            if (!System.IO.File.Exists(defaultImagePath))
-                return NotFound("Default profile image not found.");
+                if (!System.IO.File.Exists(defaultImagePath))
+                    return NotFound("Default profile image not found.");
 
-            var destFileName = "profile" + Path.GetExtension(defaultImagePath);
-            var destFilePath = Path.Combine(userImagePath, destFileName);
+                var destFileName = "profile" + Path.GetExtension(defaultImagePath);
+                var destFilePath = Path.Combine(userImagePath, destFileName);
 
-            System.IO.File.Copy(defaultImagePath, destFilePath, overwrite: true);
+                System.IO.File.Copy(defaultImagePath, destFilePath, overwrite: true);
 
-            var userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(u => u.UserID == userIdLong);
-            if (userDetails == null)
-                return NotFound($"User with id {userId} not found.");
+                var userDetails = await _dbContext.UsersDetails.FirstOrDefaultAsync(u => u.UserID == userIdLong);
+                if (userDetails == null)
+                    return NotFound($"User with id {userId} not found.");
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
-            return Ok(new { message = "Default image set successfully." });
+                return Ok(new { message = "Default image set successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
 
         // === Helpers ===

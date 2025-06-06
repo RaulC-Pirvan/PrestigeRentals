@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
@@ -17,11 +18,13 @@ namespace PrestigeRentals.Presentation.Controllers
     {
         private readonly IVehicleService _vehicleService;
         private readonly IVehicleFilterService _filterService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public VehicleController(IVehicleService vehicleService, IVehicleFilterService filterService)
+        public VehicleController(IVehicleService vehicleService, IVehicleFilterService filterService, IWebHostEnvironment webHostEnvironment    )
         {
             _vehicleService = vehicleService;
             _filterService = filterService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         /// <summary>
@@ -173,8 +176,28 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isVehicleDeleted = await _vehicleService.DeleteVehicle(vehicleId);
+
                 if (isVehicleDeleted)
-                    return Ok("Vehicle deleted successfully.");
+                {
+                    // Ștergere folder imagini vehicul
+                    var vehicleFolderPath = Path.Combine(_webHostEnvironment.WebRootPath, "images", "vehicle", vehicleId.ToString());
+
+                    if (Directory.Exists(vehicleFolderPath))
+                    {
+                        try
+                        {
+                            Directory.Delete(vehicleFolderPath, recursive: true);
+                        }
+                        catch (Exception folderEx)
+                        {
+                            // Folderul n-a putut fi șters, dar vehiculul a fost șters din DB
+                            Console.WriteLine($"Eroare la ștergerea folderului: {folderEx.Message}");
+                        }
+                    }
+
+                    return Ok(new { message = "Vehicle deleted successfully." });
+                }
+
                 return BadRequest("Error: Vehicle could not be deleted.");
             }
             catch (VehicleNotFoundException ex)

@@ -474,9 +474,19 @@ namespace PrestigeRentals.Presentation.Controllers
                 // Caută CNP (13 cifre)
                 var match = Regex.Match(ocrText, @"\b\d{13}\b");
 
+                // Șterge fișierul ID card original
+                try
+                {
+                    System.IO.File.Delete(idCardPath);
+                }
+                catch (Exception deleteEx)
+                {
+                    // Opțional: log, dar nu bloca flow-ul dacă nu se poate șterge
+                    Console.WriteLine($"Eroare la ștergerea fișierului: {deleteEx.Message}");
+                }
+
                 if (match.Success)
                 {
-                    // Aici poți face validarea de 18+ ani
                     bool isAdult = IsAdultBasedOnCnp(match.Value);
                     return Ok(new { isAdult });
                 }
