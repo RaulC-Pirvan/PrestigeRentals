@@ -23,7 +23,7 @@ namespace PrestigeRentals.Application.DTO
 
         public int Horsepower { get; set; }
 
-        public decimal PricePerHour { get; set; }
+        public decimal PricePerDay { get; set; }
 
         /// <summary>
         /// Gets or sets the engine size of the vehicle in liters.

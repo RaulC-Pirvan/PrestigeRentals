@@ -231,7 +231,7 @@ namespace PrestigeRentals.Application.Services.Services
                 Model = vehicle.Model,
                 Chassis = vehicle.Chassis,
                 Horsepower = vehicle.Horsepower,
-                PricePerHour= vehicle.PricePerDay,
+                PricePerDay= vehicle.PricePerDay,
                 EngineSize = vehicle.EngineSize,
                 FuelType = vehicle.FuelType,
                 Transmission = vehicle.Transmission,
@@ -289,7 +289,7 @@ namespace PrestigeRentals.Application.Services.Services
                 Model = vehicle.Model,
                 Chassis = vehicle.Chassis,
                 Horsepower = vehicle.Horsepower,
-                PricePerHour = vehicle.PricePerDay,
+                PricePerDay = vehicle.PricePerDay,
                 EngineSize = vehicle.EngineSize,
                 FuelType = vehicle.FuelType,
                 Transmission = vehicle.Transmission,
@@ -312,7 +312,7 @@ namespace PrestigeRentals.Application.Services.Services
             vehicle.Model = request.Model ?? vehicle.Model;
             vehicle.Chassis = request.Chassis ?? vehicle.Chassis;
             vehicle.Horsepower = request.Horsepower ?? vehicle.Horsepower;
-            vehicle.PricePerDay = request.PricePerHour ?? vehicle.PricePerDay;
+            vehicle.PricePerDay = request.PricePerDay ?? vehicle.PricePerDay;
             vehicle.EngineSize = request.EngineSize ?? vehicle.EngineSize;
             vehicle.FuelType = request.FuelType ?? vehicle.FuelType;
             vehicle.Transmission = request.Transmission ?? vehicle.Transmission;

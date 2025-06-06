@@ -4,6 +4,7 @@ import { ButtonComponent } from '../../../../shared/button/button.component';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common';
+import { NotificationService } from '../../../../services/notification.service';
 
 @Component({
   selector: 'app-admin-vehicle-card',
@@ -19,6 +20,7 @@ export class AdminVehicleCardComponent {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object,
     private http: HttpClient,
+    private notificationService: NotificationService
   ) {}
 
   goToVehicle(vehicleId: number) {
@@ -41,10 +43,12 @@ export class AdminVehicleCardComponent {
       .subscribe({
         next: () => {
           console.log('Vehicul șters cu succes.');
+          this.notificationService.show('Successfully deleted vehicle', 'success');
           window.location.reload();
         },
         error: (err) => {
           console.error('Eroare la ștergerea vehiculului:', err);
+          this.notificationService.show('Failed to delete vehicle', 'error');
         },
       });
   }
@@ -60,5 +64,9 @@ export class AdminVehicleCardComponent {
       localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
     console.log('Retrieved token once:', this.cachedToken);
     return this.cachedToken;
+  }
+
+  editVehicle(id: number): void {
+    this.router.navigate(['/admin-dashboard/edit', id]);
   }
 }

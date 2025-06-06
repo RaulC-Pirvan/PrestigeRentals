@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { AdminVehicleCardComponent } from '../components/admin-vehicle-card/admin-vehicle-card.component';
 import { forkJoin, tap } from 'rxjs';
 import { AdminAddVehicleComponent } from '../../../components/admin-add-vehicle/admin-add-vehicle.component';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-vehicles',
@@ -26,7 +27,7 @@ export class VehiclesComponent {
   pageSize = 5;
   mode: 'overview' | 'add' = 'overview';
 
-  constructor(private vehicleService: VehicleService) {}
+  constructor(private vehicleService: VehicleService, private notificationService: NotificationService) {}
 
   ngOnInit(): void {
     this.loadVehicles();
@@ -34,7 +35,7 @@ export class VehiclesComponent {
 
   loadVehicles() {
     this.vehicleService.getAllVehicles().subscribe((vehicles) => {
-      this.vehicles = vehicles;
+      this.vehicles = vehicles.sort((a, b) => a.id - b.id);
 
       const requests = this.vehicles.map((vehicle) =>
         forkJoin({
@@ -88,13 +89,11 @@ export class VehiclesComponent {
     mainImageFile?: File | undefined; // pune ? aici
     secondaryImageFiles: File[];
   }) {
-    // Trimite datele la backend
 
     const { vehicleData, mainImageFile, secondaryImageFiles } = event;
 
     this.vehicleService.createVehicle(vehicleData).subscribe({
       next: (vehicle) => {
-        // Dacă ai nevoie să încarci pozele separat, fă asta după ce primești vehicle.id
 
         if (mainImageFile) {
           this.vehicleService
@@ -114,11 +113,15 @@ export class VehiclesComponent {
         }
 
         this.vehicles.push(vehicle);
+        this.vehicles.sort((a, b) => a.id - b.id);
         this.setMode('overview');
         this.updateDisplayedVehicles();
+
+        this.notificationService.show('Vehicle added successfully', 'success');
       },
       error: (err) => {
         console.error('Error adding vehicle', err);
+        this.notificationService.show('Failed to add vehicle', 'error');
       },
     });
   }

@@ -27,6 +27,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { RegisterSuccessComponent } from './pages/register-success/register-success.component';
 import { UserGuard } from './guards/user.guard';
 import { AdminGuard } from './guards/admin.guard';
+import { AdminEditVehicleComponent } from './components/admin-edit-vehicle/admin-edit-vehicle.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -72,6 +73,7 @@ export const routes: Routes = [
       { path: 'tickets', component: TicketsComponent },
       { path: 'users', component: UsersComponent },
       { path: 'vehicles', component: VehiclesComponent },
+      {path: 'edit/:id', component: AdminEditVehicleComponent}
     ],
   },
 
