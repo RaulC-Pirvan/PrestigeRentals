@@ -5,6 +5,7 @@ using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Application.Services.Services;
 using PrestigeRentals.Domain.Interfaces;
 using PrestigeRentals.Infrastructure.Repositories;
+using PrestigeRentals.Infrastructure.Workers;
 
 namespace PrestigeRentals.Application.DependencyInjection
 {
@@ -31,6 +32,10 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<IReviewService, ReviewService>();
             services.AddScoped<IVehicleFilterService, VehicleFilterService>();
             services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IOrderExpirationService, OrderExpirationService>();
+
+            // Worker
+            services.AddHostedService<OrderBackgroundWorker>();
 
             // Repositories
             services.AddScoped<IVehicleRepository, VehicleRepository>();

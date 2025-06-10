@@ -38,7 +38,13 @@ namespace PrestigeRentals.Application.Services.Services
             if (vehicle == null)
                 throw new ArgumentException("Vehicle not found");
 
+            if (!vehicle.Available)
+                throw new InvalidOperationException("Vehicle is not available.");
+
             var duration = (createOrderRequest.EndTime - createOrderRequest.StartTime).TotalDays;
+            if (duration <= 0)
+                throw new ArgumentException("End time must be after start time.");
+
             var totalCost = (decimal)duration * vehicle.PricePerDay;
 
             // Create a new order entity
@@ -46,14 +52,17 @@ namespace PrestigeRentals.Application.Services.Services
             {
                 UserId = createOrderRequest.UserId,
                 VehicleId = createOrderRequest.VehicleId,
-                StartTime = createOrderRequest.StartTime,
-                EndTime = createOrderRequest.EndTime,
+                StartTime = DateTime.SpecifyKind(createOrderRequest.StartTime, DateTimeKind.Utc),
+                EndTime = DateTime.SpecifyKind(createOrderRequest.EndTime, DateTimeKind.Utc),
                 PricePerDay = vehicle.PricePerDay,
                 TotalCost = totalCost
             };
 
             // Save the new order in the database
             await _orderRepository.AddAsync(order);
+
+            vehicle.Available = false;
+            await _vehicleRepository.UpdateAsync(vehicle);
 
             // Return a DTO representation of the created order
             return new OrderDTO
