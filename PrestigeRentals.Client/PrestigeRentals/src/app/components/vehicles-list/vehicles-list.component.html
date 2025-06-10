@@ -1,11 +1,13 @@
-
 <div *ngIf="loading">Loading vehicles...</div>
 <div *ngIf="error" class="error">{{ error }}</div>
 
 <div *ngIf="pagedVehicles.length > 0" class="vehicles-list">
+ 
   <app-vehicle-card
-    *ngFor="let vehicle of pagedVehicles"
-    [vehicleId]="vehicle.id"
+    *ngFor="let v of pagedVehicles"
+    [vehicleId]="v.id"
+    
+    [orderEndTime]="orderMap.get(v.id)"
   >
   </app-vehicle-card>
 </div>

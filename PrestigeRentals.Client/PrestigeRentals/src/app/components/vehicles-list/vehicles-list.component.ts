@@ -10,6 +10,8 @@ import { VehicleCardComponent } from '../vehicle-card/vehicle-card.component';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { Vehicle } from '../../models/vehicle.model';
+import { Order } from '../../models/order.model';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-vehicles-list',
@@ -32,15 +34,20 @@ export class VehiclesListComponent implements OnInit, OnChanges {
   currentPage = 1;
   pageSize = 9;
 
+  orders: Order[] = [];
+  orderMap = new Map<number, string>(); // vehicleId -> endTime
+
   constructor(
     private vehicleService: VehicleService,
-    private authService: AuthService
+    private authService: AuthService,
+    private orderService: OrderService
   ) {}
 
   ngOnInit(): void {
     this.authService.userLoaded$.subscribe((loaded) => {
       if (loaded) {
         this.loadVehicles();
+        this.loadOrders();
       }
     });
   }
@@ -63,6 +70,28 @@ export class VehiclesListComponent implements OnInit, OnChanges {
         this.error = 'Failed to load vehicles.';
         console.error(err);
         this.loading = false;
+      },
+    });
+  }
+
+  loadOrders(): void {
+    this.orderService.getAllOrders().subscribe({
+      next: (orders) => {
+        const now = new Date();
+        this.orders = orders;
+        this.orderMap.clear();
+
+        for (const order of orders) {
+          const start = new Date(order.startTime);
+          const end = new Date(order.endTime);
+
+          if (!order.isCancelled && start <= now && end > now) {
+            this.orderMap.set(order.vehicleId, order.endTime);
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load orders.', err);
       },
     });
   }

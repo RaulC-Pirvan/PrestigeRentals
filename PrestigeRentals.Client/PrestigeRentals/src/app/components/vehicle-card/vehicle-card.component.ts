@@ -4,19 +4,24 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { Router } from '@angular/router';
 import { Vehicle } from '../../models/vehicle.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle-card',
-  imports: [ButtonComponent],
+  imports: [ButtonComponent, CommonModule],
   templateUrl: './vehicle-card.component.html',
-  styleUrl: './vehicle-card.component.scss',
+  styleUrls: ['./vehicle-card.component.scss'],
 })
 export class VehicleCardComponent implements OnInit {
   @Input() vehicleId: number = 1;
   @Input() vehicle?: Vehicle;
+  @Input() orderEndTime?: string;
 
   vehicleData?: Vehicle;
   vehicleImageUrl: string = 'assets/vehicle-placeholder.png';
+
+  remainingTime: string | null = null;
+  private timerInterval: any;
 
   constructor(
     private vehicleService: VehicleService,
@@ -25,11 +30,42 @@ export class VehicleCardComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    if(this.vehicle)
-    {
+    if (this.vehicle) {
       this.vehicleData = this.vehicle;
     }
+
+    if (!this.vehicleData?.available && this.orderEndTime) {
+      this.startCountdown(this.orderEndTime);
+    }
+
     this.loadVehicleData();
+  }
+
+  startCountdown(endTime: string) {
+    const end = new Date(endTime).getTime();
+
+    this.timerInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const diff = end - now;
+
+      if (diff <= 0) {
+        clearInterval(this.timerInterval);
+        this.remainingTime = null;
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      this.remainingTime = `${this.pad(hours)}:${this.pad(minutes)}:${this.pad(
+        seconds
+      )}`;
+    }, 1000);
+  }
+
+  pad(n: number): string {
+    return n < 10 ? '0' + n : n.toString();
   }
 
   private loadVehicleData(): void {
@@ -54,6 +90,12 @@ export class VehicleCardComponent implements OnInit {
         console.error('Failed to load vehicle image');
       },
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
+    }
   }
 
   goToDetails(id?: number) {

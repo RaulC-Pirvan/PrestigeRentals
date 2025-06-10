@@ -18,11 +18,22 @@
     border-bottom: 2px solid $accent-colour;
     height: 35%;
     width: 100%;
+    flex-direction: column;
+}
+
+.countdown-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    background-color: $accent-colour;
+    width: 100%;
 }
 
 img {
     height: 100%;
     width: 100%;
+    object-fit: cover;
 }
 
 .text-container {
