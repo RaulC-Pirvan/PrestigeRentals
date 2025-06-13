@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { TitleComponent } from '../../shared/title/title.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { VehiclesListComponent } from '../../components/vehicles-list/vehicles-list.component';
@@ -18,7 +17,6 @@ import {
     CommonModule,
     ReactiveFormsModule,
     NavbarComponent,
-    FooterComponent,
     TitleComponent,
     ButtonComponent,
     VehiclesListComponent,
@@ -62,13 +60,21 @@ export class InventoryComponent implements OnInit {
   }
 
   applyFilters(): void {
-    this.filters = this.filterForm.value;
-    console.log('Applying filters:', this.filters);
-    this.filters = this.filters; // Make sure you update filters property so vehicle list updates
+    const raw = this.filterForm.value;
+    this.filters = Object.fromEntries(
+      Object.entries(raw).map(([key, val]) => [key, val || null])
+    );
   }
 
   resetFilters(): void {
-    this.filterForm.reset();
+    this.filterForm.setValue({
+      make: '',
+      model: '',
+      fuel: '',
+      transmission: '',
+      chassis: '',
+    });
+
     this.filters = {};
   }
 

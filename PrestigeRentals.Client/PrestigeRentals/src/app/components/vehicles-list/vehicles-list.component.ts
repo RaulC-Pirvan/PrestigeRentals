@@ -102,7 +102,7 @@ export class VehiclesListComponent implements OnInit, OnChanges {
     // Apply filters
     for (const key of Object.keys(this.filters)) {
       const value = this.filters[key];
-      if (value) {
+      if (value && value !== 'Any') {
         results = results.filter(
           (v: any) => (v[key] ?? '').toLowerCase() === value.toLowerCase()
         );

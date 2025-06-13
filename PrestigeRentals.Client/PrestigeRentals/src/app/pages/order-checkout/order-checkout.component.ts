@@ -13,11 +13,11 @@ import { HttpClient } from '@angular/common/http';
 
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { TitleComponent } from '../../shared/title/title.component';
 import { ButtonComponent } from '../../shared/button/button.component';
 import { BookingDataService } from '../../services/booking-data.service';
 import { switchMap } from 'rxjs/operators';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-order-checkout',
@@ -26,7 +26,6 @@ import { switchMap } from 'rxjs/operators';
     CommonModule,
     ReactiveFormsModule,
     NavbarComponent,
-    FooterComponent,
     TitleComponent,
     ButtonComponent,
   ],
@@ -50,18 +49,31 @@ export class OrderCheckoutComponent implements OnInit {
     private checkoutDataService: CheckoutDataService,
     private vehicleService: VehicleService,
     private http: HttpClient,
-    private bookingDataService: BookingDataService
+    private bookingDataService: BookingDataService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit() {
     this.checkoutForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.minLength(2)]],
+      lastName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      cardHolder: ['', Validators.required],
-      cardNumber: ['', Validators.required],
-      expireDate: ['', Validators.required],
-      cvv: ['', Validators.required],
+      cardHolder: ['', [Validators.required, Validators.minLength(5)]],
+      cardNumber: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^\d{4}\s?\d{4}\s?\d{4}\s?\d{4}$/), // accepts with or without spaces
+        ],
+      ],
+      expireDate: [
+        '',
+        [
+          Validators.required,
+          Validators.pattern(/^(0[1-9]|1[0-2])\/\d{2}$/), // MM/YY format
+        ],
+      ],
+      cvv: ['', [Validators.required, Validators.pattern(/^\d{3}$/)]],
     });
 
     this.authService.userDetails$.subscribe(
@@ -138,6 +150,7 @@ export class OrderCheckoutComponent implements OnInit {
 
   onCheckoutClick() {
     if (this.checkoutForm.invalid) {
+      this.notificationService.show('Please make sure the fields are completed correctly.', 'error');
       this.checkoutForm.markAllAsTouched();
       return;
     }

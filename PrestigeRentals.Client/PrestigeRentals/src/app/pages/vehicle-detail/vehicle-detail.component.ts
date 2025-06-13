@@ -3,7 +3,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { VehicleService } from '../../services/vehicle.service';
 import { VehicleDto } from '../../models/vehicle-dto.model';
 import { CommonModule } from '@angular/common';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FormsModule } from '@angular/forms';
 import { ButtonComponent } from '../../shared/button/button.component';
@@ -25,7 +24,6 @@ export interface VehicleOptions {
   standalone: true,
   imports: [
     CommonModule,
-    FooterComponent,
     NavbarComponent,
     FormsModule,
     ButtonComponent,
@@ -56,6 +54,8 @@ export class VehicleDetailComponent implements OnInit {
   vehicleOptions: VehicleOptions | null = null;
   trueFeatures: string[] = [];
 
+  today: string ='';
+
   constructor(
     private route: ActivatedRoute,
     private vehicleService: VehicleService,
@@ -65,6 +65,8 @@ export class VehicleDetailComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    const now = new Date();
+    this.today = now.toISOString().split('T')[0];
     const idParam = this.route.snapshot.paramMap.get('id');
     if (idParam) {
       this.vehicleId = Number(idParam);

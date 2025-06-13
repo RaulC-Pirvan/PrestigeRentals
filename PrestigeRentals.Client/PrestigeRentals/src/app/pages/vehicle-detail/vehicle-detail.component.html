@@ -125,6 +125,7 @@
                 name="startTime"
                 type="date"
                 [(ngModel)]="startTime"
+                [min]="today"
                 (ngModelChange)="calculateCostAndDuration()"
               />
             </div>
