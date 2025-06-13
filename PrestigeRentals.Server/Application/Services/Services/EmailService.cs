@@ -48,5 +48,34 @@ namespace PrestigeRentals.Application.Services.Services
             await smtpClient.SendMailAsync(mailMessage);
 
         }
+
+        public async Task SendNewPasswordEmailAsync(string toEmail, string newPassword)
+        {
+            var smtpClient = new SmtpClient(_smtpHost)
+            {
+                Port = _smtpPort,
+                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
+                EnableSsl = true
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(_smtpUsername, "Prestige Rentals"),
+                Subject = "Your New Password - Prestige Rentals",
+                Body = $@"
+                        <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                            <h2>Password Reset</h2>
+                            <p>Your new temporary password is: <strong style='font-size: 18px;'>{newPassword}</strong></p>
+                            <p style='color: gray;'>Please log in using this password and change it as soon as possible.</p>
+                            <p style='color: gray;'>If you didn’t request this, you can ignore the email.</p>
+                        </div>",
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(toEmail);
+
+            await smtpClient.SendMailAsync(mailMessage);
+
+        }
     }
 }

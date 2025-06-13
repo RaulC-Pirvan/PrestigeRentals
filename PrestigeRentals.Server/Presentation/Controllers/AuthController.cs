@@ -159,6 +159,23 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(new { message = "Verification code resent successfully." });
         }
 
+        [HttpPost("/forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
+        {
+            var user = await _userRepository.GetUserByEmail(request.Email);
+            if (user == null)
+                return NotFound("User not found.");
+
+            var newPassword = Guid.NewGuid().ToString("N")[..8];
+
+            user.Password = _authService.HashPassword(newPassword);
+            await _userRepository.UpdateAsync(user);
+
+            await _emailService.SendNewPasswordEmailAsync(user.Email, newPassword);
+
+            return Ok(new { message = "Password reset email sent." });
+        }
+
         /// <summary>
         /// Authenticates a user and returns a JWT token if credentials are valid.
         /// </summary>

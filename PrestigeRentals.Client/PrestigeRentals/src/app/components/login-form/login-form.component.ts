@@ -4,6 +4,7 @@ import { TitleComponent } from '../../shared/title/title.component';
 import {
   FormBuilder,
   FormGroup,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -15,7 +16,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login-form',
-  imports: [ButtonComponent, TitleComponent, ReactiveFormsModule, CommonModule],
+  imports: [ButtonComponent, TitleComponent, ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
 })
@@ -25,6 +26,9 @@ export class LoginFormComponent {
   rememberMe = false;
   notificationMessage: string | null = null;
   notificationType: 'success' | 'error' = 'success';
+
+  showForgotPassword = false;
+  forgotEmail: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -78,5 +82,22 @@ export class LoginFormComponent {
 
   redirectTo(path: string): void {
     this.router.navigate([path]);
+  }
+
+  openForgotPasswordModal() {
+    this.showForgotPassword = true;
+  }
+
+  closeForgotPasswordModal() {
+    this.showForgotPassword = false;
+    this.forgotEmail = '';
+  }
+
+  sendResetLink() {
+    if(!this.forgotEmail || !this.forgotEmail.includes('@')) {
+      alert('Please enter a valid email address.');
+      return;
+    }
+
   }
 }

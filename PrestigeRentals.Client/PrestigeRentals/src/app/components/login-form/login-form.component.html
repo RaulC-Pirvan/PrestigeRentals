@@ -17,7 +17,9 @@
               loginForm.get('email')?.touched && loginForm.get('email')?.invalid
             "
           >
-            <span class="error-text" *ngIf="loginForm.get('email')?.errors?.['required']"
+            <span
+              class="error-text"
+              *ngIf="loginForm.get('email')?.errors?.['required']"
               >Email is required.</span
             >
             <span *ngIf="loginForm.get('email')?.errors?.['email']"
@@ -32,7 +34,8 @@
           <div
             class="error-text"
             *ngIf="
-              loginForm.get('password')?.touched && loginForm.get('password')?.invalid
+              loginForm.get('password')?.touched &&
+              loginForm.get('password')?.invalid
             "
           >
             <span *ngIf="loginForm.get('password')?.errors?.['required']"
@@ -62,7 +65,37 @@
           ></app-button>
         </div>
       </form>
-      <p>Forgot your password? <span class="heavy">Click here!</span></p>
+      <p>
+        Forgot your password?
+        <span class="heavy" (click)="openForgotPasswordModal()"
+          >Click here!</span
+        >
+      </p>
+
+      <div class="modal-backdrop" *ngIf="showForgotPassword">
+        <div class="modal" (click)="$event.stopPropagation()">
+          <h3>Reset Password</h3>
+          <p>Enter your email address to receive a new password.</p>
+          <input
+            type="email"
+            [(ngModel)]="forgotEmail"
+            placeholder="you@example.com"
+          />
+          <div class="modal-buttons">
+            <app-button
+              buttonText="SEND >"
+              buttonType="transparent"
+              (buttonClick)="redirectTo('/register')"
+            ></app-button>
+            <app-button
+              buttonText="CANCEL >"
+              buttonType="transparent"
+              (buttonClick)="redirectTo('/register')"
+            ></app-button>
+          </div>
+        </div>
+      </div>
+
       <hr class="accent" />
       <div class="button-container">
         <app-button
