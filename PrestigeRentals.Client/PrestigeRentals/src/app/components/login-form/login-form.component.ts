@@ -63,4 +63,8 @@ export class LoginFormComponent {
       });
     }
   }
+
+  redirectTo(path: string): void {
+    this.router.navigate([path]);
+  }
 }
