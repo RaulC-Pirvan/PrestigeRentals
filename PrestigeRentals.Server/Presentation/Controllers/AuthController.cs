@@ -132,7 +132,31 @@ namespace PrestigeRentals.Presentation.Controllers
 
             await _userRepository.UpdateAsync(user);
 
-            return Ok("Email successfully verified.");
+            return Ok(new { message = "Email successfully verified." });
+        }
+
+        [HttpPost("/resend-verification-code")]
+        public async Task<IActionResult> ResendVerificationCode([FromBody] ResendCodeRequest request)
+        {
+            if (string.IsNullOrWhiteSpace(request.Email))
+                return BadRequest("Email is required.");
+
+            var user = await _userRepository.GetUserByEmail(request.Email);
+            if (user == null)
+                return BadRequest("User not found.");
+
+            if (user.EmailConfirmed)
+                return BadRequest("Email is already verified.");
+
+            var newCode = new Random().Next(100000, 999999).ToString();
+
+            user.EmailVerificationCode = newCode;
+            user.VerificationCodeExpiry = DateTime.UtcNow.AddMinutes(15);
+
+            await _userRepository.UpdateAsync(user);
+
+            await _emailService.SendVerificationEmailAsync(user.Email, newCode);
+            return Ok(new { message = "Verification code resent successfully." });
         }
 
         /// <summary>
@@ -355,7 +379,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDemoted = await _userManagementService.RevertToUser(userId);
-                return Ok(new {message = "User successfully demoted to User." });
+                return Ok(new { message = "User successfully demoted to User." });
             }
             catch (UserAlreadyUserException ex)
             {
@@ -390,7 +414,7 @@ namespace PrestigeRentals.Presentation.Controllers
             var user = await _dbContext.Users.FindAsync(userId);
             if (user == null) return NotFound();
 
-            user.Banned= false;
+            user.Banned = false;
             await _dbContext.SaveChangesAsync();
 
             return Ok();

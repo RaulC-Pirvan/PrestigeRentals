@@ -161,4 +161,17 @@ export class AuthService {
   get isUser(): boolean {
     return this.getUserRole() === 'User';
   }
+
+  verifyEmailCode(email: string, code: string) {
+    return this.http.post('https://localhost:7093/verify-email', {
+      email,
+      code,
+    });
+  }
+
+  resendVerificationCode(email: string) {
+    return this.http.post('https://localhost:7093/resend-verification-code', {
+      email,
+    });
+  }
 }

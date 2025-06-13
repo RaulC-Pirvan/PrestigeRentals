@@ -21,7 +21,6 @@ import { ButtonComponent } from '../../shared/button/button.component';
     CommonModule,
     ReactiveFormsModule,
     NavbarComponent,
-    FooterComponent,
     TitleComponent,
     ButtonComponent,
   ],
@@ -43,6 +42,9 @@ export class RegisterComponent {
 
   ocrResult: boolean | null = null; // true if over 18, false if not, null if not verified
 
+  codeForm: FormGroup;
+  verificationError: string = '';
+
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
@@ -61,6 +63,13 @@ export class RegisterComponent {
       password: ['', Validators.required],
       repeatPassword: ['', Validators.required],
       agreeToTerms: [false, Validators.requiredTrue],
+    });
+
+    this.codeForm = this.fb.group({
+      verificationCode: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{6}$/)],
+      ],
     });
   }
 
@@ -104,8 +113,8 @@ export class RegisterComponent {
             next: (res: boolean) => {
               this.ocrResult = res;
               if (res) {
-                console.log('✅ Over 18, redirecting...');
-                this.router.navigate(['/register-success']);
+                console.log('✅ Over 18, proceed to email verification...');
+                this.step = 4; // new step for entering email code
               } else {
                 alert('❌ You must be over 18 to register.');
               }
@@ -119,6 +128,37 @@ export class RegisterComponent {
           alert('❌ Failed to upload ID card.');
         },
       });
+  }
+
+  verifyCode() {
+    if (!this.codeForm.valid || !this.credentialsForm.value.email) {
+      this.verificationError = 'Please enter a valid code.';
+      return;
+    }
+
+    const email = this.credentialsForm.value.email;
+    const code = this.codeForm.value.verificationCode;
+
+    this.authService.verifyEmailCode(email, code).subscribe({
+      next: () => {
+        this.verificationError = '';
+        this.router.navigate(['/register-success']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.verificationError = 'Invalid or expired verification code.';
+      },
+    });
+  }
+
+  resendCode() {
+    const email = this.credentialsForm.value.email;
+    if (!email) return;
+
+    this.authService.resendVerificationCode(email).subscribe({
+      next: () => alert('Verification code resent. Check your inbox.'),
+      error: () => alert('Failed to resend code. Try again later.'),
+    });
   }
 
   previousStep() {

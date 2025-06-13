@@ -113,7 +113,7 @@
 
       <div *ngIf="step === 3">
         <div class="title-container">
-          <h2>Final step: Upload your ID card</h2>
+          <h2>Almost there! Upload a picture of your ID Card</h2>
         </div>
         <div class="title-container">
           <h3 class="light">This will be used to validate your age.</h3>
@@ -134,6 +134,42 @@
             You must be over 18 to register.
           </p>
         </div>
+      </div>
+
+      <div *ngIf="step === 4">
+        <div class="title-container">
+          <h2>Final step: Verify your email address</h2>
+          <p>Enter the code we sent to {{ credentialsForm.value.email }}.</p>
+        </div>
+
+        <form [formGroup]="codeForm" class="register-form">
+          <div class="input-container">
+            <label for="verificationCode">Verification Code</label>
+            <input
+              type="text"
+              id="verificationCode"
+              formControlName="verificationCode"
+              maxlength="6"
+            />
+          </div>
+
+          <div class="button-container">
+            <app-button
+              buttonText="VERIFY"
+              buttonType="accent"
+              (buttonClick)="verifyCode()"
+            ></app-button>
+            <app-button
+              buttonText="RESEND CODE"
+              buttonType="transparent"
+              (buttonClick)="resendCode()"
+            ></app-button>
+          </div>
+
+          <div class="error-text" *ngIf="verificationError">
+            {{ verificationError }}
+          </div>
+        </form>
       </div>
     </div>
     <div class="image-card">
