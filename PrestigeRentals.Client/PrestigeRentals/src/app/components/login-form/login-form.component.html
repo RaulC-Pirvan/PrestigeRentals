@@ -11,11 +11,37 @@
         <div class="input-container">
           <label for="">Email Address</label>
           <input type="text" id="email" formControlName="email" />
+          <div
+            class="error-text"
+            *ngIf="
+              loginForm.get('email')?.touched && loginForm.get('email')?.invalid
+            "
+          >
+            <span class="error-text" *ngIf="loginForm.get('email')?.errors?.['required']"
+              >Email is required.</span
+            >
+            <span *ngIf="loginForm.get('email')?.errors?.['email']"
+              >Enter a valid email.</span
+            >
+          </div>
         </div>
 
         <div class="input-container">
           <label for="">Password</label>
-          <input type="password" id="password"  formControlName="password" />
+          <input type="password" id="password" formControlName="password" />
+          <div
+            class="error-text"
+            *ngIf="
+              loginForm.get('password')?.touched && loginForm.get('password')?.invalid
+            "
+          >
+            <span *ngIf="loginForm.get('password')?.errors?.['required']"
+              >Password is required.</span
+            >
+            <span *ngIf="loginForm.get('password')?.errors?.['minlength']"
+              >Password must be at least 6 characters long.</span
+            >
+          </div>
         </div>
 
         <div class="checkbox-container">
