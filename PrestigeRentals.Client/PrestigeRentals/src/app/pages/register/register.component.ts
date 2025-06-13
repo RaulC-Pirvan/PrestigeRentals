@@ -14,6 +14,7 @@ import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { TitleComponent } from '../../shared/title/title.component';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -49,7 +50,8 @@ export class RegisterComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private notificationService: NotificationService
   ) {
     this.userForm = this.fb.group({
       firstName: ['', Validators.required],
@@ -81,7 +83,7 @@ export class RegisterComponent {
         this.credentialsForm.value.password !==
         this.credentialsForm.value.repeatPassword
       ) {
-        alert('Passwords do not match');
+        this.notificationService.show('Passwords do not match.', 'error');
         return;
       }
       this.step = 3;
@@ -116,16 +118,22 @@ export class RegisterComponent {
                 console.log('✅ Over 18, proceed to email verification...');
                 this.step = 4; // new step for entering email code
               } else {
-                alert('❌ You must be over 18 to register.');
+                this.notificationService.show(
+                  'You must be over 18 to register.',
+                  'error'
+                );
               }
             },
             error: () => {
-              alert('❌ Failed to verify age. Please try again.');
+              this.notificationService.show(
+                'Failed to verify age. Please try again.',
+                'error'
+              );
             },
           });
         },
         error: () => {
-          alert('❌ Failed to upload ID card.');
+          this.notificationService.show('Failed to upload ID card.', 'error');
         },
       });
   }
@@ -156,8 +164,16 @@ export class RegisterComponent {
     if (!email) return;
 
     this.authService.resendVerificationCode(email).subscribe({
-      next: () => alert('Verification code resent. Check your inbox.'),
-      error: () => alert('Failed to resend code. Try again later.'),
+      next: () =>
+        this.notificationService.show(
+          'Verification code resent. Check your inbox.',
+          'success'
+        ),
+      error: () =>
+        this.notificationService.show(
+          'Failed to resend code. Please try again.',
+          'error'
+        ),
     });
   }
 
@@ -183,7 +199,10 @@ export class RegisterComponent {
       this.credentialsForm.value.password !==
         this.credentialsForm.value.repeatPassword
     ) {
-      alert('Please fix the errors before submitting.');
+      this.notificationService.show(
+        'Please fix errors before submitting.',
+        'error'
+      );
       return;
     }
 
@@ -220,7 +239,10 @@ export class RegisterComponent {
       },
       error: () => {
         this.isLoading = false;
-        alert('Registration failed. Please try again.');
+        this.notificationService.show(
+          'Registration error. Please try again.',
+          'error'
+        );
       },
     });
   }

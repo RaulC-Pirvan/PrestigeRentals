@@ -150,7 +150,10 @@ export class OrderCheckoutComponent implements OnInit {
 
   onCheckoutClick() {
     if (this.checkoutForm.invalid) {
-      this.notificationService.show('Please make sure the fields are completed correctly.', 'error');
+      this.notificationService.show(
+        'Please make sure the fields are completed correctly.',
+        'error'
+      );
       this.checkoutForm.markAllAsTouched();
       return;
     }
@@ -197,12 +200,11 @@ export class OrderCheckoutComponent implements OnInit {
             });
             this.router.navigate(['/order-confirmation']);
           } else {
-            alert('Payment failed: ' + paymentRes.errorMessage);
+            this.notificationService.show('Payment failed', 'error');
           }
         },
         error: (err) => {
-          console.error('Order or payment error:', err);
-          alert('An error occurred. Please try again.');
+          this.notificationService.show('Order or payment error', 'error');
         },
       });
   }

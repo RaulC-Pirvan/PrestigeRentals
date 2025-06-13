@@ -16,7 +16,13 @@ import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-login-form',
-  imports: [ButtonComponent, TitleComponent, ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [
+    ButtonComponent,
+    TitleComponent,
+    ReactiveFormsModule,
+    CommonModule,
+    FormsModule,
+  ],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.scss',
 })
@@ -94,19 +100,32 @@ export class LoginFormComponent {
   }
 
   sendResetLink() {
-    if(!this.forgotEmail || !this.forgotEmail.includes('@')) {
-      alert('Please enter a valid email address.');
+    if (!this.forgotEmail || !this.forgotEmail.includes('@')) {
+      this.notificationService.show(
+        'Please enter a valid email address.',
+        'error'
+      );
       return;
     }
 
-    this.http.post('https://localhost:7093/forgot-password', {email: this.forgotEmail}).subscribe({
-      next: () => {
-        alert('A new password has been sent to your email.');
-        this.closeForgotPasswordModal();
-      },
-      error: () => {
-        alert('Something went wrong. Please try again.');
-      }
-    })
+    this.http
+      .post('https://localhost:7093/forgot-password', {
+        email: this.forgotEmail,
+      })
+      .subscribe({
+        next: () => {
+          this.notificationService.show(
+            'A new password has been sent to your email.',
+            'success'
+          );
+          this.closeForgotPasswordModal();
+        },
+        error: () => {
+          this.notificationService.show(
+            'Something went wrong. Please try again.',
+            'error'
+          );
+        },
+      });
   }
 }

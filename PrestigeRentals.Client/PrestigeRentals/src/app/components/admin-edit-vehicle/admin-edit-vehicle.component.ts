@@ -101,7 +101,7 @@ export class AdminEditVehicleComponent implements OnInit {
 
   submit(): void {
     if (this.modifyForm.invalid) {
-      alert('Formularul conține erori!');
+      this.notificationService.show('The form contains errors', 'error');
       return;
     }
 

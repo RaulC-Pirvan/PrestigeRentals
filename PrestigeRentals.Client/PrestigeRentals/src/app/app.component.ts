@@ -44,11 +44,7 @@ export class AppComponent implements OnInit {
       if (event instanceof NavigationStart) {
         if (isPlatformBrowser(this.platformId)) {
           const currentUrl = window.location.pathname;
-          // Comentăm/refacem această parte
-          // if (!event.restoredState && event.url !== currentUrl && !this.hasReloaded) {
-          //   this.hasReloaded = true;
-          //   window.location.href = event.url;
-          // }
+
         }
       }
       if (
