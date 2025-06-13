@@ -4,14 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { BookingDataService } from '../../services/booking-data.service';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
-import { FooterComponent } from "../../components/footer/footer.component";
 import { TitleComponent } from "../../shared/title/title.component";
 import { ButtonComponent } from "../../shared/button/button.component";
 
 @Component({
   selector: 'app-order-confirmation',
   standalone: true,
-  imports: [CommonModule, QRCodeComponent, NavbarComponent, FooterComponent, TitleComponent, ButtonComponent],
+  imports: [CommonModule, QRCodeComponent, NavbarComponent, TitleComponent, ButtonComponent],
   templateUrl: './order-confirmation.component.html',
   styleUrl: './order-confirmation.component.scss',
 })

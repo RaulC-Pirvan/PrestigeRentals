@@ -51,5 +51,14 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public bool IsCancelled { get; set; } = false;
 
+        [Required]
+        public string BookingReference { get; set; }
+
+        [Required]
+        public string QrCodeData { get; set; }
+
+        [Required]
+        public string QrCodeBase64Image { get; set; }
+
     }
 }

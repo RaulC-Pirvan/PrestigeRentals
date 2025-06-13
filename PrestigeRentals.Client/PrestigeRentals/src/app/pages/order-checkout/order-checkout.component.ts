@@ -18,6 +18,8 @@ import { ButtonComponent } from '../../shared/button/button.component';
 import { BookingDataService } from '../../services/booking-data.service';
 import { switchMap } from 'rxjs/operators';
 import { NotificationService } from '../../services/notification.service';
+import { Order } from '../../models/order.model';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-order-checkout',
@@ -166,13 +168,18 @@ export class OrderCheckoutComponent implements OnInit {
     };
 
     this.http
-      .post<{ id: number }>('https://localhost:7093/api/order', orderPayload)
+      .post<{
+        id: number;
+        bookingReference: string;
+        qrCodeData: string;
+        qrCodeBase64Image: string;
+      }>('https://localhost:7093/api/order', orderPayload)
       .pipe(
         switchMap((orderRes) => {
           const orderId = orderRes.id;
 
           const paymentPayload = {
-            orderId: orderId,
+            orderId,
             totalCost: this.totalCost,
             userId: this.userId,
             vehicleId: this.vehicleId,
@@ -185,6 +192,12 @@ export class OrderCheckoutComponent implements OnInit {
             cvv: this.checkoutForm.value.cvv,
           };
 
+          this.bookingDataService.setBookingData({
+            bookingReference: orderRes.bookingReference,
+            qrCodeData: orderRes.qrCodeData,
+            qrCodeBase64Image: orderRes.qrCodeBase64Image,
+          });
+
           return this.http.post<any>(
             'https://localhost:7093/api/payment/mockpay',
             paymentPayload
@@ -193,17 +206,22 @@ export class OrderCheckoutComponent implements OnInit {
       )
       .subscribe({
         next: (paymentRes) => {
+          console.log('[FRONTEND] QR Data:', paymentRes.qrCodeData);
+
           if (paymentRes.success) {
-            this.bookingDataService.setBookingData({
-              bookingReference: paymentRes.bookingReference,
-              qrCodeData: paymentRes.qrCodeData,
+            const data = this.bookingDataService.getBookingData();
+            this.router.navigate(['/order-confirmation'], {
+              state: {
+                bookingReference: data?.bookingReference,
+                qrCodeData: data?.qrCodeData,
+                qrCodeBase64Image: data?.qrCodeBase64Image,
+              },
             });
-            this.router.navigate(['/order-confirmation']);
           } else {
             this.notificationService.show('Payment failed', 'error');
           }
         },
-        error: (err) => {
+        error: () => {
           this.notificationService.show('Order or payment error', 'error');
         },
       });

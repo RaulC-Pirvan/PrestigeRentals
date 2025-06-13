@@ -40,5 +40,9 @@ namespace PrestigeRentals.Application.DTO
         /// Gets or sets a value indicating whether the order has been cancelled.
         /// </summary>
         public bool IsCancelled { get; set; }
+        public string BookingReference { get; set; }
+        public string QrCodeData { get; set; }
+
+        public string QrCodeBase64Image { get; set; }
     }
 }

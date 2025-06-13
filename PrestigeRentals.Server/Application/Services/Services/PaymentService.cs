@@ -21,7 +21,7 @@ namespace PrestigeRentals.Application.Services.Services
             {
                 Success = true,
                 BookingReference = bookingRef,
-                QrCodeData = qrData
+                //QrCodeData = qrData
             });
         }
     }

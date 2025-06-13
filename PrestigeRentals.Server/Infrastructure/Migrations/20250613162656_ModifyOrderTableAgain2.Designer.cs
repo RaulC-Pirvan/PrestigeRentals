@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PrestigeRentals.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using PrestigeRentals.Infrastructure.Persistence;
 namespace PrestigeRentals.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250613162656_ModifyOrderTableAgain2")]
+    partial class ModifyOrderTableAgain2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,10 +87,6 @@ namespace PrestigeRentals.Infrastructure.Migrations
 
                     b.Property<decimal>("PricePerDay")
                         .HasColumnType("numeric");
-
-                    b.Property<string>("QrCodeBase64Image")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("QrCodeData")
                         .IsRequired()

@@ -1,4 +1,5 @@
 ﻿using PrestigeRentals.Application.Services.Interfaces;
+using QRCoder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,47 @@ namespace PrestigeRentals.Application.Services.Services
 
             await smtpClient.SendMailAsync(mailMessage);
 
+        }
+
+        private byte[] GenerateQrCodeBytes(string data)
+        {
+            using var qrGenerator = new QRCodeGenerator();
+            using var qrCodeData = qrGenerator.CreateQrCode(data, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new PngByteQRCode(qrCodeData);
+            return qrCode.GetGraphic(20);
+        }
+
+        public async Task SendQrCodeEmailAsync(string toEmail, string bookingReference, string qrData)
+        {
+            var qrBytes = GenerateQrCodeBytes(qrData);
+            var base64Qr = Convert.ToBase64String(qrBytes);
+            var base64ImageSrc = $"data:image/png;base64,{base64Qr}";
+
+            var smtpClient = new SmtpClient(_smtpHost)
+            {
+                Port = _smtpPort,
+                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
+                EnableSsl = true
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(_smtpUsername, "Prestige Rentals"),
+                Subject = "Your Booking Confirmation - Prestige Rentals",
+                Body = $@"
+            <div style='font-family: Arial, sans-serif; padding: 20px;'>
+                <h2>Booking Confirmed</h2>
+                <p>Your booking reference is: <strong>{bookingReference}</strong></p>
+                <p>Please scan the QR code below at the vehicle pickup location:</p>
+                <img src='{base64ImageSrc}' alt='QR Code' style='margin-top: 10px;' width='200'/>
+                <p style='color: gray; font-size: 12px;'>Do not share this code with anyone.</p>
+            </div>",
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(toEmail);
+
+            await smtpClient.SendMailAsync(mailMessage);
         }
     }
 }

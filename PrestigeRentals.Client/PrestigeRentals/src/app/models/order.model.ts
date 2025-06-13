@@ -1,4 +1,6 @@
 export interface Order {
+    qrCodeData: string;
+    bookingReference: string;
     id: number;
     userId: number;
     vehicleId: number;

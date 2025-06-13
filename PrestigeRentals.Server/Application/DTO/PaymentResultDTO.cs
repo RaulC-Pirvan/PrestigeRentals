@@ -10,7 +10,7 @@ namespace PrestigeRentals.Application.DTO
     {
         public bool Success { get; set; }
         public string BookingReference { get; set; }
-        public string QrCodeData { get; set; }
+       // public string QrCodeData { get; set; }
         public string ErrorMessage { get; set; }
     }
 }

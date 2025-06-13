@@ -1,4 +1,5 @@
-﻿using PrestigeRentals.Application.DTO;
+﻿using Microsoft.Extensions.Logging;
+using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
@@ -16,15 +17,20 @@ namespace PrestigeRentals.Application.Services.Services
     {
         private readonly IOrderRepository _orderRepository;
         private readonly IVehicleRepository _vehicleRepository;
-
+        private readonly IEmailService _emailService;
+        private readonly IUserRepository _userRepository;
+        private readonly ILogger<OrderService> _logger;
         /// <summary>
         /// Constructor to initialize the service with the order repository.
         /// </summary>
         /// <param name="orderRepository">The repository used to interact with the order data.</param>
-        public OrderService(IOrderRepository orderRepository, IVehicleRepository vehicleRepository)
+        public OrderService(IOrderRepository orderRepository, IVehicleRepository vehicleRepository, IEmailService emailService, IUserRepository userRepository, ILogger<OrderService> logger)
         {
             _orderRepository = orderRepository;
             _vehicleRepository = vehicleRepository;
+            _emailService = emailService;
+            _userRepository = userRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -45,43 +51,68 @@ namespace PrestigeRentals.Application.Services.Services
             if (duration <= 0)
                 throw new ArgumentException("End time must be after start time.");
 
-            var hasOverlap = await _orderRepository.AnyAsync(o => o.VehicleId == createOrderRequest.VehicleId && !o.IsCancelled && (
-                (createOrderRequest.StartTime >= o.StartTime && createOrderRequest.StartTime < o.EndTime) ||
-                (createOrderRequest.EndTime > o.StartTime && createOrderRequest.EndTime <= o.EndTime) ||
-                (createOrderRequest.StartTime <= o.StartTime && createOrderRequest.EndTime >= o.EndTime)
-            ));
+            var hasOverlap = await _orderRepository.AnyAsync(o =>
+                o.VehicleId == createOrderRequest.VehicleId &&
+                !o.IsCancelled &&
+                (
+                    (createOrderRequest.StartTime >= o.StartTime && createOrderRequest.StartTime < o.EndTime) ||
+                    (createOrderRequest.EndTime > o.StartTime && createOrderRequest.EndTime <= o.EndTime) ||
+                    (createOrderRequest.StartTime <= o.StartTime && createOrderRequest.EndTime >= o.EndTime)
+                ));
 
             if (hasOverlap)
                 throw new InvalidOperationException("The vehicle is already booked for the selected time period.");
 
             var totalCost = (decimal)duration * vehicle.PricePerDay;
+            string bookingReference = $"PR-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
 
-            // Create a new order entity
-            Order order = new Order
+            var startTime = DateTime.SpecifyKind(createOrderRequest.StartTime, DateTimeKind.Utc);
+            var endTime = DateTime.SpecifyKind(createOrderRequest.EndTime, DateTimeKind.Utc);
+
+            var qrData = $"BookingRef:{bookingReference};VehicleId:{createOrderRequest.VehicleId};Start:{startTime:O};End:{endTime:O}";
+            var qrBytes = GenerateQrCodeBytes(qrData); // You already have this method in use
+            var base64Qr = Convert.ToBase64String(qrBytes);
+            var base64ImageSrc = $"data:image/png;base64,{base64Qr}";
+
+            // ✅ Include QrCodeData here BEFORE saving
+            var order = new Order
             {
                 UserId = createOrderRequest.UserId,
                 VehicleId = createOrderRequest.VehicleId,
-                StartTime = DateTime.SpecifyKind(createOrderRequest.StartTime, DateTimeKind.Utc),
-                EndTime = DateTime.SpecifyKind(createOrderRequest.EndTime, DateTimeKind.Utc),
+                StartTime = startTime,
+                EndTime = endTime,
                 PricePerDay = vehicle.PricePerDay,
-                TotalCost = totalCost
+                TotalCost = totalCost,
+                BookingReference = bookingReference,
+                QrCodeData = qrData,
+                QrCodeBase64Image = base64ImageSrc
             };
 
-            // Save the new order in the database
+            // ✅ Save the order with all required data
             await _orderRepository.AddAsync(order);
-
             await _vehicleRepository.UpdateAsync(vehicle);
 
-            // Return a DTO representation of the created order
+            var user = await _userRepository.GetUserById(createOrderRequest.UserId);
+            if (user == null || string.IsNullOrEmpty(user.Email))
+                throw new InvalidOperationException("User email not found");
+
+            await _emailService.SendQrCodeEmailAsync(user.Email, bookingReference, qrData);
+
+            Console.WriteLine($"[BACKEND] QR Data: {qrData}");
+            _logger.LogInformation($"[BACKEND] QR Data: {qrData}");
+
             return new OrderDTO
             {
                 Id = order.Id,
                 UserId = order.UserId,
                 VehicleId = order.VehicleId,
-                StartTime = order.StartTime,
-                EndTime = order.EndTime,
+                StartTime = startTime,
+                EndTime = endTime,
                 PricePerDay = order.PricePerDay,
-                TotalCost = order.TotalCost
+                TotalCost = order.TotalCost,
+                BookingReference = bookingReference,
+                QrCodeData = qrData,
+                QrCodeBase64Image = base64ImageSrc // ✅ add this
             };
         }
 
@@ -185,6 +216,16 @@ namespace PrestigeRentals.Application.Services.Services
             });
 
             return orderDTOs;
+        }
+
+        private byte[] GenerateQrCodeBytes(string data)
+        {
+            using (var qrGenerator = new QRCoder.QRCodeGenerator())
+            using (var qrCodeData = qrGenerator.CreateQrCode(data, QRCoder.QRCodeGenerator.ECCLevel.Q))
+            using (var qrCode = new QRCoder.PngByteQRCode(qrCodeData))
+            {
+                return qrCode.GetGraphic(20);
+            }
         }
     }
 }

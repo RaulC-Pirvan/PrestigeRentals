@@ -14,5 +14,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <param name="verificationCode">The verification code to include in the email.</param>
         Task SendVerificationEmailAsync(string toEmail, string verificationCode);
         Task SendNewPasswordEmailAsync(string toEmal, string newPassword);
+        Task SendQrCodeEmailAsync(string toEmail, string bookingReference, string qrData);
     }
 }

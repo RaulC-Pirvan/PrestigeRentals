@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 interface BookingData {
   bookingReference: string;
   qrCodeData: string;
+  qrCodeBase64Image?: string;
 }
 
 const STORAGE_KEY = 'bookingData';
