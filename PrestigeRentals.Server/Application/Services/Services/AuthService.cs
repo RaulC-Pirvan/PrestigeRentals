@@ -65,7 +65,7 @@ namespace PrestigeRentals.Application.Services.Services
 
             await _userRepository.AddAsync(user);
 
-            //await _emailService.SendVerificationEmailAsync(registerRequest.Email, verificationCode);
+            await _emailService.SendVerificationEmailAsync(registerRequest.Email, verificationCode);
 
             var userDetails = new UserDetails
             {

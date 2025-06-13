@@ -11,10 +11,10 @@ namespace PrestigeRentals.Application.Services.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly string _smtpHost = "smtp.mailersend.net";
+        private readonly string _smtpHost = "smtp.ethereal.email";
         private readonly int _smtpPort = 587;
-        private readonly string _smtpUsername = "MS_SjKDQR@test-2p0347zzkd7lzdrn.mlsender.net";
-        private readonly string _smtpPassword = "mssp.cNmLtF8.pq3enl60r30l2vwr.blQM3cj";
+        private readonly string _smtpUsername = "garret.hauck36@ethereal.email";
+        private readonly string _smtpPassword = "83dKdH1D92st8MVMEM";
 
         /// <summary>
         /// Sends a verification email with a one-time verification code.
