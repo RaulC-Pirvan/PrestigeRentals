@@ -7,6 +7,7 @@ using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
 
@@ -19,12 +20,14 @@ namespace PrestigeRentals.Presentation.Controllers
         private readonly IVehicleService _vehicleService;
         private readonly IVehicleFilterService _filterService;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IOrderRepository _orderRepository;
 
-        public VehicleController(IVehicleService vehicleService, IVehicleFilterService filterService, IWebHostEnvironment webHostEnvironment    )
+        public VehicleController(IVehicleService vehicleService, IVehicleFilterService filterService, IWebHostEnvironment webHostEnvironment, IOrderRepository orderRepository)
         {
             _vehicleService = vehicleService;
             _filterService = filterService;
             _webHostEnvironment = webHostEnvironment;
+            _orderRepository = orderRepository;
         }
 
         /// <summary>
@@ -255,6 +258,20 @@ namespace PrestigeRentals.Presentation.Controllers
         {
             var ids = await _vehicleService.GetSimilarVehicleIdsAsync(excludeId, chassis, transmission);
             return Ok(ids);
+        }
+
+        [HttpGet("{vehicleId}/booked-dates")]
+        public async Task<IActionResult> GetBookedDateRanges(int vehicleId)
+        {
+            var bookings = await _orderRepository.GetActiveOrdersByVehicle(vehicleId);
+
+            var ranges = bookings.Where(o => !o.IsCancelled).Select(o => new
+            {
+                StartDate = o.StartTime.Date,
+                EndDate = o.EndTime.Date
+            });
+
+            return Ok(ranges);
         }
     }
 }

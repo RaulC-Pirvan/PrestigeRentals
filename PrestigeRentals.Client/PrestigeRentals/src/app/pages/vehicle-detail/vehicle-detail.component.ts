@@ -11,6 +11,11 @@ import { ReviewCardComponent } from '../../components/review-card/review-card.co
 import { ProfileService } from '../../services/profile.service';
 import { VehicleSuggestionComponent } from '../../components/vehicle-suggestion/vehicle-suggestion.component';
 import { CheckoutDataService } from '../../services/checkout-data.service';
+import { HttpClient } from '@angular/common/http';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatNativeDateModule } from '@angular/material/core';
 
 export interface VehicleOptions {
   navigation: boolean;
@@ -29,6 +34,10 @@ export interface VehicleOptions {
     ButtonComponent,
     ReviewCardComponent,
     VehicleSuggestionComponent,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatNativeDateModule
   ],
   templateUrl: './vehicle-detail.component.html',
   styleUrls: ['./vehicle-detail.component.scss'],
@@ -56,12 +65,15 @@ export class VehicleDetailComponent implements OnInit {
 
   today: string ='';
 
+  bookedRanges: {start: Date; end: Date}[] = [];
+
   constructor(
     private route: ActivatedRoute,
     private vehicleService: VehicleService,
     private profileService: ProfileService,
     private router: Router,
-    private checkoutDataService: CheckoutDataService
+    private checkoutDataService: CheckoutDataService,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -77,6 +89,8 @@ export class VehicleDetailComponent implements OnInit {
         this.loadReviewsForVehicle(this.vehicleId);
         this.loadSimilarVehicles();
       });
+
+      this.loadBookedDates(this.vehicleId);
     }
   }
 
@@ -311,6 +325,25 @@ export class VehicleDetailComponent implements OnInit {
     });
 
     this.router.navigate(['/order-checkout']);
-
   }
+
+  loadBookedDates(vehicleId: number): void {
+    this.http.get<{startDate: string, endDate: string}[]>(`https://localhost:7093/api/vehicle/${vehicleId}/booked-dates`).subscribe((res) => {
+      this.bookedRanges = res.map(r => ({
+        start: new Date(r.startDate),
+        end: new Date(r.endDate)
+      }));
+    });
+  }
+
+  disableBookedDates = (date: Date | null): boolean => {
+    if(!date) return false;
+
+    return !this.bookedRanges.some(range => {
+      const day = date.setHours(0, 0, 0, 0);
+      const start = new Date(range.start).setHours(0, 0, 0, 0);
+      const end = new Date(range.end).setHours(0, 0, 0, 0);
+      return day >= start && day <= end;
+    });
+  };
 }

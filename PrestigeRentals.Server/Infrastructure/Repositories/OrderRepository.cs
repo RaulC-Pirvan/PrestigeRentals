@@ -143,5 +143,10 @@ namespace PrestigeRentals.Application.Services
         {
             return await _dbContext.Orders.AnyAsync(predicate);
         }
+
+        public async Task<List<Order>> GetActiveOrdersByVehicle(int vehicleId)
+        {
+            return await _dbContext.Orders.Where(o => o.VehicleId == vehicleId && !o.IsCancelled).ToListAsync();
+        }
     }   
 }

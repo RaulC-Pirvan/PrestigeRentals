@@ -118,27 +118,39 @@
         <hr class="middle-hr" />
         <div class="right-side-container">
           <div class="time-container">
-            <div class="start-time-container">
-              <label for="startTime">Start Date</label>
+            <mat-form-field class="custom-datepicker" appearance="fill">
+              <mat-label>Start Date</mat-label>
               <input
-                class="time-selector"
-                name="startTime"
-                type="date"
+                matInput
+                [matDatepicker]="picker1"
                 [(ngModel)]="startTime"
-                [min]="today"
-                (ngModelChange)="calculateCostAndDuration()"
+                [matDatepickerFilter]="disableBookedDates"
+                (dateChange)="calculateCostAndDuration()"
+                name="startDate"
               />
-            </div>
-            <div class="end-time-container">
-              <label for="endTime">End Date</label>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="custom-datepicker" appearance="fill">
+              <mat-label>End Date</mat-label>
               <input
-                class="time-selector"
-                name="endTime"
-                type="date"
+                matInput
+                [matDatepicker]="picker2"
                 [(ngModel)]="endTime"
-                (ngModelChange)="calculateCostAndDuration()"
+                [matDatepickerFilter]="disableBookedDates"
+                (dateChange)="calculateCostAndDuration()"
+                name="endDate"
               />
-            </div>
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
           </div>
           <hr />
           <div class="total-time-container">

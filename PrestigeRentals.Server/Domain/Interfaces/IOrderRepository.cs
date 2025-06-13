@@ -49,5 +49,7 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(long userId);
 
         Task<bool> AnyAsync(Expression<Func<Order, bool>> predicate);
+
+        Task<List<Order>> GetActiveOrdersByVehicle(int vehicleId);
     }
 }

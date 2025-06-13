@@ -462,3 +462,11 @@ h2 {
   opacity: 0.3;
   cursor: not-allowed;
 }
+
+.custom-datepicker {
+  width: 100%;
+
+  .mat-input-element {
+    background-color: $primary-colour;
+  }
+}
