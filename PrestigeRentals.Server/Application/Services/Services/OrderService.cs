@@ -45,6 +45,15 @@ namespace PrestigeRentals.Application.Services.Services
             if (duration <= 0)
                 throw new ArgumentException("End time must be after start time.");
 
+            var hasOverlap = await _orderRepository.AnyAsync(o => o.VehicleId == createOrderRequest.VehicleId && !o.IsCancelled && (
+                (createOrderRequest.StartTime >= o.StartTime && createOrderRequest.StartTime < o.EndTime) ||
+                (createOrderRequest.EndTime > o.StartTime && createOrderRequest.EndTime <= o.EndTime) ||
+                (createOrderRequest.StartTime <= o.StartTime && createOrderRequest.EndTime >= o.EndTime)
+            ));
+
+            if (hasOverlap)
+                throw new InvalidOperationException("The vehicle is already booked for the selected time period.");
+
             var totalCost = (decimal)duration * vehicle.PricePerDay;
 
             // Create a new order entity
@@ -61,7 +70,6 @@ namespace PrestigeRentals.Application.Services.Services
             // Save the new order in the database
             await _orderRepository.AddAsync(order);
 
-            vehicle.Available = false;
             await _vehicleRepository.UpdateAsync(vehicle);
 
             // Return a DTO representation of the created order

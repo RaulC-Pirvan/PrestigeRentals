@@ -1,5 +1,6 @@
 ﻿using PrestigeRentals.Domain.Entities;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace PrestigeRentals.Application.Services.Interfaces.Repositories
@@ -46,5 +47,7 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         Task<List<Order>> GetActiveOrdersForVehicleAsync(long vehicleId, DateTime from,  DateTime to);
 
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(long userId);
+
+        Task<bool> AnyAsync(Expression<Func<Order, bool>> predicate);
     }
 }

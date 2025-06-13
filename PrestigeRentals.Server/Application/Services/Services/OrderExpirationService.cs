@@ -26,6 +26,21 @@ namespace PrestigeRentals.Application.Services.Services
         {
             var now = DateTime.UtcNow;
 
+            var activeOrders = await _dbContext.Orders.Where(o => o.StartTime <= now && o.EndTime > now && !o.IsCancelled).ToListAsync(cancellationToken);
+
+            _logger.LogInformation("[OrderExpirationService] Found {Count} active orders at {Time}.", activeOrders.Count, now);
+
+            foreach(var order in activeOrders)
+            {
+                var vehicle = await _dbContext.Vehicles.FindAsync(new object[] { order.VehicleId }, cancellationToken);
+                if (vehicle != null && vehicle.Available)
+                {
+                    vehicle.Available = false;
+                    _dbContext.Entry(vehicle).State = EntityState.Modified;
+                    _logger.LogInformation("[OrderExpirationService] Vehicle {VehicleId} marked as unavailable.", vehicle.Id);
+                }
+            }
+            
             var expiredOrders = await _dbContext.Orders
                .Where(o => o.EndTime <= now && !o.IsCancelled)
                 .ToListAsync(cancellationToken);

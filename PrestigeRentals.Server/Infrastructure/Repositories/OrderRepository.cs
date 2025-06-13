@@ -5,6 +5,7 @@ using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace PrestigeRentals.Application.Services
@@ -136,6 +137,11 @@ namespace PrestigeRentals.Application.Services
         public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(long userId)
         {
             return await _dbContext.Orders.Where(o => o.UserId == userId).ToListAsync();
+        }
+
+        public async Task<bool> AnyAsync(Expression<Func<Order, bool>> predicate)
+        {
+            return await _dbContext.Orders.AnyAsync(predicate);
         }
     }   
 }
