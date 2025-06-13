@@ -74,23 +74,28 @@
 
       <div class="modal-backdrop" *ngIf="showForgotPassword">
         <div class="modal" (click)="$event.stopPropagation()">
-          <h3>Reset Password</h3>
-          <p>Enter your email address to receive a new password.</p>
-          <input
-            type="email"
-            [(ngModel)]="forgotEmail"
-            placeholder="you@example.com"
-          />
+          <div class="title-container">
+            <h3>Reset Password</h3>
+            <p>Enter your email address to receive a new password.</p>
+          </div>
+          <div class="input-container">
+            <label for="">Email</label>
+            <input
+              type="email"
+              [(ngModel)]="forgotEmail"
+              placeholder="you@example.com"
+            />
+          </div>
           <div class="modal-buttons">
             <app-button
               buttonText="SEND >"
-              buttonType="transparent"
-              (buttonClick)="redirectTo('/register')"
+              buttonType="accent"
+              (buttonClick)="sendResetLink()"
             ></app-button>
             <app-button
               buttonText="CANCEL >"
               buttonType="transparent"
-              (buttonClick)="redirectTo('/register')"
+              (buttonClick)="closeForgotPasswordModal()"
             ></app-button>
           </div>
         </div>

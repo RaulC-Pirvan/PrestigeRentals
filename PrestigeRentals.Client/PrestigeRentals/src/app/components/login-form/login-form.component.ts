@@ -99,5 +99,14 @@ export class LoginFormComponent {
       return;
     }
 
+    this.http.post('https://localhost:7093/forgot-password', {email: this.forgotEmail}).subscribe({
+      next: () => {
+        alert('A new password has been sent to your email.');
+        this.closeForgotPasswordModal();
+      },
+      error: () => {
+        alert('Something went wrong. Please try again.');
+      }
+    })
   }
 }
