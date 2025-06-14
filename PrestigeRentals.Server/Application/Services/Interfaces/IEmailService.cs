@@ -19,5 +19,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task SendReviewNotificationToAdminAsync(string userEmail, long vehicleId, int rating, string review);
         Task SendVehicleChangeNotificationToAdminAsync(long vehicleId, string action);
         Task SendUserStatusChangeNotificationToAdminAsync(string affectedUserEmail, string newStatus);
+        Task SendReviewRequestEmailAsync(string userEmail, string vehicleName, long orderId);
     }
 }

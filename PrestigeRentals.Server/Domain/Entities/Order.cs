@@ -60,5 +60,8 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public string QrCodeBase64Image { get; set; }
 
+        [Required]
+        public bool ReviewReminderSet { get; set; } = false;
+
     }
 }

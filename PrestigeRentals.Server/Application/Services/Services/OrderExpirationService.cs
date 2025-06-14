@@ -15,11 +15,13 @@ namespace PrestigeRentals.Application.Services.Services
 
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<OrderExpirationService> _logger;
+        private readonly IEmailService _emailService;
 
-        public OrderExpirationService(ApplicationDbContext dbContext, ILogger<OrderExpirationService> logger)
+        public OrderExpirationService(ApplicationDbContext dbContext, ILogger<OrderExpirationService> logger, IEmailService emailService)
         {
             _dbContext = dbContext;
             _logger = logger;
+            _emailService = emailService;
         }
 
         public async Task UpdateExpiredOrderAsync(CancellationToken cancellationToken)
@@ -61,6 +63,20 @@ namespace PrestigeRentals.Application.Services.Services
                         _dbContext.Entry(vehicle).State = EntityState.Modified;
 
                         _logger.LogInformation("[OrderExpirationService] Vehicle {VehicleId} marked as available.", vehicle.Id);
+                    }
+
+                    if(!order.ReviewReminderSet)
+                    {
+                        var user = await _dbContext.Users.FindAsync(new object[] { order.UserId }, cancellationToken);
+
+                        if(user != null)
+                        {
+                            var vechileName = $"{vehicle.Make} {vehicle.Model}";
+                            await _emailService.SendReviewRequestEmailAsync(user.Email, vechileName, order.Id);
+
+                            order.ReviewReminderSet = true;
+                            _logger.LogInformation("[OrderExpirationService] Sent review request email to user.");
+                        }
                     }
                 }
             }

@@ -194,5 +194,26 @@ namespace PrestigeRentals.Application.Services.Services
 
             await SendEmailAsync(_adminEmail, $"[User Status Update] {affectedUserEmail} → {newStatus}", body);
         }
+
+        public async Task SendReviewRequestEmailAsync(string userEmail, string vehicleName, long orderId)
+        {
+            var reviewLink = $"localhost:4200/review?orderId={orderId}";
+
+            string body = $@"
+        <div style='font-family: Arial, sans-serif; padding: 20px;'>
+            <h2>How was your ride with the {vehicleName}?</h2>
+            <p>Your trip has ended. We'd love to hear your feedback.</p>
+            <a href='{reviewLink}' style='
+                display: inline-block;
+                margin-top: 10px;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 5px;'>Leave a Review</a>
+        </div>";
+
+            await SendEmailAsync(userEmail, "We'd love your feedback!", body);
+        }
     }
 }
