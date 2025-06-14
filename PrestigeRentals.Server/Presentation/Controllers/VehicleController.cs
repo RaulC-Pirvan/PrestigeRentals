@@ -21,13 +21,15 @@ namespace PrestigeRentals.Presentation.Controllers
         private readonly IVehicleFilterService _filterService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly IOrderRepository _orderRepository;
+        private readonly IEmailService _emailService;
 
-        public VehicleController(IVehicleService vehicleService, IVehicleFilterService filterService, IWebHostEnvironment webHostEnvironment, IOrderRepository orderRepository)
+        public VehicleController(IVehicleService vehicleService, IVehicleFilterService filterService, IWebHostEnvironment webHostEnvironment, IOrderRepository orderRepository, IEmailService emailService)
         {
             _vehicleService = vehicleService;
             _filterService = filterService;
             _webHostEnvironment = webHostEnvironment;
             _orderRepository = orderRepository;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -107,6 +109,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 var vehicleDto = await _vehicleService.AddVehicle(vehicleRequest);
+                await _emailService.SendVehicleChangeNotificationToAdminAsync(vehicleDto.Id, "added");
                 return Ok(vehicleDto); // returns 200 OK with the DTO
             }
             catch (Exception ex)
@@ -190,6 +193,7 @@ namespace PrestigeRentals.Presentation.Controllers
                         try
                         {
                             Directory.Delete(vehicleFolderPath, recursive: true);
+                            await _emailService.SendVehicleChangeNotificationToAdminAsync(vehicleId, "deleted");
                         }
                         catch (Exception folderEx)
                         {
@@ -226,6 +230,7 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 VehicleDTO vehicleDTO = await _vehicleService.UpdateVehicle(vehicleId, vehicleUpdateRequest);
+                await _emailService.SendVehicleChangeNotificationToAdminAsync(vehicleId, "updated");
                 return Ok(vehicleDTO);
             }
             catch (VehicleUpdateException ex)
