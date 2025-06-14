@@ -4,6 +4,7 @@ using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Exceptions;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Application.Services.Services;
 using PrestigeRentals.Domain.Exceptions;
 using System.Security.Claims;
@@ -15,10 +16,14 @@ namespace PrestigeRentals.Presentation.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly IReviewService _reviewService;
+        private readonly IEmailService _emailService;
+        private readonly IUserRepository _userRepository;
 
-        public ReviewController(IReviewService reviewService)
+        public ReviewController(IReviewService reviewService, IEmailService emailService, IUserRepository userRepository)
         {
             _reviewService = reviewService;
+            _emailService = emailService;
+            _userRepository = userRepository;
         }
 
         [HttpPost]
@@ -31,6 +36,19 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 var createdReview = await _reviewService.CreateReview(createReviewRequest);
+
+                var user = await _userRepository.GetUserById(createReviewRequest.UserId);
+
+
+                if (user != null)
+                {
+                    await _emailService.SendReviewNotificationToAdminAsync(
+                  userEmail: user.Email,
+                  vehicleId: createReviewRequest.VehicleId,
+                  rating: createReviewRequest.Rating,
+                  review: createReviewRequest.Description
+              );
+                }
                 return Ok(createdReview);
             }
 

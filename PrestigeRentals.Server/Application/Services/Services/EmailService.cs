@@ -156,12 +156,12 @@ namespace PrestigeRentals.Application.Services.Services
             await SendEmailAsync(_adminEmail, $"[Contact Form] New Submission", body);
         }
 
-        public async Task SendReviewNotificationToAdminAsync(string userName, string userEmail, long vehicleId, int rating, string review)
+        public async Task SendReviewNotificationToAdminAsync(string userEmail, long vehicleId, int rating, string review)
         {
             string body = $@"
         <div style='font-family: Arial, sans-serif; padding: 20px;'>
             <h2>New Review Submitted</h2>
-            <p><strong>User:</strong> {userName} ({userEmail})</p>
+            <p><strong>User:</strong> ({userEmail})</p>
             <p><strong>Vehicle ID:</strong> {vehicleId}</p>
             <p><strong>Rating:</strong> {rating}/5</p>
             <p><strong>Review:</strong></p>
