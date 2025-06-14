@@ -20,5 +20,8 @@ namespace PrestigeRentals.Application.Requests
 
         [Required]
         public string Description { get; set; }
+
+        [Required]
+        public long OrderId { get; set; }
     }
 }

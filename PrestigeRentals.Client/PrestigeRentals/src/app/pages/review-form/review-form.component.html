@@ -1,0 +1,77 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <app-title text="REVIEW"></app-title>
+  <div class="card-container">
+    <div *ngIf="vehicleImageUrl" class="image-container">
+      <img [src]="vehicleImageUrl" alt="Vehicle" />
+    </div>
+
+    <div class="title-container">
+      <h2>{{ vehicleName }}</h2>
+    </div>
+
+    <hr class="accent" />
+    <div class="form-container">
+      <form
+        [formGroup]="reviewForm"
+        (ngSubmit)="onSubmit()"
+        class="review-form"
+      >
+        <div class="input-container">
+          <label for="rating">Rating</label>
+          <select formControlName="rating" id="rating">
+            <option *ngFor="let r of [1, 2, 3, 4, 5]" [value]="r">
+              {{ r }}
+            </option>
+          </select>
+          <div
+            class="error-text"
+            *ngIf="
+              reviewForm.get('rating')?.touched &&
+              reviewForm.get('rating')?.invalid
+            "
+          >
+            <span *ngIf="reviewForm.get('rating')?.errors?.['required']"
+              >Rating is required.</span
+            >
+            <span
+              *ngIf="reviewForm.get('rating')?.errors?.['min'] || reviewForm.get('rating')?.errors?.['max']"
+            >
+              Rating must be between 1 and 5.
+            </span>
+          </div>
+        </div>
+
+        <div class="big-input-container">
+          <label for="description">Description</label>
+          <textarea
+            formControlName="description"
+            id="description"
+            class="big-input"
+          ></textarea>
+          <div
+            class="error-text"
+            *ngIf="
+              reviewForm.get('description')?.touched &&
+              reviewForm.get('description')?.invalid
+            "
+          >
+            <span *ngIf="reviewForm.get('description')?.errors?.['required']"
+              >Description is required.</span
+            >
+            <span *ngIf="reviewForm.get('description')?.errors?.['minlength']">
+              Description must be at least 5 characters long.
+            </span>
+          </div>
+        </div>
+
+        <app-button
+          buttonText="SUBMIT >"
+          buttonType="accent"
+          [disabled]="reviewForm.invalid"
+          (buttonClick)="(null)"
+        ></app-button>
+      </form>
+    </div>
+  </div>
+</div>

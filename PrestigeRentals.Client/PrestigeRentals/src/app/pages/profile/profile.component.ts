@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
-import { FooterComponent } from '../../components/footer/footer.component';
 import { OrderPreviewComponent } from '../../components/order-preview/order-preview.component';
 import { ProfileService, UserProfile } from '../../services/profile.service';
 import { OrderService } from '../../services/order.service';
@@ -16,7 +15,6 @@ import { ReviewPreviewComponent } from '../../components/review-preview/review-p
   imports: [
     CommonModule,
     NavbarComponent,
-    FooterComponent,
     OrderPreviewComponent,
     ReviewPreviewComponent,
   ],

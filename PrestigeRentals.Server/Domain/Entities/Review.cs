@@ -19,6 +19,9 @@ namespace PrestigeRentals.Domain.Entities
         public long VehicleId { get; set; }
 
         [Required]
+        public long OrderId { get; set; }
+
+        [Required]
         public int Rating { get; set; }
         
         [Required]

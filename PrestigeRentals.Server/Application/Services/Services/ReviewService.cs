@@ -1,6 +1,7 @@
 ﻿using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
 using PrestigeRentals.Application.Services.Interfaces;
+using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Domain.Interfaces;
 using System;
@@ -14,20 +15,38 @@ namespace PrestigeRentals.Application.Services.Services
     public class ReviewService : IReviewService
     {
         private readonly IReviewRepository _reviewRepository;
+        private readonly IOrderRepository _orderRepository;
 
-        public ReviewService(IReviewRepository reviewRepository)
+        public ReviewService(IReviewRepository reviewRepository, IOrderRepository orderRepository)
         {
             _reviewRepository = reviewRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task<ReviewDTO> CreateReview(CreateReviewRequest request)
         {
+            var order = await _orderRepository.GetByIdAsync(request.OrderId);
+
+            if (order == null || order.UserId != request.UserId)
+            {
+                throw new UnauthorizedAccessException("You are not authorized to review this order.");
+            }
+
+            var existingReview = await _reviewRepository.GetReviewByOrderIdAsync(request.OrderId);
+            if (existingReview != null)
+            {
+                throw new InvalidOperationException("A review for this order already exists.");
+            }
+
+
             Review review = new Review
             {
                 UserId = request.UserId,
                 VehicleId = request.VehicleId,
                 Rating = request.Rating,
-                Description = request.Description
+                Description = request.Description,
+                OrderId = request.OrderId,
+                CreatedAt = DateTime.UtcNow
             };
 
             await _reviewRepository.AddAsync(review);
@@ -38,7 +57,8 @@ namespace PrestigeRentals.Application.Services.Services
                 UserId = review.UserId,
                 VehicleId = review.VehicleId,
                 Rating = review.Rating,
-                Description = review.Description
+                Description = review.Description,
+                CreatedAt = review.CreatedAt
             };
         }
 
@@ -110,6 +130,11 @@ namespace PrestigeRentals.Application.Services.Services
             }).ToList();
 
             return reviewDTOs;
+        }
+
+        public async Task<bool> ReviewExistsForOrder(long orderId)
+        {
+            return await _reviewRepository.ExistsByOrderIdAsync(orderId);
         }
     }
 }

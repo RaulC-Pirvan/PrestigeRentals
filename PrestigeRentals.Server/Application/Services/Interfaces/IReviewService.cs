@@ -15,5 +15,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task<ReviewDTO> GetReviewById(long id);
         Task<IEnumerable<ReviewDTO>> GetReviewsByUserIdAsync(long userId);
         Task<List<ReviewDTO>> GetReviewsByVehicleIdAsync(long vehicleId);
+        Task<bool> ReviewExistsForOrder(long orderId);
     }
 }

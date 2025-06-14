@@ -21,5 +21,8 @@ namespace PrestigeRentals.Domain.Interfaces
 
         Task<IEnumerable<Review>> GetReviewsByUserIdAsync(long userId);
         Task<IEnumerable<Review>> GetReviewsByVehicleIdAsync(long vehicleId);
+        Task<Review?> GetReviewByOrderIdAsync(long orderId);
+        Task<bool> ExistsByOrderIdAsync(long orderId);
+
     }
 }

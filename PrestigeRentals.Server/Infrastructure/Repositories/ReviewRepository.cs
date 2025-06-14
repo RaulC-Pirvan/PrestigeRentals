@@ -86,5 +86,17 @@ namespace PrestigeRentals.Infrastructure.Repositories
         {
             return await _dbContext.Reviews.Where(r => r.VehicleId == vehicleId).ToListAsync();
         }
+
+        public async Task<Review?> GetReviewByOrderIdAsync(long orderId)
+        {
+            return await _dbContext.Reviews
+                .FirstOrDefaultAsync(r => r.OrderId == orderId);
+        }
+
+        public async Task<bool> ExistsByOrderIdAsync(long orderId)
+        {
+            return await _dbContext.Reviews.AnyAsync(r => r.OrderId == orderId);
+        }
+
     }
 }

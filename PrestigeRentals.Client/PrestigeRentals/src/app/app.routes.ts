@@ -28,6 +28,8 @@ import { RegisterSuccessComponent } from './pages/register-success/register-succ
 import { UserGuard } from './guards/user.guard';
 import { AdminGuard } from './guards/admin.guard';
 import { AdminEditVehicleComponent } from './components/admin-edit-vehicle/admin-edit-vehicle.component';
+import { ReviewFormComponent } from './pages/review-form/review-form.component';
+import { ReviewSuccessComponent } from './pages/review-success/review-success.component';
 
 export const routes: Routes = [
   { path: '', component: LandingPageComponent },
@@ -37,16 +39,49 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'about-us', component: AboutUsComponent },
 
-  { path: 'login', component: LoginComponent, canActivate: [AuthRedirectGuard] },
-  { path: 'register', component: RegisterComponent, canActivate: [AuthRedirectGuard] },
+  {
+    path: 'login',
+    component: LoginComponent,
+    canActivate: [AuthRedirectGuard],
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [AuthRedirectGuard],
+  },
   { path: 'register-success', component: RegisterSuccessComponent },
 
-  { path: 'inventory', component: InventoryComponent, canActivate: [UserGuard] },
-  { path: 'vehicle/:id', component: VehicleDetailComponent, canActivate: [UserGuard] },
-  { path: 'order-checkout', component: OrderCheckoutComponent, canActivate: [UserGuard] },
-  { path: 'order-confirmation', component: OrderConfirmationComponent, canActivate: [UserGuard] },
+  {
+    path: 'inventory',
+    component: InventoryComponent,
+    canActivate: [UserGuard],
+  },
+  {
+    path: 'vehicle/:id',
+    component: VehicleDetailComponent,
+    canActivate: [UserGuard],
+  },
+  {
+    path: 'order-checkout',
+    component: OrderCheckoutComponent,
+    canActivate: [UserGuard],
+  },
+  {
+    path: 'order-confirmation',
+    component: OrderConfirmationComponent,
+    canActivate: [UserGuard],
+  },
   { path: 'profile', component: ProfileComponent, canActivate: [UserGuard] },
-
+  {
+    path: 'review',
+    component: ReviewFormComponent,
+    canActivate: [UserGuard],
+  },
+  {
+    path: 'review-success',
+    component: ReviewSuccessComponent,
+    canActivate: [UserGuard]
+  },
   {
     path: 'settings',
     component: SettingsComponent,
@@ -73,7 +108,7 @@ export const routes: Routes = [
       { path: 'tickets', component: TicketsComponent },
       { path: 'users', component: UsersComponent },
       { path: 'vehicles', component: VehiclesComponent },
-      {path: 'edit/:id', component: AdminEditVehicleComponent}
+      { path: 'edit/:id', component: AdminEditVehicleComponent },
     ],
   },
 

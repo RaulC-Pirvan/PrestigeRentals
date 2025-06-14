@@ -7,6 +7,7 @@ using PrestigeRentals.Application.Services.Interfaces;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Application.Services.Services;
 using PrestigeRentals.Domain.Exceptions;
+using PrestigeRentals.Domain.Interfaces;
 using System.Security.Claims;
 
 namespace PrestigeRentals.Presentation.Controllers
@@ -18,40 +19,36 @@ namespace PrestigeRentals.Presentation.Controllers
         private readonly IReviewService _reviewService;
         private readonly IEmailService _emailService;
         private readonly IUserRepository _userRepository;
+        private readonly IReviewRepository _reviewRepository;
 
-        public ReviewController(IReviewService reviewService, IEmailService emailService, IUserRepository userRepository)
+        public ReviewController(IReviewService reviewService, IEmailService emailService, IUserRepository userRepository, IReviewRepository reviewRepository)
         {
             _reviewService = reviewService;
             _emailService = emailService;
             _userRepository = userRepository;
+            _reviewRepository = reviewRepository;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<ActionResult<ReviewDTO>> CreateReview([FromBody] CreateReviewRequest createReviewRequest)
+        public async Task<IActionResult> CreateReview([FromBody] CreateReviewRequest createReviewRequest)
         {
-            if (createReviewRequest == null)
-                return BadRequest("Invalid data.");
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
             try
             {
                 var createdReview = await _reviewService.CreateReview(createReviewRequest);
-
-                var user = await _userRepository.GetUserById(createReviewRequest.UserId);
-
-
-                if (user != null)
-                {
-                    await _emailService.SendReviewNotificationToAdminAsync(
-                  userEmail: user.Email,
-                  vehicleId: createReviewRequest.VehicleId,
-                  rating: createReviewRequest.Rating,
-                  review: createReviewRequest.Description
-              );
-                }
                 return Ok(createdReview);
             }
-
+            catch (UnauthorizedAccessException ex)
+            {
+                return StatusCode(403, new { message = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(new { message = ex.Message });
+            }
             catch (Exception ex)
             {
                 return StatusCode(500, "Internal server error: " + ex.Message);
@@ -132,6 +129,13 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 return StatusCode(500, $"An error occurred while retrieving reviews: {ex.Message}");
             }
+        }
+
+        [HttpGet("exists/{orderId}")]
+        public async Task<IActionResult> ReviewExists(long orderId)
+        {
+            bool exists = await _reviewRepository.ExistsByOrderIdAsync(orderId);
+            return Ok(exists);
         }
     }
 }
