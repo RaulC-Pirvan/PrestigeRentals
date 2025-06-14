@@ -18,6 +18,6 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task SendContactFormTicketToAdminAsync(string userEmail, string message);
         Task SendReviewNotificationToAdminAsync(string userEmail, long vehicleId, int rating, string review);
         Task SendVehicleChangeNotificationToAdminAsync(long vehicleId, string action);
-        Task SendUserStatusChangeNotificationToAdminAsync(long adminId, string affectedUserEmail, string newStatus);
+        Task SendUserStatusChangeNotificationToAdminAsync(string affectedUserEmail, string newStatus);
     }
 }

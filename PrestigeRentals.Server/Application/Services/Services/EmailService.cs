@@ -183,12 +183,11 @@ namespace PrestigeRentals.Application.Services.Services
             await SendEmailAsync(_adminEmail, $"[Vehicle {action}] Vehicle ID #{vehicleId}", body);
         }
 
-        public async Task SendUserStatusChangeNotificationToAdminAsync(long adminId, string affectedUserEmail, string newStatus)
+        public async Task SendUserStatusChangeNotificationToAdminAsync(string affectedUserEmail, string newStatus)
         {
             string body = $@"
         <div style='font-family: Arial, sans-serif; padding: 20px;'>
             <h2>User Status Changed</h2>
-            <p><strong>Admin ID:</strong> {adminId}</p>
             <p><strong>Affected User:</strong> {affectedUserEmail}</p>
             <p><strong>New Status:</strong> {newStatus}</p>
         </div>";

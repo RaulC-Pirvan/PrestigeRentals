@@ -362,13 +362,14 @@ namespace PrestigeRentals.Presentation.Controllers
         /// <returns>A message indicating whether the promotion was successful.</returns>
         [Authorize(Roles = "Admin")]
         [HttpPatch("{userId}/set-admin")]
-        public async Task<IActionResult> SetAdmin(int userId)
+        public async Task<IActionResult> SetAdmin(long userId)
         {
             try
             {
                 bool isUserPromoted = await _userManagementService.MakeAdmin(userId);
+                var user = await _userRepository.GetUserById(userId);
+                await _emailService.SendUserStatusChangeNotificationToAdminAsync(user.Email, "promoted");
                 return Ok(new { message = "User successfully promoted to Admin." });
-
             }
             catch (UserAlreadyAdminException ex)
             {
@@ -396,6 +397,8 @@ namespace PrestigeRentals.Presentation.Controllers
             try
             {
                 bool isUserDemoted = await _userManagementService.RevertToUser(userId);
+                var user = await _userRepository.GetUserById(userId);
+                await _emailService.SendUserStatusChangeNotificationToAdminAsync(user.Email, "demoted");
                 return Ok(new { message = "User successfully demoted to User." });
             }
             catch (UserAlreadyUserException ex)
@@ -421,6 +424,8 @@ namespace PrestigeRentals.Presentation.Controllers
             user.Banned = true;
             await _dbContext.SaveChangesAsync();
 
+            await _emailService.SendUserStatusChangeNotificationToAdminAsync(user.Email, "banned");
+
             return Ok();
         }
 
@@ -433,6 +438,8 @@ namespace PrestigeRentals.Presentation.Controllers
 
             user.Banned = false;
             await _dbContext.SaveChangesAsync();
+
+            await _emailService.SendUserStatusChangeNotificationToAdminAsync(user.Email, "unbanned");
 
             return Ok();
         }
