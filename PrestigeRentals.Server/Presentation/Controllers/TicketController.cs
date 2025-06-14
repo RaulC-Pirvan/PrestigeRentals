@@ -10,10 +10,12 @@ namespace PrestigeRentals.Presentation.Controllers
     public class TicketController : ControllerBase
     {
         private readonly ITicketService _ticketService;
+        private readonly IEmailService _emailService;
 
-        public TicketController(ITicketService ticketService)
+        public TicketController(ITicketService ticketService, IEmailService emailService)
         {
             _ticketService = ticketService;
+            _emailService = emailService;
         }
 
         [HttpPost]
@@ -25,6 +27,9 @@ namespace PrestigeRentals.Presentation.Controllers
             }
 
             var ticketId = await _ticketService.CreateTicketAsync(request);
+
+            await _emailService.SendContactFormTicketToAdminAsync(userEmail: request.Email, message: request.Description);
+
             return Ok(new { id = ticketId });
         }
 

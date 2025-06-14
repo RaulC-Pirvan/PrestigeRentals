@@ -48,7 +48,7 @@ namespace PrestigeRentals.Presentation.Controllers
         /// </summary>
         /// <returns>A list of all orders.</returns>
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetAllOrders()
         {
             try

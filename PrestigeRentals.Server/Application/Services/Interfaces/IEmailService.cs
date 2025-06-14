@@ -15,5 +15,9 @@ namespace PrestigeRentals.Application.Services.Interfaces
         Task SendVerificationEmailAsync(string toEmail, string verificationCode);
         Task SendNewPasswordEmailAsync(string toEmal, string newPassword);
         Task SendQrCodeEmailAsync(string toEmail, string bookingReference, string qrData);
+        Task SendContactFormTicketToAdminAsync(string userEmail, string message);
+        Task SendReviewNotificationToAdminAsync(string userName, string userEmail, long vehicleId, int rating, string review);
+        Task SendVehicleChangeNotificationToAdminAsync(long vehicleId, string action);
+        Task SendUserStatusChangeNotificationToAdminAsync(long adminId, string affectedUserEmail, string newStatus);
     }
 }

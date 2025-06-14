@@ -16,6 +16,29 @@ namespace PrestigeRentals.Application.Services.Services
         private readonly int _smtpPort = 587;
         private readonly string _smtpUsername = "garret.hauck36@ethereal.email";
         private readonly string _smtpPassword = "83dKdH1D92st8MVMEM";
+        private readonly string _adminEmail = "PrestigeRentalsRO@gmail.com";
+
+        private async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
+        {
+            var smtpClient = new SmtpClient(_smtpHost)
+            {
+                Port = _smtpPort,
+                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
+                EnableSsl = true
+            };
+
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(_smtpUsername, "Prestige Rentals"),
+                Subject = subject,
+                Body = htmlBody,
+                IsBodyHtml = true
+            };
+
+            mailMessage.To.Add(toEmail);
+
+            await smtpClient.SendMailAsync(mailMessage);
+        }
 
         /// <summary>
         /// Sends a verification email with a one-time verification code.
@@ -118,6 +141,59 @@ namespace PrestigeRentals.Application.Services.Services
             mailMessage.To.Add(toEmail);
 
             await smtpClient.SendMailAsync(mailMessage);
+        }
+
+        public async Task SendContactFormTicketToAdminAsync(string userEmail, string message)
+        {
+            string body = $@"
+        <div style='font-family: Arial, sans-serif; padding: 20px;'>
+            <h2>New Contact Form Submission</h2>
+            <p><strong>From:</strong> {userEmail}</p>
+            <p><strong>Message:</strong></p>
+            <blockquote style='background:#f9f9f9; padding:10px; border-left: 4px solid #ccc;'>{message}</blockquote>
+        </div>";
+
+            await SendEmailAsync(_adminEmail, $"[Contact Form] New Submission", body);
+        }
+
+        public async Task SendReviewNotificationToAdminAsync(string userName, string userEmail, long vehicleId, int rating, string review)
+        {
+            string body = $@"
+        <div style='font-family: Arial, sans-serif; padding: 20px;'>
+            <h2>New Review Submitted</h2>
+            <p><strong>User:</strong> {userName} ({userEmail})</p>
+            <p><strong>Vehicle ID:</strong> {vehicleId}</p>
+            <p><strong>Rating:</strong> {rating}/5</p>
+            <p><strong>Review:</strong></p>
+            <blockquote style='background:#f9f9f9; padding:10px; border-left: 4px solid #ccc;'>{review}</blockquote>
+        </div>";
+
+            await SendEmailAsync(_adminEmail, $"[Review] Vehicle #{vehicleId} rated {rating}/5", body);
+        }
+
+        public async Task SendVehicleChangeNotificationToAdminAsync(long vehicleId, string action)
+        {
+            string body = $@"
+        <div style='font-family: Arial, sans-serif; padding: 20px;'>
+            <h2>Vehicle {action.ToUpper()} Notification</h2>
+            <p>A vehicle was <strong>{action}</strong>.</p>
+            <p><strong>Vehicle ID:</strong> {vehicleId}</p>
+        </div>";
+
+            await SendEmailAsync(_adminEmail, $"[Vehicle {action}] Vehicle ID #{vehicleId}", body);
+        }
+
+        public async Task SendUserStatusChangeNotificationToAdminAsync(long adminId, string affectedUserEmail, string newStatus)
+        {
+            string body = $@"
+        <div style='font-family: Arial, sans-serif; padding: 20px;'>
+            <h2>User Status Changed</h2>
+            <p><strong>Admin ID:</strong> {adminId}</p>
+            <p><strong>Affected User:</strong> {affectedUserEmail}</p>
+            <p><strong>New Status:</strong> {newStatus}</p>
+        </div>";
+
+            await SendEmailAsync(_adminEmail, $"[User Status Update] {affectedUserEmail} → {newStatus}", body);
         }
     }
 }
