@@ -96,7 +96,7 @@ namespace PrestigeRentals.Application.Services.Services
             if (user == null || string.IsNullOrEmpty(user.Email))
                 throw new InvalidOperationException("User email not found");
 
-            await _emailService.SendQrCodeEmailAsync(user.Email, bookingReference, qrData);
+            await _emailService.SendQrCodeEmailAsync(createOrderRequest.Email, bookingReference, qrData);
 
             Console.WriteLine($"[BACKEND] QR Data: {qrData}");
             _logger.LogInformation($"[BACKEND] QR Data: {qrData}");

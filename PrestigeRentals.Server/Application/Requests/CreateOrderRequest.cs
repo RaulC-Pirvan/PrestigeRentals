@@ -31,5 +31,8 @@ namespace PrestigeRentals.Application.Requests
         /// </summary>
         [Required]
         public DateTime EndTime { get; set; }
+
+        [Required]
+        public string Email { get; set; }
     }
 }

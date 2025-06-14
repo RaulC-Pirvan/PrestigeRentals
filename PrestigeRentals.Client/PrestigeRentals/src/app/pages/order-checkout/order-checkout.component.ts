@@ -94,7 +94,6 @@ export class OrderCheckoutComponent implements OnInit {
           this.checkoutForm.patchValue({
             firstName: firstName,
             lastName: lastName,
-            email: user.email,
           });
         }
       }
@@ -165,6 +164,7 @@ export class OrderCheckoutComponent implements OnInit {
       vehicleId: this.vehicleId,
       startTime: this.formatToISOString(this.startTime),
       endTime: this.formatToISOString(this.endTime),
+      email: this.checkoutForm.value.email,
     };
 
     this.http
@@ -191,6 +191,8 @@ export class OrderCheckoutComponent implements OnInit {
             expireDate: this.checkoutForm.value.expireDate,
             cvv: this.checkoutForm.value.cvv,
           };
+
+          console.log('📧 Email from form:', this.checkoutForm.value.email);
 
           this.bookingDataService.setBookingData({
             bookingReference: orderRes.bookingReference,
