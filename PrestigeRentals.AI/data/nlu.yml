@@ -1,0 +1,38 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hi
+    - hello
+    - hey
+    - good morning
+
+- intent: ask_available_cars
+  examples: |
+      - what cars are available?
+      - show me some cars
+      - do you have any vehicles?
+      - available rentals?
+
+- intent: recommend_vehicle
+  examples: |
+    - I need a car for a family
+    - what's best for a business trip?
+    - suggest a vehicle for mountain roads
+
+- intent: ask_by_features
+  examples: |
+    - I want a car with hill assist
+    - Do you have vehicles with cruise control?
+    - What cars come with heads up display?
+    - I need navigation and hill assist
+
+- intent: ask_by_specs
+  examples: |
+    - show me SUVs
+    - I need a sedan
+    - cars with automatic transmission
+    - I want something manual
+    - vehicles over 200 horsepower
+    - cars with at least 300 hp

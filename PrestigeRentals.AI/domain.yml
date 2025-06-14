@@ -1,0 +1,30 @@
+version: "3.1"
+
+intents:
+  - greet
+  - ask_available_cars
+  - recommend_vehicle
+  - ask_by_features
+  - ask_by_specs
+  
+responses:
+  utter_greet:
+    - text: "Hey! How can I help you with your car rental?"
+
+  utter_ask_available_cars:
+    - text: "Sure! Are you looking for a specific date or car type?"
+
+  utter_recommend_vehicle:
+    - text: "Tell me a bit more: how many people, what kind of trip?"
+
+  utter_goodbye:
+    - text: "Goodbye! Let me know if you need help renting a car."
+
+actions:
+    - action_ask_available_vehicles
+    - action_recommend_by_feature
+    - action_filter_by_specs
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
