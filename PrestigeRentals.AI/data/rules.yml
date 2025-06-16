@@ -20,3 +20,73 @@ rules:
   steps:
     - intent: ask_by_specs
     - action: action_filter_by_specs
+
+- rule: Answer payment FAQ
+  steps:
+    - intent: faq_payment
+    - action: utter_faq_payment
+
+- rule: Answer key FAQ
+  steps:
+    - intent: faq_keys
+    - action: utter_faq_keys
+
+- rule: Answer availability FAQ
+  steps:
+    - intent: faq_availability
+    - action: utter_faq_availability
+
+- rule: Answer review FAQ
+  steps:
+    - intent: faq_review
+    - action: utter_faq_review
+
+- rule: Answer contact FAQ
+  steps:
+    - intent: faq_contact
+    - action: utter_faq_contact
+
+- rule: Answer age FAQ
+  steps:
+    - intent: faq_age
+    - action: utter_faq_age
+
+- rule: Answer fuel FAQ
+  steps:
+    - intent: faq_fuel
+    - action: utter_faq_fuel
+
+- rule: Answer cancel FAQ
+  steps:
+    - intent: faq_cancel
+    - action: utter_faq_cancel
+
+- rule: Answer credit card FAQ
+  steps:
+    - intent: faq_creditcard
+    - action: utter_faq_creditcard
+
+- rule: Answer ID scan FAQ
+  steps:
+    - intent: faq_idscan
+    - action: utter_faq_idscan
+
+- rule: Answer international travel FAQ
+  steps:
+    - intent: faq_international
+    - action: utter_faq_international
+
+- rule: Answer early return FAQ
+  steps:
+    - intent: faq_early_return
+    - action: utter_faq_early_return
+
+- rule: Answer late return FAQ
+  steps:
+    - intent: faq_late_return
+    - action: utter_faq_late_return
+
+- rule: Answer stolen vehicle FAQ
+  steps:
+    - intent: faq_stolen
+    - action: utter_faq_stolen

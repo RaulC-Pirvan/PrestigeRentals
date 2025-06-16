@@ -28,6 +28,15 @@ export class ChatWidgetComponent {
 
   toggleChat() {
     this.chatOpen = !this.chatOpen;
+
+    if (this.chatOpen && this.messages.length === 0) {
+      this.messages.push({
+        sender: 'bot',
+        text: this.sanitizer.bypassSecurityTrustHtml(
+          "Hi, I'm <strong>Luna</strong>, your personal virtual assistant. How can I help you today?"
+        ),
+      });
+    }
   }
 
   sendMessage() {

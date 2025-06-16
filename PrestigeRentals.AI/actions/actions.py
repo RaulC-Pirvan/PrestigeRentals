@@ -24,12 +24,12 @@ class ActionGetAvailableVehicles(Action):
                 dispatcher.utter_message(text="Sorry, no vehicles are currently available.")
                 return []
 
-            message = "Here are some available vehicles:\n"
-            for v in vehicles[:5]:  # max 5 sugestii
+            message = "Here are some available vehicles:<ul>"
+            for v in vehicles[:5]:
                 link = f"/vehicle/{v['id']}"
-                name = f"{v['make']} {v['model']} ({v['chassis']})"
-                message += f"<li><span class='vehicle-link' data-link='{link}'>{name}</span></li>"
-
+                name = f"{v['make']} {v['model']}"
+                price = f"{v['pricePerDay']}€/day"
+                message += f"<li><a class='vehicle-link' data-link='{link}'>[{name}]</a> - {price}</li>"
             message += "</ul>"
 
             dispatcher.utter_message(text=message)
@@ -113,10 +113,13 @@ class ActionRecommendByFeature(Action):
                 dispatcher.utter_message(text="No vehicles match those features at the moment.")
                 return []
 
-            response = "Here are some cars with those features:\n"
+            response = "Here are some cars with those features:<ul>"
             for v in matching[:5]:
-                link = f"http://localhost:4200/vehicle/{v['id']}"
-                response += f"- [{v['make']} {v['model']}]({link}): {v['pricePerDay']}€/day\n"
+                link = f"/vehicle/{v['id']}"
+                name = f"{v['make']} {v['model']}"
+                price = f"{v['pricePerDay']}€/day"
+                response += f"<li><a class='vehicle-link' data-link='{link}'>[{name}]</a> - {price}</li>"
+            response += "</ul>"
 
             dispatcher.utter_message(text=response)
 
@@ -165,10 +168,13 @@ class ActionFilterBySpecs(Action):
             dispatcher.utter_message(text="No vehicles matched those specifications.")
             return []
 
-        response = "Here are some vehicles:\n"
+        response = "Here are some vehicles:<ul>"
         for v in filtered[:5]:
-            link = f"http://localhost:4200/vehicle/{v['id']}"
-            response += f"- [{v['make']} {v['model']}]({link}): {v['horsepower']}hp, {v['transmission']}, {v['chassis']}\n"
+            link = f"/vehicle/{v['id']}"
+            name = f"{v['make']} {v['model']}"
+            details = f"{v['horsepower']}hp, {v['pricePerDay']}€/day"
+            response += f"<li><a class='vehicle-link' data-link='{link}'>[{name}]</a> - {details}</li>"
+        response += "</ul>"
 
         dispatcher.utter_message(text=response)
         return []
