@@ -1,0 +1,88 @@
+@import "../../styles.scss";
+
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: $accent-colour;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  line-height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.chat-button:hover {
+  background: $primary-colour;
+}
+
+.chat-window {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  width: 300px;
+  height: 400px;
+  background: $primary-colour;
+  border: 1px solid $accent-colour;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  z-index: 1000;
+}
+
+.chat-header {
+  background: $accent-colour;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.chat-body .user {
+  text-align: right;
+  background-color: $secondary-colour;
+  color: $text-colour;
+  font-weight: 600;
+  margin: 5px 0;
+  padding: 10px;
+  width: 100%;
+  border-radius: 12px;
+}
+
+.chat-body .bot {
+  text-align: left;
+  color: $text-colour;
+  font-weight: 600;
+  padding: 10px;
+  margin: 5px 0;
+}
+
+.chat-input {
+  padding: 10px;
+  border-top: 1px solid $accent-colour;
+}
+
+.chat-input input {
+  width: 100%;
+  padding: 8px;
+}
+
+.chat-image {
+  max-width: 100%;
+  border-radius: 8px;
+  margin-top: 5px;
+}

@@ -1,9 +1,0 @@
-{
-  "lookup": {
-    "eJyLrq6NBQAEOAGx": "action_listen",
-    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohvSg1taS2NhYA6dwbhQ==": "utter_greet",
-    "eJyLrq7VUaguKEoti09MLsnMz7NSqIYw4vMSc1OtFKCcnMziktQ8oNrS4tQioJrMPCC3xEohvSg1taSWgBmlJSWpRfEQpbhMiAUAQvc0lw==": "action_listen",
-    "eJydjkEKwCAMBL/iA/oCv1JKSCWUUGtLEr2If69g70JvOzAMu9a2uPoIFcBgfCfv6hiQ8CLvPoisRqm7WUm6w6mjeXcIkbVJI5uRwFD/FSYvUE/AghxxjwQBRVvbXsvnU5s=": "action_ask_available_vehicles",
-    "eJydjkEKwzAMBL/iB/QF/koIQjVLKuK6QZJ9Mfl7DOmlp4TetDA7q6nvj9A3RSNOLp8SQz8PKvxGDN+QxRxlsNWgg5EyosewKOD7haO6Q+lE/zNcfMG2EjeWzM8MSqx2U/hbbHhJyrB7A/MBjxZ5AQ==": "action_listen"
-  }
-}

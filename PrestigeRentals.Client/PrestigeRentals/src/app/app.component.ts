@@ -10,10 +10,11 @@ import { NotificationService } from './services/notification.service';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from "./components/footer/footer.component";
+import { ChatWidgetComponent } from "./chat-widget/chat-widget.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, CommonModule, FooterComponent],
+  imports: [RouterOutlet, CommonModule, FooterComponent, ChatWidgetComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

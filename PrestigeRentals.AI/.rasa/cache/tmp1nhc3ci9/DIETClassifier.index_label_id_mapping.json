@@ -1,7 +1,0 @@
-{
-  "0": "ask_available_cars",
-  "1": "ask_by_features",
-  "2": "ask_by_specs",
-  "3": "greet",
-  "4": "recommend_vehicle"
-}
