@@ -25,9 +25,13 @@ class ActionGetAvailableVehicles(Action):
                 return []
 
             message = "Here are some available vehicles:\n"
-            for v in vehicles[:5]:  # Limit for readability
-                link = f"http://localhost:4200/vehicle/{v['id']}"
-                message += f"- {v['make']} {v['model']} ({v['chassis']}) ({link})\n"
+            for v in vehicles[:5]:  # max 5 sugestii
+                link = f"/vehicle/{v['id']}"
+                name = f"{v['make']} {v['model']} ({v['chassis']})"
+                message += f"<li><span class='vehicle-link' data-link='{link}'>{name}</span></li>"
+
+            message += "</ul>"
+
             dispatcher.utter_message(text=message)
 
         except Exception as e:

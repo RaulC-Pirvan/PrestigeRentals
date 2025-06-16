@@ -8,7 +8,7 @@
 
     <div class="chat-body" #chatBody>
         <div *ngFor="let msg of messages" [ngClass]="msg.sender">
-            <div *ngIf="msg.text"> {{ msg.text}} </div>
+            <div *ngIf="msg.text" [innerHtml]="msg.text"></div>
             <img *ngIf="msg.image" [src]="msg.image" class="chat-image">
         </div>
     </div>
