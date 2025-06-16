@@ -30,12 +30,9 @@ export class ChatWidgetComponent {
     this.chatOpen = !this.chatOpen;
 
     if (this.chatOpen && this.messages.length === 0) {
-      this.messages.push({
-        sender: 'bot',
-        text: this.sanitizer.bypassSecurityTrustHtml(
-          "Hi, I'm <strong>Luna</strong>, your personal virtual assistant. How can I help you today?"
-        ),
-      });
+      this.typeTextSlowly(
+        "Hi, I'm <strong>Luna</strong>, your personal virtual assistant. How can I help you today?"
+      );
     }
   }
 
@@ -56,13 +53,16 @@ export class ChatWidgetComponent {
       })
       .subscribe((response) => {
         response.forEach((res) => {
-          this.messages.push({
-            sender: 'bot',
-            text: res.text
-              ? this.sanitizer.bypassSecurityTrustHtml(res.text)
-              : '',
-            image: res.image,
-          });
+          if (res.text) {
+            this.typeTextSlowly(res.text);
+          }
+
+          if (res.image) {
+            this.messages.push({
+              sender: 'bot',
+              image: res.image,
+            });
+          }
         });
       });
 
@@ -90,9 +90,33 @@ export class ChatWidgetComponent {
         if (link) {
           this.router.navigate([link]);
           location.reload();
-          this.chatOpen = false; // închide chat-ul dacă vrei
+          this.chatOpen = false;
         }
       });
     });
+  }
+
+  typeTextSlowly(fullText: string, delay: number = 25) {
+    let current = '';
+    let index = 0;
+
+    const interval = setInterval(() => {
+      current += fullText[index++];
+      const partial = this.sanitizer.bypassSecurityTrustHtml(current);
+
+      if (
+        this.messages.length &&
+        this.messages[this.messages.length - 1].sender === 'bot' &&
+        !this.messages[this.messages.length - 1].image
+      ) {
+        this.messages[this.messages.length - 1].text = partial;
+      } else {
+        this.messages.push({ sender: 'bot', text: partial });
+      }
+
+      if (index >= fullText.length) {
+        clearInterval(interval);
+      }
+    }, delay);
   }
 }
