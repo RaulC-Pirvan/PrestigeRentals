@@ -519,6 +519,33 @@ namespace PrestigeRentals.Presentation.Controllers
 
                 string ocrText = page.GetText();
 
+                string ocrTextUpper = ocrText.ToUpperInvariant();
+
+                // Căutăm seria buletinului
+                bool hasSerieRegex = Regex.IsMatch(ocrTextUpper, @"\b[A-Z]{2}\d{6}\b");
+
+                // Căutăm prezența unor cuvinte cheie
+                bool looksLikeIdCard =
+                    ocrTextUpper.Contains("ROMANIA") ||
+                    ocrTextUpper.Contains("CARTE DE IDENTITATE") ||
+                    ocrTextUpper.Contains("SERIA") ||
+                    ocrTextUpper.Contains("NR") ||
+                    ocrTextUpper.Contains("NUME") ||
+                    ocrTextUpper.Contains("PRENUME") ||
+                    ocrTextUpper.Contains("SEX") ||
+                    ocrTextUpper.Contains("NATIONALITATE") ||
+                    ocrTextUpper.Contains("CNP") ||
+                    hasSerieRegex;
+
+                if (!looksLikeIdCard)
+                {
+                    return Ok(new
+                    {
+                        isAdult = false,
+                        message = "Documentul nu pare a fi un buletin valid (lipsesc elemente caracteristice)."
+                    });
+                }
+
                 // Caută CNP (13 cifre)
                 var match = Regex.Match(ocrText, @"\b\d{13}\b");
 
