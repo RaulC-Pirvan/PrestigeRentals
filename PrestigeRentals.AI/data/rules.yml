@@ -1,13 +1,22 @@
 version: "3.1"
 
 rules:
-
-- rule: Say goodbye anytime the user says goodbye
+- rule: Greet the user
   steps:
-  - intent: goodbye
-  - action: utter_goodbye
+    - intent: greet
+    - action: utter_greet
 
-- rule: Say 'I am a bot' anytime the user challenges
+- rule: Show available cars
   steps:
-  - intent: bot_challenge
-  - action: utter_iamabot
+    - intent: ask_available_cars
+    - action: action_ask_available_vehicles
+
+- rule: Recommend cars by features
+  steps:
+    - intent: ask_by_features
+    - action: action_recommend_by_feature
+
+- rule: Filter by specs
+  steps:
+    - intent: ask_by_specs
+    - action: action_filter_by_specs

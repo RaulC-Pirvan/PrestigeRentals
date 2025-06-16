@@ -1,30 +1,24 @@
 version: "3.1"
 
 stories:
-
-- story: happy path
+- story: greet and ask for cars
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_great
-  - action: utter_happy
+    - intent: greet
+    - action: utter_greet
+    - intent: ask_available_cars
+    - action: action_ask_available_vehicles
 
-- story: sad path 1
+- story: show available cars
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: affirm
-  - action: utter_happy
+    - intent: ask_available_cars
+    - action: action_ask_available_vehicles
 
-- story: sad path 2
+- story: recommend by features
   steps:
-  - intent: greet
-  - action: utter_greet
-  - intent: mood_unhappy
-  - action: utter_cheer_up
-  - action: utter_did_that_help
-  - intent: deny
-  - action: utter_goodbye
+    - intent: ask_by_features
+    - action: action_recommend_by_feature
+
+- story: filter by vehicle spec
+  steps:
+    - intent: ask_by_specs
+    - action: action_filter_by_specs

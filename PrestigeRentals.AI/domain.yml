@@ -2,32 +2,28 @@ version: "3.1"
 
 intents:
   - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-
+  - ask_available_cars
+  - recommend_vehicle
+  - ask_by_features
+  - ask_by_specs
+  
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+    - text: "Hey! How can I help you with your car rental?"
 
-  utter_cheer_up:
-  - text: "Here is something to cheer you up:"
-    image: "https://i.imgur.com/nGF1K8f.jpg"
+  utter_ask_available_cars:
+    - text: "Sure! Are you looking for a specific date or car type?"
 
-  utter_did_that_help:
-  - text: "Did that help you?"
-
-  utter_happy:
-  - text: "Great, carry on!"
+  utter_recommend_vehicle:
+    - text: "Tell me a bit more: how many people, what kind of trip?"
 
   utter_goodbye:
-  - text: "Bye"
+    - text: "Goodbye! Let me know if you need help renting a car."
 
-  utter_iamabot:
-  - text: "I am a bot, powered by Rasa."
+actions:
+    - action_ask_available_vehicles
+    - action_recommend_by_feature
+    - action_filter_by_specs
 
 session_config:
   session_expiration_time: 60
