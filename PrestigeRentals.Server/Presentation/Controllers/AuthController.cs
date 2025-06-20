@@ -501,77 +501,91 @@ namespace PrestigeRentals.Presentation.Controllers
         [HttpPost("extract-cnp/{userId}")]
         public IActionResult ExtractCnp(string userId)
         {
-            // Construim calea către poza buletinului
             var idCardPath = Path.Combine(RootImages, "user", userId, "idcard", "idcard.jpg");
 
             if (!System.IO.File.Exists(idCardPath))
+            {
+                Console.WriteLine($"[WARN] Fișierul buletinului nu a fost găsit: {idCardPath}");
                 return NotFound("Imaginea buletinului nu a fost găsită pentru acest user.");
+            }
 
             try
             {
-                // Prelucrare imagine cu OpenCV
-                var preprocessedPath = PreprocessImage(idCardPath);
+                Console.WriteLine($"[INFO] Începe procesarea OCR pentru user: {userId}");
 
-                // OCR cu Tesseract
+                var preprocessedPath = PreprocessImage(idCardPath);
+                Console.WriteLine($"[INFO] Imagine preprocesată salvată la: {preprocessedPath}");
+
                 using var engine = new TesseractEngine(tessDataPath, "ron", EngineMode.Default);
                 using var pix = Pix.LoadFromFile(preprocessedPath);
                 using var page = engine.Process(pix);
 
                 string ocrText = page.GetText();
-
                 string ocrTextUpper = ocrText.ToUpperInvariant();
 
-                // Căutăm seria buletinului
-                bool hasSerieRegex = Regex.IsMatch(ocrTextUpper, @"\b[A-Z]{2}\d{6}\b");
+                // Calcul scor încredere pe baza cuvintelor cheie
+                var keywords = new Dictionary<string, bool>
+        {
+            { "ROMANIA", ocrTextUpper.Contains("ROMANIA") },
+            { "CARTE DE IDENTITATE", ocrTextUpper.Contains("CARTE DE IDENTITATE") },
+            { "SERIA", ocrTextUpper.Contains("SERIA") },
+            { "NR", ocrTextUpper.Contains("NR") },
+            { "NUME", ocrTextUpper.Contains("NUME") },
+            { "PRENUME", ocrTextUpper.Contains("PRENUME") },
+            { "SEX", ocrTextUpper.Contains("SEX") },
+            { "NATIONALITATE", ocrTextUpper.Contains("NATIONALITATE") },
+            { "CNP", ocrTextUpper.Contains("CNP") },
+            { "SERIE BULETIN (regex)", Regex.IsMatch(ocrTextUpper, @"\b[A-Z]{2}\d{6}\b") }
+        };
 
-                // Căutăm prezența unor cuvinte cheie
-                bool looksLikeIdCard =
-                    ocrTextUpper.Contains("ROMANIA") ||
-                    ocrTextUpper.Contains("CARTE DE IDENTITATE") ||
-                    ocrTextUpper.Contains("SERIA") ||
-                    ocrTextUpper.Contains("NR") ||
-                    ocrTextUpper.Contains("NUME") ||
-                    ocrTextUpper.Contains("PRENUME") ||
-                    ocrTextUpper.Contains("SEX") ||
-                    ocrTextUpper.Contains("NATIONALITATE") ||
-                    ocrTextUpper.Contains("CNP") ||
-                    hasSerieRegex;
+                int matchedCount = keywords.Count(k => k.Value);
+                int total = keywords.Count;
+                int confidence = (int)((matchedCount / (double)total) * 100);
 
-                if (!looksLikeIdCard)
+                Console.WriteLine($"[INFO] Scor de încredere document: {confidence}%");
+                foreach (var kvp in keywords)
+                {
+                    Console.WriteLine($"[CHECK] {kvp.Key} -> {(kvp.Value ? "DA" : "NU")}");
+                }
+
+                if (confidence < 70)
                 {
                     return Ok(new
                     {
                         isAdult = false,
-                        message = "Documentul nu pare a fi un buletin valid (lipsesc elemente caracteristice)."
+                        confidence,
+                        message = "Documentul nu pare a fi un buletin valid (scor sub 70%)."
                     });
                 }
 
-                // Caută CNP (13 cifre)
                 var match = Regex.Match(ocrText, @"\b\d{13}\b");
 
-                // Șterge fișierul ID card original
                 try
                 {
                     System.IO.File.Delete(idCardPath);
+                    Console.WriteLine($"[INFO] Fișierul original {idCardPath} a fost șters.");
                 }
                 catch (Exception deleteEx)
                 {
-                    // Opțional: log, dar nu bloca flow-ul dacă nu se poate șterge
-                    Console.WriteLine($"Eroare la ștergerea fișierului: {deleteEx.Message}");
+                    Console.WriteLine($"[WARN] Eroare la ștergerea fișierului: {deleteEx.Message}");
                 }
 
                 if (match.Success)
                 {
-                    bool isAdult = IsAdultBasedOnCnp(match.Value);
-                    return Ok(new { isAdult });
+                    string cnp = match.Value;
+                    bool isAdult = IsAdultBasedOnCnp(cnp);
+                    Console.WriteLine($"[INFO] CNP detectat: {cnp} | Adult: {(isAdult ? "DA" : "NU")}");
+                    return Ok(new { isAdult, confidence });
                 }
                 else
                 {
-                    return Ok(new { isAdult = false, message = "CNP nu a fost detectat." });
+                    Console.WriteLine("[WARN] CNP nu a fost detectat.");
+                    return Ok(new { isAdult = false, confidence, message = "CNP nu a fost detectat." });
                 }
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"[ERROR] Eroare în OCR: {ex.Message}");
                 return StatusCode(500, "A apărut o eroare: " + ex.Message);
             }
         }
