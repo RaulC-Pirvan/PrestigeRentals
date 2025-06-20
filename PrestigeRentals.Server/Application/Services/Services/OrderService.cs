@@ -85,7 +85,8 @@ namespace PrestigeRentals.Application.Services.Services
                 TotalCost = totalCost,
                 BookingReference = bookingReference,
                 QrCodeData = qrData,
-                QrCodeBase64Image = base64ImageSrc
+                QrCodeBase64Image = base64ImageSrc,
+                IsUsed = false
             };
 
             // ✅ Save the order with all required data
@@ -112,7 +113,8 @@ namespace PrestigeRentals.Application.Services.Services
                 TotalCost = order.TotalCost,
                 BookingReference = bookingReference,
                 QrCodeData = qrData,
-                QrCodeBase64Image = base64ImageSrc // ✅ add this
+                QrCodeBase64Image = base64ImageSrc, // ✅ add this
+                IsUsed = false
             };
         }
 

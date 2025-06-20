@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using PrestigeRentals.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using PrestigeRentals.Infrastructure.Persistence;
+using System.Drawing;
+using ZXing;
+using ZXing.Windows.Compatibility;
 
 namespace PrestigeRentals.Presentation.Controllers
 {
@@ -127,6 +125,51 @@ namespace PrestigeRentals.Presentation.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("booking/validate-qrcode")]
+        public async Task<IActionResult> ValidateQrCode(IFormFile qrImage)
+        {
+            if (qrImage == null || qrImage.Length == 0)
+                return BadRequest("QR Image is missing.");
+
+            try
+            {
+                var tempPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName() + Path.GetExtension(qrImage.FileName));
+                await using (var stream = new FileStream(tempPath, FileMode.Create))
+                {
+                    await qrImage.CopyToAsync(stream);
+                }
+
+                var qrText = DecodeQrCode(tempPath);
+                qrText = qrText?.Trim();
+
+                Console.WriteLine($"[DEBUG] Cod QR extras: {qrText}");
+
+                var bookingRef = ExtractBookingReference(qrText);
+
+                Console.WriteLine($"[DEBUG] BookingReference extras: {bookingRef}");
+
+                if (string.IsNullOrEmpty(bookingRef))
+                    return BadRequest(new { isValid = false, message = "Formatul codului QR este invalid." });
+
+                // Caută comanda doar pe BookingReference
+                var booking = await _dbContext.Orders
+                  .FirstOrDefaultAsync(o => o.BookingReference == bookingRef);
+
+                if (booking == null)
+                    return Ok(new { isValid = false, message = "Comanda nu a fost găsită sau nu este activă în acest moment." });
+
+                // Marchează comanda ca folosită
+                booking.IsUsed = true;
+                await _dbContext.SaveChangesAsync();
+
+                return Ok(new { isValid = true, message = "Acces validat cu succes." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { isValid = false, message = "A apărut o eroare internă.", error = ex.Message });
             }
         }
 
@@ -266,6 +309,21 @@ namespace PrestigeRentals.Presentation.Controllers
                 ".gif" => "image/gif",
                 _ => "application/octet-stream"
             };
+        }
+
+
+        private string DecodeQrCode(string imagePath)
+        {
+            var reader = new BarcodeReader(); // din ZXing.Windows.Compatibility
+            using var bitmap = (Bitmap)Image.FromFile(imagePath);
+            var result = reader.Decode(bitmap);
+            return result?.Text;
+        }
+
+        private string ExtractBookingReference(string qrText)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(qrText, @"BookingRef:(PR-[A-Z0-9]+)");
+            return match.Success ? match.Groups[1].Value : null;
         }
     }
 }

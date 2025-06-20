@@ -63,5 +63,8 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public bool ReviewReminderSet { get; set; } = false;
 
+        [Required]
+        public bool IsUsed { get; set; } = false;
+
     }
 }

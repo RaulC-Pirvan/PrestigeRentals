@@ -44,5 +44,7 @@ namespace PrestigeRentals.Application.DTO
         public string QrCodeData { get; set; }
 
         public string QrCodeBase64Image { get; set; }
+
+        public bool IsUsed { get; set; }
     }
 }
