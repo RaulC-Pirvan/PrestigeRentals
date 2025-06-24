@@ -20,11 +20,24 @@ namespace PrestigeRentals.Application.Requests
         /// </summary>
         public string? Model { get; set; }
 
+        /// <summary>
+        /// Gets or sets the chassis identifier or type of the vehicle.
+        /// This is an optional field for updating the vehicle.
+        /// </summary>
         public string? Chassis { get; set; }
 
+        /// <summary>
+        /// Gets or sets the daily rental price of the vehicle.
+        /// This is an optional field for updating the vehicle.
+        /// </summary>
         public decimal? PricePerDay { get; set; }
 
+        /// <summary>
+        /// Gets or sets the horsepower of the vehicle.
+        /// This is an optional field for updating the vehicle.
+        /// </summary>
         public int? Horsepower { get; set; }
+
         /// <summary>
         /// Gets or sets the engine size of the vehicle (e.g., 2.5, 3.0).
         /// This is an optional field for updating the vehicle.

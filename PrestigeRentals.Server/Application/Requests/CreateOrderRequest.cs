@@ -32,6 +32,10 @@ namespace PrestigeRentals.Application.Requests
         [Required]
         public DateTime EndTime { get; set; }
 
+        /// <summary>
+        /// Gets or sets the email address associated with the order.
+        /// This is typically used to send confirmation details.
+        /// </summary>
         [Required]
         public string Email { get; set; }
     }

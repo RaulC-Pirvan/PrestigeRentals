@@ -17,11 +17,20 @@ namespace PrestigeRentals.Application.Requests
         /// Gets or sets the model of the vehicle (e.g., Camry, Focus, etc.).
         /// </summary>
         public string Model { get; set; }
-        
+
+        /// <summary>
+        /// Gets or sets the chassis identifier or body type of the vehicle.
+        /// </summary>
         public string Chassis { get; set; }
 
+        /// <summary>
+        /// Gets or sets the daily rental price of the vehicle.
+        /// </summary>
         public decimal PricePerDay { get; set; }
 
+        /// <summary>
+        /// Gets or sets the horsepower of the vehicle.
+        /// </summary>
         public int Horsepower { get; set; }
 
         /// <summary>
