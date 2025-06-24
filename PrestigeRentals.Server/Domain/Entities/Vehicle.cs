@@ -26,9 +26,15 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public string Model { get; set; }
 
+        /// <summary>
+        /// Chassis type or identifier (e.g., Sedan, SUV, Coupe).
+        /// </summary>
         [Required]
         public string Chassis { get; set; }
 
+        /// <summary>
+        /// The engine's horsepower rating.
+        /// </summary>
         [Required]
         public int Horsepower { get; set; }
 
@@ -61,15 +67,17 @@ namespace PrestigeRentals.Domain.Entities
         /// </summary>
         [Required]
         public bool Deleted { get; set; } = false;
-        
+
         /// <summary>
-        /// Indicates wheter the vehicle is currently available for renting.
+        /// Indicates whether the vehicle is currently available for rent.
         /// </summary>
         [Required]
         public bool Available { get; set; } = true;
 
+        /// <summary>
+        /// Rental price per day for the vehicle.
+        /// </summary>
         [Required]
         public decimal PricePerDay { get; set; }
-
     }
 }

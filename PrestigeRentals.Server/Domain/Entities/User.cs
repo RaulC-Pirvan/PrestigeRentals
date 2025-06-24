@@ -40,26 +40,29 @@ namespace PrestigeRentals.Domain.Entities
         public bool Active { get; set; } = true;
 
         /// <summary>
-        /// Indicates if the user is soft-deleted.
+        /// Indicates if the user account is soft-deleted.
         /// </summary>
         [Required]
         public bool Deleted { get; set; } = false;
 
         /// <summary>
-        /// Code sent to the user's email for verification.
+        /// Code sent to the user's email for verification purposes.
         /// </summary>
         public string? EmailVerificationCode { get; set; }
 
         /// <summary>
-        /// Expiry date/time for the verification code.
+        /// Expiration timestamp for the verification code.
         /// </summary>
         public DateTime? VerificationCodeExpiry { get; set; }
 
         /// <summary>
-        /// Indicates whether the user's email has been confirmed.
+        /// Indicates whether the user's email has been verified.
         /// </summary>
         public bool EmailConfirmed { get; set; } = false;
 
+        /// <summary>
+        /// Indicates whether the user is banned from accessing the platform.
+        /// </summary>
         public bool Banned { get; set; } = false;
     }
 }

@@ -38,33 +38,52 @@ namespace PrestigeRentals.Domain.Entities
         [Required]
         public DateTime EndTime { get; set; }
 
+        /// <summary>
+        /// Gets or sets the price per day for the rented vehicle.
+        /// </summary>
         [Required]
         public decimal PricePerDay { get; set; }
 
+        /// <summary>
+        /// Gets or sets the total cost for the rental period.
+        /// </summary>
         [Required]
         public decimal TotalCost { get; set; }
 
         /// <summary>
         /// Gets or sets a flag indicating whether the order has been cancelled.
-        /// Default value is false.
         /// </summary>
         [Required]
         public bool IsCancelled { get; set; } = false;
 
+        /// <summary>
+        /// Gets or sets the unique booking reference string associated with this order.
+        /// </summary>
         [Required]
         public string BookingReference { get; set; }
 
+        /// <summary>
+        /// Gets or sets the data encoded in the QR code for this order.
+        /// </summary>
         [Required]
         public string QrCodeData { get; set; }
 
+        /// <summary>
+        /// Gets or sets the base64-encoded PNG image of the QR code.
+        /// </summary>
         [Required]
         public string QrCodeBase64Image { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether a review reminder has been sent for this order.
+        /// </summary>
         [Required]
         public bool ReviewReminderSet { get; set; } = false;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the order has been used (e.g., vehicle picked up).
+        /// </summary>
         [Required]
         public bool IsUsed { get; set; } = false;
-
     }
 }
