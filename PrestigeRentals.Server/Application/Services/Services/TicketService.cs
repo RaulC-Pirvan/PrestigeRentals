@@ -11,14 +11,28 @@ using PrestigeRentals.Domain.Interfaces;
 
 namespace PrestigeRentals.Application.Services.Services
 {
+    /// <summary>
+    /// Service responsible for managing user support tickets, including creation and retrieval.
+    /// Implements <see cref="ITicketService"/>.
+    /// </summary>
     public class TicketService : ITicketService
     {
         private readonly ITicketRepository _ticketRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TicketService"/> class.
+        /// </summary>
+        /// <param name="ticketRepository">The repository used for ticket data access.</param>
         public TicketService(ITicketRepository ticketRepository)
         {
             _ticketRepository = ticketRepository;
         }
+
+        /// <summary>
+        /// Creates a new support ticket based on the provided request data.
+        /// </summary>
+        /// <param name="request">The ticket creation request containing user input.</param>
+        /// <returns>The ID of the newly created ticket.</returns>
         public async Task<long> CreateTicketAsync(CreateTicketRequest request)
         {
             var ticket = new Ticket
@@ -34,6 +48,11 @@ namespace PrestigeRentals.Application.Services.Services
             return ticket.Id;
         }
 
+
+        /// <summary>
+        /// Retrieves all submitted support tickets.
+        /// </summary>
+        /// <returns>A list of all tickets represented as DTOs.</returns>
         public async Task<List<TicketDTO>> GetAllTicketsAsync()
         {
             var tickets = await _ticketRepository.GetAllAsync();
@@ -49,6 +68,12 @@ namespace PrestigeRentals.Application.Services.Services
             }).ToList();
         }
 
+
+        /// <summary>
+        /// Retrieves a specific support ticket by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the ticket to retrieve.</param>
+        /// <returns>The matching ticket as a DTO, or null if not found.</returns>
         public async Task<TicketDTO> GetTicketByIdAsync(long id)
         {
             var ticket = await _ticketRepository.GetByIdAsync(id);

@@ -306,6 +306,13 @@ namespace PrestigeRentals.Application.Services.Services
 
             return vehicleDTO;
         }
+
+        /// <summary>
+        /// Applies updates from the request to the vehicle entity.
+        /// Only non-null values in the request are applied.
+        /// </summary>
+        /// <param name="vehicle">The vehicle entity to update.</param>
+        /// <param name="request">The update request containing new values.</param>
         private void UpdateVehicleProperties(Vehicle vehicle, VehicleUpdateRequest request)
         {
             vehicle.Make = request.Make ?? vehicle.Make;
@@ -318,6 +325,12 @@ namespace PrestigeRentals.Application.Services.Services
             vehicle.Transmission = request.Transmission ?? vehicle.Transmission;
         }
 
+        /// <summary>
+        /// Applies updates from the request to the vehicle options entity.
+        /// Only non-null values in the request are applied.
+        /// </summary>
+        /// <param name="vehicleOptions">The vehicle options entity to update.</param>
+        /// <param name="request">The update request containing new option values.</param>
         private void UpdateVehicleOptionsProperties(VehicleOptions vehicleOptions, VehicleUpdateRequest request)
         {
             vehicleOptions.Navigation = request.Navigation ?? vehicleOptions.Navigation;
@@ -326,6 +339,12 @@ namespace PrestigeRentals.Application.Services.Services
             vehicleOptions.CruiseControl = request.CruiseControl ?? vehicleOptions.CruiseControl;
         }
 
+        /// <summary>
+        /// Retrieves a list of vehicles along with their availability status at a specified point in time.
+        /// </summary>
+        /// <param name="now">The timestamp to check for active orders.</param>
+        /// <param name="onlyActive">Optional flag to filter only active vehicles.</param>
+        /// <returns>A list of <see cref="VehicleAvailabilityDTO"/> objects with availability information.</returns>
         public async Task<List<VehicleAvailabilityDTO>> GetVehiclesWithAvailability(DateTime now, bool? onlyActive = false)
         {
             var vehicles = await _vehicleRepository.GetAllVehiclesAsync(onlyActive);
@@ -353,6 +372,13 @@ namespace PrestigeRentals.Application.Services.Services
             return vehicleAvailability;
         }
 
+        /// <summary>
+        /// Retrieves a list of vehicle IDs that have similar characteristics, excluding a specific vehicle ID.
+        /// </summary>
+        /// <param name="excludeId">The ID of the vehicle to exclude from results.</param>
+        /// <param name="chassis">The chassis type to match against.</param>
+        /// <param name="transmission">The transmission type to match against.</param>
+        /// <returns>A task representing the asynchronous operation, containing a list of matching vehicle IDs.</returns>
         public Task<List<long>> GetSimilarVehicleIdsAsync(long excludeId, string chassis, string transmission)
         {
             return _vehicleRepository.GetSimilarVehicleIdsAsync(excludeId, chassis, transmission);

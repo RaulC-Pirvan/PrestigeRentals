@@ -242,6 +242,12 @@ namespace PrestigeRentals.Application.Services.Services
             return true;
         }
 
+
+        /// <summary>
+        /// Ensures the user and their details exist and are marked as active.
+        /// </summary>
+        /// <param name="userId">The ID of the user to validate.</param>
+        /// <exception cref="UserNotFoundException">Thrown if the user or their details are not found or inactive.</exception>
         private async Task EnsureUserExists(long userId)
         {
             bool userAlive = await _userRepository.IsAliveAsync(userId);
@@ -254,6 +260,12 @@ namespace PrestigeRentals.Application.Services.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves the user's profile information including first name, last name, and role.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A <see cref="UserProfileDTO"/> containing the user's profile data.</returns>
+        /// <exception cref="Exception">Thrown if the user or their details are not found.</exception>
         public async Task<UserProfileDTO> GetUserProfile(long userId)
         {
             var user = await _userRepository.GetUserById(userId);
@@ -273,6 +285,10 @@ namespace PrestigeRentals.Application.Services.Services
             };
         }
 
+        /// <summary>
+        /// Retrieves a list of all users in the system, including role, email, and status flags.
+        /// </summary>
+        /// <returns>A list of <see cref="UserDTO"/> objects representing all registered users.</returns>
         public async Task<List<UserDTO>> GetAllUsersAsync()
         {
             return await _dbContext.Users
@@ -291,6 +307,12 @@ namespace PrestigeRentals.Application.Services.Services
                .ToListAsync();
         }
 
+
+        /// <summary>
+        /// Retrieves the user entity by ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user to retrieve.</param>
+        /// <returns>The <see cref="User"/> entity, or null if not found.</returns>
         public async Task<User> GetUserByIdAsync(long userId)
         {
             return await _userRepository.GetUserById(userId);

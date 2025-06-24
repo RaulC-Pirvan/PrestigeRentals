@@ -20,10 +20,16 @@ namespace PrestigeRentals.Application.Services.Services
         private readonly IEmailService _emailService;
         private readonly IUserRepository _userRepository;
         private readonly ILogger<OrderService> _logger;
+
         /// <summary>
-        /// Constructor to initialize the service with the order repository.
+        /// Initializes a new instance of the <see cref="OrderService"/>.
         /// </summary>
-        /// <param name="orderRepository">The repository used to interact with the order data.</param>
+        /// <param name="orderRepository">Service for accessing order data.</param>
+        /// <param name="vehicleRepository">Service for accessing vehicle data.</param>
+        /// <param name="emailService">Service for sending transactional emails.</param>
+        /// <param name="userRepository">Service for accessing user data.</param>
+        /// <param name="logger">Logger instance for tracking operations.</param>
+
         public OrderService(IOrderRepository orderRepository, IVehicleRepository vehicleRepository, IEmailService emailService, IUserRepository userRepository, ILogger<OrderService> logger)
         {
             _orderRepository = orderRepository;
@@ -70,11 +76,10 @@ namespace PrestigeRentals.Application.Services.Services
             var endTime = DateTime.SpecifyKind(createOrderRequest.EndTime, DateTimeKind.Utc);
 
             var qrData = $"BookingRef:{bookingReference};VehicleId:{createOrderRequest.VehicleId};Start:{startTime:O};End:{endTime:O}";
-            var qrBytes = GenerateQrCodeBytes(qrData); // You already have this method in use
+            var qrBytes = GenerateQrCodeBytes(qrData); 
             var base64Qr = Convert.ToBase64String(qrBytes);
             var base64ImageSrc = $"data:image/png;base64,{base64Qr}";
 
-            // ✅ Include QrCodeData here BEFORE saving
             var order = new Order
             {
                 UserId = createOrderRequest.UserId,
@@ -89,7 +94,6 @@ namespace PrestigeRentals.Application.Services.Services
                 IsUsed = false
             };
 
-            // ✅ Save the order with all required data
             await _orderRepository.AddAsync(order);
             await _vehicleRepository.UpdateAsync(vehicle);
 
@@ -113,7 +117,7 @@ namespace PrestigeRentals.Application.Services.Services
                 TotalCost = order.TotalCost,
                 BookingReference = bookingReference,
                 QrCodeData = qrData,
-                QrCodeBase64Image = base64ImageSrc, // ✅ add this
+                QrCodeBase64Image = base64ImageSrc,
                 IsUsed = false
             };
         }
@@ -202,6 +206,11 @@ namespace PrestigeRentals.Application.Services.Services
             return true;
         }
 
+        /// <summary>
+        /// Retrieves all orders associated with a specific user.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A collection of order DTOs belonging to the specified user.</returns>
         public async Task<IEnumerable<OrderDTO>> GetOrdersByUserIdAsync(long userId)
         {
             var orders = await _orderRepository.GetOrdersByUserIdAsync(userId);
@@ -220,6 +229,11 @@ namespace PrestigeRentals.Application.Services.Services
             return orderDTOs;
         }
 
+        /// <summary>
+        /// Generates a QR code as a PNG byte array from the provided string data.
+        /// </summary>
+        /// <param name="data">The string to encode in the QR code.</param>
+        /// <returns>A byte array representing the generated QR code in PNG format.</returns>
         private byte[] GenerateQrCodeBytes(string data)
         {
             using (var qrGenerator = new QRCoder.QRCodeGenerator())

@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace PrestigeRentals.Application.Services.Services
 {
+    /// <summary>
+    /// Background service responsible for maintaining vehicle availability based on active and expired rental orders.
+    /// It also sends post-rental review reminders to users.
+    /// </summary>
     public class OrderExpirationService : IOrderExpirationService
     {
 
@@ -17,6 +21,12 @@ namespace PrestigeRentals.Application.Services.Services
         private readonly ILogger<OrderExpirationService> _logger;
         private readonly IEmailService _emailService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OrderExpirationService"/> class.
+        /// </summary>
+        /// <param name="dbContext">The application's database context.</param>
+        /// <param name="logger">The logger used for tracking operations and diagnostics.</param>
+        /// <param name="emailService">The email service used to send review requests.</param>
         public OrderExpirationService(ApplicationDbContext dbContext, ILogger<OrderExpirationService> logger, IEmailService emailService)
         {
             _dbContext = dbContext;
@@ -24,6 +34,12 @@ namespace PrestigeRentals.Application.Services.Services
             _emailService = emailService;
         }
 
+        /// <summary>
+        /// Scans for orders that have just become active or expired, updates vehicle availability accordingly,
+        /// and sends review request emails for completed rentals if not already sent.
+        /// </summary>
+        /// <param name="cancellationToken">A token to cancel the operation.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
         public async Task UpdateExpiredOrderAsync(CancellationToken cancellationToken)
         {
             var now = DateTime.UtcNow;

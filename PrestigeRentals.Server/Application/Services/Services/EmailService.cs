@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace PrestigeRentals.Application.Services.Services
 {
+    /// <summary>
+    /// Implementation of the <see cref="IEmailService"/> that uses SMTP to send various transactional emails 
+    /// (verification codes, booking confirmations, admin notifications, etc.).
+    /// </summary>
     public class EmailService : IEmailService
     {
         private readonly string _smtpHost = "smtp.ethereal.email";
@@ -18,6 +22,12 @@ namespace PrestigeRentals.Application.Services.Services
         private readonly string _smtpPassword = "83dKdH1D92st8MVMEM";
         private readonly string _adminEmail = "PrestigeRentalsRO@gmail.com";
 
+        /// <summary>
+        /// Sends a basic HTML email using SMTP.
+        /// </summary>
+        /// <param name="toEmail">The recipient's email address.</param>
+        /// <param name="subject">The subject of the email.</param>
+        /// <param name="htmlBody">The HTML body of the email.</param>
         private async Task SendEmailAsync(string toEmail, string subject, string htmlBody)
         {
             var smtpClient = new SmtpClient(_smtpHost)
@@ -73,6 +83,11 @@ namespace PrestigeRentals.Application.Services.Services
 
         }
 
+        /// <summary>
+        /// Sends an email to the user containing their newly generated password.
+        /// </summary>
+        /// <param name="toEmail">The recipient's email address.</param>
+        /// <param name="newPassword">The new password to include in the email.</param>
         public async Task SendNewPasswordEmailAsync(string toEmail, string newPassword)
         {
             var smtpClient = new SmtpClient(_smtpHost)
@@ -102,6 +117,11 @@ namespace PrestigeRentals.Application.Services.Services
 
         }
 
+        /// <summary>
+        /// Generates a QR code as a PNG byte array from the specified string data.
+        /// </summary>
+        /// <param name="data">The data to encode into the QR code.</param>
+        /// <returns>A byte array representing the PNG image of the QR code.</returns>
         private byte[] GenerateQrCodeBytes(string data)
         {
             using var qrGenerator = new QRCodeGenerator();
@@ -110,6 +130,12 @@ namespace PrestigeRentals.Application.Services.Services
             return qrCode.GetGraphic(20);
         }
 
+        /// <summary>
+        /// Sends a booking confirmation email to the user, including a QR code image for vehicle pickup.
+        /// </summary>
+        /// <param name="toEmail">The recipient's email address.</param>
+        /// <param name="bookingReference">The booking reference code.</param>
+        /// <param name="qrData">The string encoded in the QR code.</param>
         public async Task SendQrCodeEmailAsync(string toEmail, string bookingReference, string qrData)
         {
             var qrBytes = GenerateQrCodeBytes(qrData);
@@ -143,6 +169,11 @@ namespace PrestigeRentals.Application.Services.Services
             await smtpClient.SendMailAsync(mailMessage);
         }
 
+        /// <summary>
+        /// Sends a contact form submission to the admin email.
+        /// </summary>
+        /// <param name="userEmail">The email of the user who submitted the form.</param>
+        /// <param name="message">The message content.</param>
         public async Task SendContactFormTicketToAdminAsync(string userEmail, string message)
         {
             string body = $@"
@@ -156,6 +187,13 @@ namespace PrestigeRentals.Application.Services.Services
             await SendEmailAsync(_adminEmail, $"[Contact Form] New Submission", body);
         }
 
+        /// <summary>
+        /// Notifies the admin when a new review is submitted for a vehicle.
+        /// </summary>
+        /// <param name="userEmail">The email of the user who submitted the review.</param>
+        /// <param name="vehicleId">The ID of the reviewed vehicle.</param>
+        /// <param name="rating">The rating provided by the user.</param>
+        /// <param name="review">The textual review content.</param>
         public async Task SendReviewNotificationToAdminAsync(string userEmail, long vehicleId, int rating, string review)
         {
             string body = $@"
@@ -171,6 +209,11 @@ namespace PrestigeRentals.Application.Services.Services
             await SendEmailAsync(_adminEmail, $"[Review] Vehicle #{vehicleId} rated {rating}/5", body);
         }
 
+        /// <summary>
+        /// Notifies the admin of changes to a vehicle's status (e.g., added, updated, deleted).
+        /// </summary>
+        /// <param name="vehicleId">The vehicle's ID.</param>
+        /// <param name="action">The type of action (e.g., "added", "updated", "deleted").</param>
         public async Task SendVehicleChangeNotificationToAdminAsync(long vehicleId, string action)
         {
             string body = $@"
@@ -183,6 +226,11 @@ namespace PrestigeRentals.Application.Services.Services
             await SendEmailAsync(_adminEmail, $"[Vehicle {action}] Vehicle ID #{vehicleId}", body);
         }
 
+        /// <summary>
+        /// Notifies the admin when a user's account status changes (e.g., banned, reactivated).
+        /// </summary>
+        /// <param name="affectedUserEmail">The email of the user whose status changed.</param>
+        /// <param name="newStatus">The new status (e.g., "banned", "active").</param>
         public async Task SendUserStatusChangeNotificationToAdminAsync(string affectedUserEmail, string newStatus)
         {
             string body = $@"
@@ -195,6 +243,12 @@ namespace PrestigeRentals.Application.Services.Services
             await SendEmailAsync(_adminEmail, $"[User Status Update] {affectedUserEmail} → {newStatus}", body);
         }
 
+        /// <summary>
+        /// Sends an email asking the user to leave a review for a recently completed rental.
+        /// </summary>
+        /// <param name="userEmail">The email address of the user.</param>
+        /// <param name="vehicleName">The name of the rented vehicle.</param>
+        /// <param name="orderId">The ID of the completed order.</param>
         public async Task SendReviewRequestEmailAsync(string userEmail, string vehicleName, long orderId)
         {
             var reviewLink = $"localhost:4200/review?orderId={orderId}";
