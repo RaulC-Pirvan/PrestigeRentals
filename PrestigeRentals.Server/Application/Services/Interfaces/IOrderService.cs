@@ -37,6 +37,11 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <returns>A boolean value indicating whether the cancellation was successful.</returns>
         Task<bool> CancelOrder(long id);
 
+        /// <summary>
+        /// Retrieves all orders placed by a specific user.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose orders should be fetched.</param>
+        /// <returns>A collection of order DTOs associated with the specified user.</returns>
         Task<IEnumerable<OrderDTO>> GetOrdersByUserIdAsync(long userId);
     }
 }

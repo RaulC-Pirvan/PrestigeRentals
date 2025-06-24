@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using PrestigeRentals.Application.DTO;
 using PrestigeRentals.Application.Requests;
-using PrestigeRentals.Domain.Entities;
 
 namespace PrestigeRentals.Application.Services.Interfaces
 {
@@ -14,14 +14,14 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// Promotes a user to an admin role.
         /// </summary>
         /// <param name="userId">The ID of the user to be promoted.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <returns>True if the operation was successful; otherwise, false.</returns>
         Task<bool> MakeAdmin(long userId);
 
         /// <summary>
         /// Reverts a user from an admin role to a regular user.
         /// </summary>
         /// <param name="userId">The ID of the user to be reverted.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <returns>True if the operation was successful; otherwise, false.</returns>
         Task<bool> RevertToUser(long userId);
 
         /// <summary>
@@ -29,49 +29,58 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// </summary>
         /// <param name="userId">The ID of the user whose password will be changed.</param>
         /// <param name="oldPassword">The user's current password.</param>
-        /// <param name="newPassword">The new password to be set for the user.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <param name="newPassword">The new password to be set.</param>
+        /// <returns>True if the password change was successful; otherwise, false.</returns>
         Task<bool> ChangePassword(long userId, string oldPassword, string newPassword);
 
         /// <summary>
         /// Changes the email address for a user.
         /// </summary>
-        /// <param name="userId">The ID of the user whose email will be changed.</param>
-        /// <param name="newEmail">The new email address to be set for the user.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <param name="userId">The ID of the user whose email will be updated.</param>
+        /// <param name="newEmail">The new email address to set.</param>
+        /// <returns>True if the email change was successful; otherwise, false.</returns>
         Task<bool> ChangeEmail(long userId, string newEmail);
 
         /// <summary>
-        /// Deactivates the account of a user.
+        /// Deactivates the account of a user (soft ban).
         /// </summary>
-        /// <param name="userId">The ID of the user whose account will be deactivated.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <param name="userId">The ID of the user to deactivate.</param>
+        /// <returns>True if the account was successfully deactivated; otherwise, false.</returns>
         Task<bool> DeactivateAccount(long userId);
 
         /// <summary>
-        /// Activates the account of a deactivated user.
+        /// Reactivates the account of a previously deactivated user.
         /// </summary>
-        /// <param name="userId">The ID of the user whose account will be activated.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <param name="userId">The ID of the user to reactivate.</param>
+        /// <returns>True if the account was successfully reactivated; otherwise, false.</returns>
         Task<bool> ActivateAccount(long userId);
 
         /// <summary>
-        /// Deletes the account of a user.
+        /// Permanently deletes the account of a user.
         /// </summary>
-        /// <param name="userId">The ID of the user whose account will be deleted.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <param name="userId">The ID of the user to delete.</param>
+        /// <returns>True if the account was successfully deleted; otherwise, false.</returns>
         Task<bool> DeleteAccount(long userId);
 
         /// <summary>
-        /// Updates the details of a user (e.g., first name, last name).
+        /// Updates profile information for a user, such as name and other editable details.
         /// </summary>
-        /// <param name="userId">The ID of the user whose details will be updated.</param>
-        /// <param name="updateUserDetailsRequest">The request containing the new details for the user.</param>
-        /// <returns>A task representing the asynchronous operation, with a boolean result indicating success.</returns>
+        /// <param name="userId">The ID of the user being updated.</param>
+        /// <param name="updateUserDetailsRequest">The updated profile information.</param>
+        /// <returns>True if the update was successful; otherwise, false.</returns>
         Task<bool> UpdateUserDetails(long userId, UpdateUserDetailsRequest updateUserDetailsRequest);
 
+        /// <summary>
+        /// Retrieves the profile information of a specific user.
+        /// </summary>
+        /// <param name="userId">The ID of the user whose profile is requested.</param>
+        /// <returns>A <see cref="UserProfileDTO"/> containing the user's profile data.</returns>
         Task<UserProfileDTO> GetUserProfile(long userId);
 
+        /// <summary>
+        /// Retrieves a list of all users registered in the system.
+        /// </summary>
+        /// <returns>A list of users represented as DTOs.</returns>
         Task<List<UserDTO>> GetAllUsersAsync();
     }
 }
