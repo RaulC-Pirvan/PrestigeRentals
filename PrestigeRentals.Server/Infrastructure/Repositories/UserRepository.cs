@@ -10,6 +10,7 @@ namespace PrestigeRentals.Application.Services
 {
     /// <summary>
     /// Repository responsible for user-related CRUD operations in the database.
+    /// Implements <see cref="IUserRepository"/>.
     /// </summary>
     public class UserRepository : IUserRepository
     {
@@ -20,6 +21,10 @@ namespace PrestigeRentals.Application.Services
         /// <summary>
         /// Constructs a new instance of the <see cref="UserRepository"/>.
         /// </summary>
+        /// <param name="dbContext">The database context used for data operations.</param>
+        /// <param name="userDetailsRepository">Repository for user details.</param>
+        /// <param name="logger">Logger for logging repository actions.</param>
+        /// <exception cref="ArgumentNullException">Thrown if any parameter is null.</exception>
         public UserRepository(
             ApplicationDbContext dbContext,
             IUserDetailsRepository userDetailsRepository,
@@ -30,6 +35,12 @@ namespace PrestigeRentals.Application.Services
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
+        /// <summary>
+        /// Retrieves a user by their email address.
+        /// </summary>
+        /// <param name="email">The user's email address.</param>
+        /// <returns>The matching <see cref="User"/> if found; otherwise, null.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if there is an error during retrieval.</exception>
         public async Task<User> GetUserByEmail(string email)
         {
             try
@@ -44,6 +55,12 @@ namespace PrestigeRentals.Application.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves a user by their unique identifier.
+        /// </summary>
+        /// <param name="userId">The user's ID.</param>
+        /// <returns>The matching <see cref="User"/> if found; otherwise, null.</returns>
+        /// <exception cref="InvalidOperationException">Thrown if there is an error during retrieval.</exception>
         public async Task<User> GetUserById(long userId)
         {
             try
@@ -58,6 +75,13 @@ namespace PrestigeRentals.Application.Services
             }
         }
 
+        /// <summary>
+        /// Adds a new user to the data store.
+        /// </summary>
+        /// <param name="user">The user to add.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if user is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if there is an error adding the user.</exception>
         public async Task AddAsync(User user)
         {
             if (user == null)
@@ -78,9 +102,12 @@ namespace PrestigeRentals.Application.Services
         }
 
         /// <summary>
-        /// Updates the user record in the database.
+        /// Updates an existing user in the database.
         /// </summary>
-        /// <param name="user">The updated user entity with changed values.</param>
+        /// <param name="user">The updated user entity.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if user is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if the user does not exist or an error occurs.</exception>
         public async Task UpdateAsync(User user)
         {
             if (user == null)
@@ -109,21 +136,44 @@ namespace PrestigeRentals.Application.Services
                 throw new InvalidOperationException("Error updating user.", ex);
             }
         }
+
+        /// <summary>
+        /// Checks whether a user with the specified ID is active and not deleted.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>True if active and not deleted; otherwise, false.</returns>
         public async Task<bool> IsAliveAsync(long userId)
         {
             return await _dbContext.Users.AnyAsync(u => u.Id == userId && u.Active && !u.Deleted);
         }
 
+        /// <summary>
+        /// Checks whether a user with the specified ID is deleted or inactive.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>True if deleted or inactive; otherwise, false.</returns>
         public async Task<bool> IsDeadAsync(long userId)
         {
             return await _dbContext.Users.AnyAsync(u => u.Id == userId && !u.Active && u.Deleted);
         }
 
+        /// <summary>
+        /// Checks if an email address already exists in the data store.
+        /// </summary>
+        /// <param name="email">The email to check.</param>
+        /// <returns>True if the email exists; otherwise, false.</returns>
         public async Task<bool> EmailExists(string email)
         {
             return await _dbContext.Users.AnyAsync(u => u.Email == email);
         }
 
+        /// <summary>
+        /// Deletes a user from the data store.
+        /// </summary>
+        /// <param name="user">The user entity to delete.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if user is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if error occurs during deletion.</exception>
         public async Task DeleteAsync(User user)
         {
             if (user == null)

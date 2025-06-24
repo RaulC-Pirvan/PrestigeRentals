@@ -1,18 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PrestigeRentals.Application.Services.Interfaces.Repositories;
 using PrestigeRentals.Domain.Entities;
 using PrestigeRentals.Infrastructure.Persistence;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
 
 namespace PrestigeRentals.Application.Services
 {
     /// <summary>
     /// Repository for managing order data in the database.
-    /// Implements the IOrderRepository interface.
+    /// Implements the <see cref="IOrderRepository"/> interface.
     /// </summary>
     public class OrderRepository : IOrderRepository
     {
@@ -20,10 +20,11 @@ namespace PrestigeRentals.Application.Services
         private readonly ILogger<OrderRepository> _logger;
 
         /// <summary>
-        /// Constructor to initialize the repository with a database context.
+        /// Initializes a new instance of the <see cref="OrderRepository"/> class.
         /// </summary>
         /// <param name="dbContext">The database context used to interact with the database.</param>
         /// <param name="logger">Logger instance to log repository activities.</param>
+        /// <exception cref="ArgumentNullException">Thrown if dbContext or logger is null.</exception>
         public OrderRepository(ApplicationDbContext dbContext, ILogger<OrderRepository> logger)
         {
             _dbContext = dbContext ?? throw new ArgumentNullException(nameof(dbContext), "Database context cannot be null.");
@@ -34,7 +35,7 @@ namespace PrestigeRentals.Application.Services
         /// Retrieves an order by its unique identifier.
         /// </summary>
         /// <param name="id">The ID of the order to retrieve.</param>
-        /// <returns>The order if found, otherwise null.</returns>
+        /// <returns>The order if found; otherwise, null.</returns>
         public async Task<Order> GetByIdAsync(long id)
         {
             return await _dbContext.Orders.FindAsync(id);
@@ -43,7 +44,7 @@ namespace PrestigeRentals.Application.Services
         /// <summary>
         /// Retrieves all orders from the database.
         /// </summary>
-        /// <returns>A list of all orders.</returns>
+        /// <returns>A collection of all orders.</returns>
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
             return await _dbContext.Orders.ToListAsync();
@@ -54,9 +55,11 @@ namespace PrestigeRentals.Application.Services
         /// </summary>
         /// <param name="order">The order entity to be added.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the order is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if an error occurs while saving the order.</exception>
         public async Task AddAsync(Order order)
         {
-            if(order == null)
+            if (order == null)
             {
                 _logger.LogError("Attempted to add a null order to the database.");
                 throw new ArgumentNullException(nameof(order), "Order cannot be null.");
@@ -69,7 +72,6 @@ namespace PrestigeRentals.Application.Services
                 await _dbContext.SaveChangesAsync();
                 _logger.LogInformation($"Order with ID {order.Id} has been successfully added.");
             }
-
             catch (Exception ex)
             {
                 _logger.LogError($"Error saving order: {ex.Message}");
@@ -82,6 +84,8 @@ namespace PrestigeRentals.Application.Services
         /// </summary>
         /// <param name="order">The order entity with updated values.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the order is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if an error occurs while updating the order.</exception>
         public async Task UpdateAsync(Order order)
         {
             if (order == null)
@@ -108,6 +112,8 @@ namespace PrestigeRentals.Application.Services
         /// </summary>
         /// <param name="order">The order entity to be removed.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
+        /// <exception cref="ArgumentNullException">Thrown if the order is null.</exception>
+        /// <exception cref="InvalidOperationException">Thrown if an error occurs while deleting the order.</exception>
         public async Task DeleteAsync(Order order)
         {
             if (order == null)
@@ -129,24 +135,48 @@ namespace PrestigeRentals.Application.Services
             }
         }
 
+        /// <summary>
+        /// Retrieves all active (non-cancelled and ongoing) orders for a given vehicle within a specified time range.
+        /// </summary>
+        /// <param name="vehicleId">The ID of the vehicle.</param>
+        /// <param name="from">The start of the time range.</param>
+        /// <param name="to">The end of the time range.</param>
+        /// <returns>A list of active orders for the specified vehicle.</returns>
         public async Task<List<Order>> GetActiveOrdersForVehicleAsync(long vehicleId, DateTime from, DateTime to)
         {
-            return await _dbContext.Orders.Where(o => o.VehicleId == vehicleId && !o.IsCancelled && o.StartTime <= from && o.EndTime >= to).ToListAsync();
+            return await _dbContext.Orders
+                .Where(o => o.VehicleId == vehicleId && !o.IsCancelled && o.StartTime <= from && o.EndTime >= to)
+                .ToListAsync();
         }
 
+        /// <summary>
+        /// Retrieves all orders placed by a specific user.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>A collection of orders associated with the specified user.</returns>
         public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(long userId)
         {
             return await _dbContext.Orders.Where(o => o.UserId == userId).ToListAsync();
         }
 
+        /// <summary>
+        /// Checks whether any orders satisfy the specified predicate.
+        /// </summary>
+        /// <param name="predicate">The condition to check.</param>
+        /// <returns>True if any matching orders exist; otherwise, false.</returns>
         public async Task<bool> AnyAsync(Expression<Func<Order, bool>> predicate)
         {
             return await _dbContext.Orders.AnyAsync(predicate);
         }
 
+        /// <summary>
+        /// Retrieves all active orders for a given vehicle ID.
+        /// </summary>
+        /// <param name="vehicleId">The vehicle ID to query.</param>
+        /// <returns>A list of currently active orders.</returns>
         public async Task<List<Order>> GetActiveOrdersByVehicle(int vehicleId)
         {
             return await _dbContext.Orders.Where(o => o.VehicleId == vehicleId && !o.IsCancelled).ToListAsync();
         }
-    }   
+    }
 }
