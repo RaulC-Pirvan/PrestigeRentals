@@ -33,9 +33,32 @@ namespace PrestigeRentals.Application.Services.Interfaces.Repositories
         /// </summary>
         /// <param name="user">The user object with updated information.</param>
         Task UpdateAsync(User user);
+
+        /// <summary>
+        /// Determines whether a user with the specified ID is active (not deleted).
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>True if the user is active; otherwise, false.</returns>
         Task<bool> IsAliveAsync(long userId);
+
+        /// <summary>
+        /// Determines whether a user with the specified ID is marked as deleted.
+        /// </summary>
+        /// <param name="userId">The ID of the user.</param>
+        /// <returns>True if the user is deleted; otherwise, false.</returns>
         Task<bool> IsDeadAsync(long userId);
+
+        /// <summary>
+        /// Checks if an email address already exists in the data store.
+        /// </summary>
+        /// <param name="email">The email address to check.</param>
+        /// <returns>True if the email exists; otherwise, false.</returns>
         Task<bool> EmailExists(string email);
+
+        /// <summary>
+        /// Deletes a user from the data store.
+        /// </summary>
+        /// <param name="user">The user to delete.</param>
         Task DeleteAsync(User user);
     }
 }
