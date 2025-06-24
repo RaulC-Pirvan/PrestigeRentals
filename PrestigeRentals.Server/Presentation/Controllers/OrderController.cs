@@ -121,6 +121,14 @@ namespace PrestigeRentals.Presentation.Controllers
 
         }
 
+        /// <summary>
+        /// Retrieves all orders associated with the currently authenticated user.
+        /// </summary>
+        /// <returns>
+        /// Returns an <see cref="OkObjectResult"/> containing a collection of <see cref="OrderDTO"/> on success.
+        /// Returns <see cref="UnauthorizedResult"/> if the user is not authenticated.
+        /// Returns <see cref="StatusCodeResult"/> with status 500 on internal errors.
+        /// </returns>
         [HttpGet("user")]
         public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrdersForUser()
         {
@@ -141,6 +149,5 @@ namespace PrestigeRentals.Presentation.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
-
     }
 }

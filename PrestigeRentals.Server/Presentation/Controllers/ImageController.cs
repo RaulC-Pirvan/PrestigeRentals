@@ -9,6 +9,10 @@ namespace PrestigeRentals.Presentation.Controllers
 {
     [ApiController]
     [Route("api/image")]
+
+    /// <summary>
+    /// Controller to manage image uploads, retrievals, and QR code validations for users and vehicles.
+    /// </summary>
     public class ImageController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
@@ -24,6 +28,12 @@ namespace PrestigeRentals.Presentation.Controllers
 
         // === POST ===
 
+        /// <summary>
+        /// Uploads a profile image for a specified user, replacing any existing image.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="image">The image file to upload.</param>
+        /// <returns>Uploaded filename or error.</returns>
         [HttpPost("user/{userId}")]
         public async Task<IActionResult> UploadUserImage(string userId, IFormFile image)
         {
@@ -60,6 +70,12 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Uploads a main image for a specified vehicle, replacing any existing main image.
+        /// </summary>
+        /// <param name="vehicleId">Vehicle identifier.</param>
+        /// <param name="image">The image file to upload.</param>
+        /// <returns>Uploaded filename or error.</returns>
         [HttpPost("vehicle/{vehicleId}/main")]
         public async Task<IActionResult> UploadMainVehicleImage(string vehicleId, IFormFile image)
         {
@@ -83,6 +99,12 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Uploads an ID card image for a user, replacing existing ID card image.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <param name="image">The ID card image file.</param>
+        /// <returns>Uploaded filename or error.</returns>
         [HttpPost("user/{userId}/idcard")]
         public async Task<IActionResult> UploadUserIdCardImage(string userId, IFormFile image)
         {
@@ -106,6 +128,13 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Uploads an image for a vehicle (non-main).
+        /// </summary>
+        /// <param name="vehicleId">Vehicle identifier.</param>
+        /// <param name="image">The image file.</param>
+        /// <returns>Uploaded filename or error.</returns>
         [HttpPost("vehicle/{vehicleId}")]
         public async Task<IActionResult> UploadVehicleImage(string vehicleId, IFormFile image)
         {
@@ -128,6 +157,11 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Validates a QR code image to verify booking access.
+        /// </summary>
+        /// <param name="qrImage">QR code image file.</param>
+        /// <returns>Validation result with success status and message.</returns>
         [HttpPost("booking/validate-qrcode")]
         public async Task<IActionResult> ValidateQrCode(IFormFile qrImage)
         {
@@ -175,6 +209,11 @@ namespace PrestigeRentals.Presentation.Controllers
 
         // === GET ===
 
+        /// <summary>
+        /// Retrieves the profile image of a user.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <returns>User image file or not found/error status.</returns>
         [HttpGet("user/{userId}")]
         public IActionResult GetUserImage(string userId)
         {
@@ -192,6 +231,11 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the main image of a vehicle.
+        /// </summary>
+        /// <param name="vehicleId">Vehicle identifier.</param>
+        /// <returns>Vehicle main image or not found/error status.</returns>
         [HttpGet("vehicle/{vehicleId}/main")]
         public IActionResult GetMainVehicleImage(string vehicleId)
         {
@@ -209,6 +253,11 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves all image filenames for a vehicle.
+        /// </summary>
+        /// <param name="vehicleId">Vehicle identifier.</param>
+        /// <returns>List of image filenames or not found/error status.</returns>
         [HttpGet("vehicle/{vehicleId}")]
         public IActionResult GetAllVehicleImages(string vehicleId)
         {
@@ -229,6 +278,11 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves a specific vehicle image file by filename.
+        /// </summary>
+        /// <param name="fileName">Filename of the vehicle image.</param>
+        /// <returns>Image file or error/not found status.</returns>
         [HttpGet("vehicle/file/{fileName}")]
         public IActionResult GetVehicleImageByFileName(string fileName)
         {
@@ -254,6 +308,11 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Sets the default profile image for a user.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <returns>Success message or error.</returns>
         [HttpPost("user/{userId}/default")]
         public async Task<IActionResult> SetDefaultUserImage(string userId)
         {
@@ -293,12 +352,21 @@ namespace PrestigeRentals.Presentation.Controllers
 
         // === Helpers ===
 
+        /// <summary>
+        /// Deletes all files in the specified directory.
+        /// </summary>
+        /// <param name="path">Directory path to clear.</param>
         private void ClearDirectory(string path)
         {
             foreach (var file in Directory.GetFiles(path))
                 System.IO.File.Delete(file);
         }
 
+        /// <summary>
+        /// Returns MIME content type based on file extension.
+        /// </summary>
+        /// <param name="path">File path.</param>
+        /// <returns>MIME type string.</returns>
         private string GetContentType(string path)
         {
             var ext = Path.GetExtension(path).ToLowerInvariant();
@@ -311,7 +379,11 @@ namespace PrestigeRentals.Presentation.Controllers
             };
         }
 
-
+        /// <summary>
+        /// Decodes the QR code text from an image file.
+        /// </summary>
+        /// <param name="imagePath">Path to the image containing QR code.</param>
+        /// <returns>Decoded QR code text or null if not found.</returns>
         private string DecodeQrCode(string imagePath)
         {
             var reader = new BarcodeReader(); // din ZXing.Windows.Compatibility
@@ -320,6 +392,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return result?.Text;
         }
 
+        /// <summary>
+        /// Extracts the booking reference from decoded QR code text.
+        /// </summary>
+        /// <param name="qrText">Decoded QR code text.</param>
+        /// <returns>Booking reference string or null if not found.</returns>
         private string ExtractBookingReference(string qrText)
         {
             var match = System.Text.RegularExpressions.Regex.Match(qrText, @"BookingRef:(PR-[A-Z0-9]+)");

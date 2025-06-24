@@ -243,6 +243,11 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves the list of vehicles with their availability status.
+        /// </summary>
+        /// <param name="onlyActive">Optional flag to filter only active vehicles. Default is false.</param>
+        /// <returns>A list of vehicles including their availability info.</returns>
         [HttpGet("availability")]
         public async Task<IActionResult> GetVehiclesWithAvailability([FromQuery] bool? onlyActive = false)
         {
@@ -251,6 +256,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(vehicles);
         }
 
+        /// <summary>
+        /// Retrieves available filter options for vehicles (makes, models, fuel types, etc.).
+        /// </summary>
+        /// <param name="cancellationToken">Token to cancel the request.</param>
+        /// <returns>A <see cref="VehicleFilterOptionsDto"/> containing filter option lists.</returns>
         [HttpGet("filter-options")]
         public async Task<ActionResult<VehicleFilterOptionsDto>> GetFilterOptions(CancellationToken cancellationToken)
         {
@@ -258,6 +268,13 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// Retrieves IDs of vehicles similar to a specified vehicle, based on chassis and transmission.
+        /// </summary>
+        /// <param name="excludeId">The vehicle ID to exclude from results.</param>
+        /// <param name="chassis">The chassis type to match.</param>
+        /// <param name="transmission">The transmission type to match.</param>
+        /// <returns>A list of similar vehicle IDs.</returns>
         [HttpGet("similar")]
         public async Task<IActionResult> GetSimilarVehicleIds([FromQuery] long excludeId, [FromQuery] string chassis, [FromQuery] string transmission)
         {
@@ -265,6 +282,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(ids);
         }
 
+        /// <summary>
+        /// Retrieves date ranges for bookings of a specified vehicle.
+        /// </summary>
+        /// <param name="vehicleId">The vehicle ID for which to get booking date ranges.</param>
+        /// <returns>A list of start and end dates for active bookings.</returns>
         [HttpGet("{vehicleId}/booked-dates")]
         public async Task<IActionResult> GetBookedDateRanges(int vehicleId)
         {

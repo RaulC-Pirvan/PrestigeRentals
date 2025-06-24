@@ -19,7 +19,8 @@ using RegisterRequest = PrestigeRentals.Application.Requests.RegisterRequest;
 namespace PrestigeRentals.Presentation.Controllers
 {
     /// <summary>
-    /// Handles authentication and user management related actions such as registration, login, and account management.
+    /// Handles authentication and user management related actions such as registration, login, email verification,
+    /// password reset, and user account administration.
     /// </summary>
     [ApiController]
     [Route("api/auth")]
@@ -135,6 +136,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(new { message = "Email successfully verified." });
         }
 
+        /// <summary>
+        /// Resends the verification code to the user's email.
+        /// </summary>
+        /// <param name="request">Email of the user requesting a new code.</param>
+        /// <returns>Success message if code resent.</returns>
         [HttpPost("/resend-verification-code")]
         public async Task<IActionResult> ResendVerificationCode([FromBody] ResendCodeRequest request)
         {
@@ -159,6 +165,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(new { message = "Verification code resent successfully." });
         }
 
+        /// <summary>
+        /// Initiates password reset process and sends a new password via email.
+        /// </summary>
+        /// <param name="request">Email of the user requesting a password reset.</param>
+        /// <returns>Confirmation message on success.</returns>
         [HttpPost("/forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
         {
@@ -203,6 +214,10 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Retrieves all users in the system. Requires Admin role.
+        /// </summary>
+        /// <returns>List of all users.</returns>
         [Authorize(Roles = "Admin")]
         [HttpGet("users")]
         public async Task<IActionResult> GetAllUsers()
@@ -414,6 +429,12 @@ namespace PrestigeRentals.Presentation.Controllers
                 return StatusCode(500, "Internal server error: " + ex.Message);
             }
         }
+
+        /// <summary>
+        /// Bans a user. Admin access required.
+        /// </summary>
+        /// <param name="userId">ID of the user to ban.</param>
+        /// <returns>Success or NotFound response.</returns>
         [Authorize(Roles = "Admin")]
         [HttpPost("{userId}/ban")]
         public async Task<IActionResult> BanUser(long userId)
@@ -429,6 +450,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Unbans a user. Admin access required.
+        /// </summary>
+        /// <param name="userId">ID of the user to unban.</param>
+        /// <returns>Success or NotFound response.</returns>
         [Authorize(Roles = "Admin")]
         [HttpPost("{userId}/unban")]
         public async Task<IActionResult> UnbanUser(long userId)
@@ -469,6 +495,10 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the current authenticated user's profile.
+        /// </summary>
+        /// <returns>User profile data.</returns>
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
@@ -480,6 +510,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return Ok(profile);
         }
 
+        /// <summary>
+        /// Gets a profile by user ID.
+        /// </summary>
+        /// <param name="userId">User ID to retrieve profile.</param>
+        /// <returns>User profile data or error.</returns>
         [HttpGet("profile/{userId}")]
         public async Task<IActionResult> GetProfileByUserId(long userId)
         {
@@ -498,6 +533,11 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Extracts the CNP (personal numeric code) from an uploaded user ID card image using OCR.
+        /// </summary>
+        /// <param name="userId">User ID for which the CNP should be extracted.</param>
+        /// <returns>JSON response indicating if adult, confidence score, and messages.</returns>
         [HttpPost("extract-cnp/{userId}")]
         public IActionResult ExtractCnp(string userId)
         {
@@ -590,6 +630,12 @@ namespace PrestigeRentals.Presentation.Controllers
             }
         }
 
+        /// <summary>
+        /// Preprocesses an image for OCR by converting it to grayscale, resizing, applying Gaussian blur,
+        /// and thresholding using Otsu's method. Saves the processed image to a temporary file.
+        /// </summary>
+        /// <param name="inputPath">The file path to the original image.</param>
+        /// <returns>The file path to the preprocessed image.</returns>
         private string PreprocessImage(string inputPath)
         {
             var outputPath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(inputPath) + "_preprocessed.jpg");
@@ -601,6 +647,11 @@ namespace PrestigeRentals.Presentation.Controllers
             return outputPath;
         }
 
+        /// <summary>
+        /// Determines whether a person is at least 18 years old based on their Romanian CNP (personal numeric code).
+        /// </summary>
+        /// <param name="cnp">The 13-digit Romanian personal numeric code.</param>
+        /// <returns>True if the person is 18 or older; otherwise, false.</returns>
         private bool IsAdultBasedOnCnp(string cnp)
         {
             if (string.IsNullOrWhiteSpace(cnp) || cnp.Length != 13)
