@@ -8,7 +8,11 @@ namespace PrestigeRentals.Application.DTO
     /// </summary>
     public class VehicleDTO
     {
+        /// <summary>
+        /// Gets or sets the unique identifier of the vehicle.
+        /// </summary>
         public long Id { get; set; }
+
         /// <summary>
         /// Gets or sets the make of the vehicle (e.g., Toyota, Ford, etc.).
         /// </summary>
@@ -19,10 +23,19 @@ namespace PrestigeRentals.Application.DTO
         /// </summary>
         public string Model { get; set; }
 
+        /// <summary>
+        /// Gets or sets the chassis number of the vehicle (usually a unique VIN or frame identifier).
+        /// </summary>
         public string Chassis { get; set; }
 
+        /// <summary>
+        /// Gets or sets the horsepower rating of the vehicle.
+        /// </summary>
         public int Horsepower { get; set; }
 
+        /// <summary>
+        /// Gets or sets the rental price per day for the vehicle.
+        /// </summary>
         public decimal PricePerDay { get; set; }
 
         /// <summary>
@@ -61,14 +74,17 @@ namespace PrestigeRentals.Application.DTO
         public bool CruiseControl { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the vehicle is active or available.
+        /// Gets or sets a value indicating whether the vehicle is currently active in the system.
         /// </summary>
         public bool Active { get; set; }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether the vehicle is currently available for rent.
+        /// </summary>
         public bool Available { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the vehicle is marked as deleted.
+        /// Gets or sets a value indicating whether the vehicle is marked as deleted in the system.
         /// </summary>
         public bool Deleted { get; set; }
 
@@ -80,6 +96,7 @@ namespace PrestigeRentals.Application.DTO
         /// <summary>
         /// Initializes a new instance of the <see cref="VehicleDTO"/> class with specified values.
         /// </summary>
+        /// <param name="id">The unique identifier of the vehicle.</param>
         /// <param name="make">The make of the vehicle.</param>
         /// <param name="model">The model of the vehicle.</param>
         /// <param name="engineSize">The engine size of the vehicle.</param>
@@ -89,7 +106,8 @@ namespace PrestigeRentals.Application.DTO
         /// <param name="headsUpDisplay">Indicates whether the vehicle has a heads-up display.</param>
         /// <param name="hillAssist">Indicates whether the vehicle has hill assist.</param>
         /// <param name="cruiseControl">Indicates whether the vehicle has cruise control.</param>
-        /// <param name="active">Indicates whether the vehicle is active.</param>
+        /// <param name="available">Indicates whether the vehicle is currently available for rent.</param>
+        /// <param name="active">Indicates whether the vehicle is currently active.</param>
         /// <param name="deleted">Indicates whether the vehicle is marked as deleted.</param>
         public VehicleDTO(long id, string make, string model, decimal engineSize, string fuelType, string transmission,
                           bool navigation, bool headsUpDisplay, bool hillAssist, bool cruiseControl, bool available,

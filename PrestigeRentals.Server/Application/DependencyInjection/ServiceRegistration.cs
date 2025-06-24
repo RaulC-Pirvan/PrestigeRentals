@@ -34,7 +34,7 @@ namespace PrestigeRentals.Application.DependencyInjection
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IOrderExpirationService, OrderExpirationService>();
 
-            // Worker
+            // Workers
             services.AddHostedService<OrderBackgroundWorker>();
 
             // Repositories
