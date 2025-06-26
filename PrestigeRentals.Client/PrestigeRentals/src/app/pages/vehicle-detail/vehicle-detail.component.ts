@@ -346,4 +346,11 @@ export class VehicleDetailComponent implements OnInit {
       return day >= start && day <= end;
     });
   };
+
+    reload() {
+    const currentUrl = this.router.url;
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+    this.router.navigateByUrl(currentUrl);
+  });
+  }
 }
