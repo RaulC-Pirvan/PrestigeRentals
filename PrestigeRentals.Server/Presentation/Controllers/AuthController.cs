@@ -581,7 +581,6 @@ namespace PrestigeRentals.Presentation.Controllers
             { "SEX", ocrTextUpper.Contains("SEX") },
             { "NATIONALITATE", ocrTextUpper.Contains("NATIONALITATE") },
             { "CNP", ocrTextUpper.Contains("CNP") },
-            { "SERIE BULETIN (regex)", Regex.IsMatch(ocrTextUpper, @"\b[A-Z]{2}\d{6}\b") }
         };
 
                 int matchedCount = keywords.Count(k => k.Value);
@@ -594,13 +593,13 @@ namespace PrestigeRentals.Presentation.Controllers
                     Console.WriteLine($"[CHECK] {kvp.Key} -> {(kvp.Value ? "DA" : "NU")}");
                 }
 
-                if (confidence < 70)
+                if (confidence <= 50)
                 {
                     return Ok(new
                     {
                         isAdult = false,
                         confidence,
-                        message = "Documentul nu pare a fi un buletin valid (scor sub 70%)."
+                        message = "Documentul nu pare a fi un buletin valid (scor sub 50%)."
                     });
                 }
 

@@ -57,31 +57,55 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="verificationCode">The verification code to be sent.</param>
         public async Task SendVerificationEmailAsync(string toEmail, string verificationCode)
         {
-            var smtpClient = new SmtpClient(_smtpHost)
-            {
-                Port = _smtpPort,
-                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
-                EnableSsl = true
-            };
+            string subject = "Verify Your Email - Prestige Rentals";
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_smtpUsername, "Prestige Rentals"),
-                Subject = "Welcome to Prestige Rentals",
-                Body = $@"
-                        <div style='font-family: Arial, sans-serif; padding: 20px;'>
-                            <h2>Email Verification</h2>
-                            <p>Your verification code is: <strong style='font-size: 18px;'>{verificationCode}</strong></p>
-                            <p style='color: gray;'>If you didn’t request this, you can ignore the email.</p>
-                        </div>",
-                IsBodyHtml = true
-            };
+            string body = $@"
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
 
-            mailMessage.To.Add(toEmail);
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
 
-            await smtpClient.SendMailAsync(mailMessage);
+  <h2 style='text-align: center; font-size: 24px;'>Email Verification</h2>
 
+  <p style='font-size: 16px; line-height: 1.6; text-align: center;'>
+    Your one-time verification code is:
+  </p>
+
+  <p style='
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #f7c566;
+    background-color: #2c2c2c;
+    padding: 12px 24px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 20px auto;'>
+    {verificationCode}
+  </p>
+
+  <p style='font-size: 14px; color: #B0BEC5; text-align: center;'>
+    Please enter this code to verify your email address. It will expire soon.
+  </p>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    If you didn’t request this, you can safely ignore this email.
+  </p>
+</div>";
+
+            await SendEmailAsync(toEmail, subject, body);
         }
+
 
         /// <summary>
         /// Sends an email to the user containing their newly generated password.
@@ -90,32 +114,59 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="newPassword">The new password to include in the email.</param>
         public async Task SendNewPasswordEmailAsync(string toEmail, string newPassword)
         {
-            var smtpClient = new SmtpClient(_smtpHost)
-            {
-                Port = _smtpPort,
-                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
-                EnableSsl = true
-            };
+            string subject = "Your New Password - Prestige Rentals";
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_smtpUsername, "Prestige Rentals"),
-                Subject = "Your New Password - Prestige Rentals",
-                Body = $@"
-                        <div style='font-family: Arial, sans-serif; padding: 20px;'>
-                            <h2>Password Reset</h2>
-                            <p>Your new temporary password is: <strong style='font-size: 18px;'>{newPassword}</strong></p>
-                            <p style='color: gray;'>Please log in using this password and change it as soon as possible.</p>
-                            <p style='color: gray;'>If you didn’t request this, you can ignore the email.</p>
-                        </div>",
-                IsBodyHtml = true
-            };
+            string body = $@"
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
 
-            mailMessage.To.Add(toEmail);
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
 
-            await smtpClient.SendMailAsync(mailMessage);
+  <h2 style='text-align: center; font-size: 24px;'>Password Reset</h2>
 
+  <p style='font-size: 16px; line-height: 1.6; text-align: center;'>
+    Your new temporary password is:
+  </p>
+
+  <p style='
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: #f7c566;
+    background-color: #2c2c2c;
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 20px auto;'>
+    {newPassword}
+  </p>
+
+  <p style='font-size: 16px; text-align: center;'>
+    Please log in using this password and make sure to change it after your first login.
+  </p>
+
+  <p style='font-size: 14px; color: #B0BEC5; text-align: center;'>
+    If you didn’t request this, you can safely ignore this email.
+  </p>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    For your security, never share your password with anyone.
+  </p>
+</div>";
+
+            await SendEmailAsync(toEmail, subject, body);
         }
+
 
         /// <summary>
         /// Generates a QR code as a PNG byte array from the specified string data.
@@ -142,32 +193,49 @@ namespace PrestigeRentals.Application.Services.Services
             var base64Qr = Convert.ToBase64String(qrBytes);
             var base64ImageSrc = $"data:image/png;base64,{base64Qr}";
 
-            var smtpClient = new SmtpClient(_smtpHost)
-            {
-                Port = _smtpPort,
-                Credentials = new NetworkCredential(_smtpUsername, _smtpPassword),
-                EnableSsl = true
-            };
+            string subject = "Your Booking Confirmation - Prestige Rentals";
 
-            var mailMessage = new MailMessage
-            {
-                From = new MailAddress(_smtpUsername, "Prestige Rentals"),
-                Subject = "Your Booking Confirmation - Prestige Rentals",
-                Body = $@"
-            <div style='font-family: Arial, sans-serif; padding: 20px;'>
-                <h2>Booking Confirmed</h2>
-                <p>Your booking reference is: <strong>{bookingReference}</strong></p>
-                <p>Please scan the QR code below at the vehicle pickup location:</p>
-                <img src='{base64ImageSrc}' alt='QR Code' style='margin-top: 10px;' width='200'/>
-                <p style='color: gray; font-size: 12px;'>Do not share this code with anyone.</p>
-            </div>",
-                IsBodyHtml = true
-            };
+            string body = $@"
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
 
-            mailMessage.To.Add(toEmail);
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
 
-            await smtpClient.SendMailAsync(mailMessage);
+  <h2 style='text-align: center; font-size: 24px;'>Booking Confirmed</h2>
+
+  <p style='font-size: 16px; line-height: 1.6; text-align: center;'>
+    Your booking reference is:<br/>
+    <strong style='font-size: 20px; color: #f7c566;'>{bookingReference}</strong>
+  </p>
+
+  <p style='text-align: center; font-size: 16px;'>Please scan the QR code below at the vehicle pickup location:</p>
+
+  <div style='text-align: center; margin: 20px 0;'>
+    <img src='{base64ImageSrc}' alt='QR Code' style='margin-top: 10px; width: 200px;' />
+  </div>
+
+  <p style='color: #B0BEC5; font-size: 12px; text-align: center;'>
+    Do not share this code with anyone. It grants access to your booking.
+  </p>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    Thank you for choosing PrestigeRentals!
+  </p>
+</div>";
+
+            await SendEmailAsync(toEmail, subject, body);
         }
+
 
         /// <summary>
         /// Sends a contact form submission to the admin email.
@@ -176,16 +244,42 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="message">The message content.</param>
         public async Task SendContactFormTicketToAdminAsync(string userEmail, string message)
         {
-            string body = $@"
-        <div style='font-family: Arial, sans-serif; padding: 20px;'>
-            <h2>New Contact Form Submission</h2>
-            <p><strong>From:</strong> {userEmail}</p>
-            <p><strong>Message:</strong></p>
-            <blockquote style='background:#f9f9f9; padding:10px; border-left: 4px solid #ccc;'>{message}</blockquote>
-        </div>";
+            string subject = $"[Contact Form] New Submission";
 
-            await SendEmailAsync(_adminEmail, $"[Contact Form] New Submission", body);
+            string body = $@"
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
+
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
+
+  <h2 style='text-align: center; font-size: 24px;'>New Contact Form Submission</h2>
+
+  <p style='font-size: 16px;'>
+    <strong>From:</strong> {userEmail}
+  </p>
+
+  <div style='margin: 20px 0; background: #2c2c2c; padding: 15px; border-left: 4px solid #f7c566; border-radius: 6px;'>
+    <p style='margin: 0;'>{message}</p>
+  </div>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    This message was submitted through the contact form on the platform.
+  </p>
+</div>";
+
+            await SendEmailAsync(_adminEmail, subject, body);
         }
+
 
         /// <summary>
         /// Notifies the admin when a new review is submitted for a vehicle.
@@ -196,18 +290,44 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="review">The textual review content.</param>
         public async Task SendReviewNotificationToAdminAsync(string userEmail, long vehicleId, int rating, string review)
         {
-            string body = $@"
-        <div style='font-family: Arial, sans-serif; padding: 20px;'>
-            <h2>New Review Submitted</h2>
-            <p><strong>User:</strong> ({userEmail})</p>
-            <p><strong>Vehicle ID:</strong> {vehicleId}</p>
-            <p><strong>Rating:</strong> {rating}/5</p>
-            <p><strong>Review:</strong></p>
-            <blockquote style='background:#f9f9f9; padding:10px; border-left: 4px solid #ccc;'>{review}</blockquote>
-        </div>";
+            string subject = $"[Review] Vehicle #{vehicleId} rated {rating}/5";
 
-            await SendEmailAsync(_adminEmail, $"[Review] Vehicle #{vehicleId} rated {rating}/5", body);
+            string body = $@"
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
+
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
+
+  <h2 style='text-align: center; font-size: 24px;'>New Review Submitted</h2>
+
+  <p style='font-size: 16px;'>
+    <strong>User:</strong> {userEmail}<br/>
+    <strong>Vehicle ID:</strong> #{vehicleId}<br/>
+    <strong>Rating:</strong> {rating}/5
+  </p>
+
+  <div style='margin: 20px 0; background: #2c2c2c; padding: 15px; border-left: 4px solid #f7c566; border-radius: 6px;'>
+    <p style='font-style: italic; margin: 0;'>{review}</p>
+  </div>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    This is an automated message from the PrestigeRentals review system.
+  </p>
+</div>";
+
+            await SendEmailAsync(_adminEmail, subject, body);
         }
+
 
         /// <summary>
         /// Notifies the admin of changes to a vehicle's status (e.g., added, updated, deleted).
@@ -216,15 +336,42 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="action">The type of action (e.g., "added", "updated", "deleted").</param>
         public async Task SendVehicleChangeNotificationToAdminAsync(long vehicleId, string action)
         {
-            string body = $@"
-        <div style='font-family: Arial, sans-serif; padding: 20px;'>
-            <h2>Vehicle {action.ToUpper()} Notification</h2>
-            <p>A vehicle was <strong>{action}</strong>.</p>
-            <p><strong>Vehicle ID:</strong> {vehicleId}</p>
-        </div>";
+            string subject = $"[Vehicle {action}] Vehicle ID #{vehicleId}";
 
-            await SendEmailAsync(_adminEmail, $"[Vehicle {action}] Vehicle ID #{vehicleId}", body);
+            string body = $@"
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
+
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
+
+  <h2 style='text-align: center; font-size: 24px;'>Vehicle {action.ToUpper()} Notification</h2>
+
+  <p style='font-size: 16px; line-height: 1.6;'>
+    A vehicle has been <strong>{action.ToLower()}</strong> in the system.
+  </p>
+
+  <p style='font-size: 16px;'>
+    <strong>Vehicle ID:</strong> #{vehicleId}
+  </p>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    This is an automated update for administrative purposes.
+  </p>
+</div>";
+
+            await SendEmailAsync(_adminEmail, subject, body);
         }
+
 
         /// <summary>
         /// Notifies the admin when a user's account status changes (e.g., banned, reactivated).
@@ -233,15 +380,43 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="newStatus">The new status (e.g., "banned", "active").</param>
         public async Task SendUserStatusChangeNotificationToAdminAsync(string affectedUserEmail, string newStatus)
         {
-            string body = $@"
-        <div style='font-family: Arial, sans-serif; padding: 20px;'>
-            <h2>User Status Changed</h2>
-            <p><strong>Affected User:</strong> {affectedUserEmail}</p>
-            <p><strong>New Status:</strong> {newStatus}</p>
-        </div>";
+            string subject = $"[User Status Update] {affectedUserEmail} → {newStatus}";
 
-            await SendEmailAsync(_adminEmail, $"[User Status Update] {affectedUserEmail} → {newStatus}", body);
+            string body = $@"
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
+
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
+
+  <h2 style='text-align: center; font-size: 24px;'>User Status Changed</h2>
+
+  <p style='font-size: 16px; line-height: 1.6;'>
+    An account status change has been recorded in the system.
+  </p>
+
+  <p style='font-size: 16px;'>
+    <strong>Affected User:</strong> {affectedUserEmail}<br/>
+    <strong>New Status:</strong> <span style='color: #f7c566;'>{newStatus.ToUpperInvariant()}</span>
+  </p>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    This is an automated notification sent to the administrative team.
+  </p>
+</div>";
+
+            await SendEmailAsync(_adminEmail, subject, body);
         }
+
 
         /// <summary>
         /// Sends an email asking the user to leave a review for a recently completed rental.
@@ -251,21 +426,45 @@ namespace PrestigeRentals.Application.Services.Services
         /// <param name="orderId">The ID of the completed order.</param>
         public async Task SendReviewRequestEmailAsync(string userEmail, string vehicleName, long orderId)
         {
-            var reviewLink = $"localhost:4200/review?orderId={orderId}";
+            var reviewLink = $"https://localhost:4200/review?orderId={orderId}";
 
             string body = $@"
-        <div style='font-family: Arial, sans-serif; padding: 20px;'>
-            <h2>How was your ride with the {vehicleName}?</h2>
-            <p>Your trip has ended. We'd love to hear your feedback.</p>
-            <a href='{reviewLink}' style='
-                display: inline-block;
-                margin-top: 10px;
-                padding: 10px 20px;
-                background-color: #007bff;
-                color: #fff;
-                text-decoration: none;
-                border-radius: 5px;'>Leave a Review</a>
-        </div>";
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
+
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
+
+  <h2 style='text-align: center; font-size: 24px;'>How was your ride with the {vehicleName}?</h2>
+
+  <p style='font-size: 16px; line-height: 1.6;'>
+    Your recent rental has ended and we'd love to hear about your experience. Your feedback helps us improve and helps other users choose the best ride!
+  </p>
+
+  <div style='text-align: center; margin-top: 30px;'>
+    <a href='{reviewLink}' style='
+      display: inline-block;
+      padding: 12px 24px;
+      background-color: #f7c566;
+      color: #1e1e1e;
+      font-weight: bold;
+      text-decoration: none;
+      border-radius: 6px;'>Leave a Review</a>
+  </div>
+
+  <hr style='margin: 40px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    Thank you for using PrestigeRentals. We appreciate your feedback!
+  </p>
+</div>";
 
             await SendEmailAsync(userEmail, "We'd love your feedback!", body);
         }
@@ -279,12 +478,36 @@ namespace PrestigeRentals.Application.Services.Services
             var subject = "Your PrestigeRentals Account Has Been Suspended";
 
             string body = $@"
-    <div style='font-family: Arial, sans-serif; padding: 20px;'>
-        <h2>Account Suspended</h2>
-        <p>We regret to inform you that your account on <strong>PrestigeRentals</strong> has been <span style='color: red; font-weight: bold;'>permanently suspended</span> due to a violation of our Terms of Service.</p>
-        <p>If you believe this action was made in error or wish to appeal the suspension, please contact our support team as soon as possible.</p>
-        <p style='color: gray; font-size: 12px;'>Do not reply directly to this email. This mailbox is not monitored.</p>
-    </div>";
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
+
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
+
+  <h2 style='text-align: center; font-size: 24px;'>Account Suspended</h2>
+
+  <p style='font-size: 16px; line-height: 1.6;'>
+    We regret to inform you that your account on <strong>PrestigeRentals</strong> has been 
+    <span style='color: #FFCDD2; font-weight: bold;'>permanently suspended</span> due to a violation of our Terms of Service.
+  </p>
+
+  <p style='font-size: 16px; line-height: 1.6;'>
+    If you believe this was done in error or wish to appeal, please contact our support team as soon as possible.
+  </p>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    Please do not reply to this email. This mailbox is not monitored.
+  </p>
+</div>";
 
             await SendEmailAsync(userEmail, subject, body);
         }
@@ -299,12 +522,36 @@ namespace PrestigeRentals.Application.Services.Services
             var subject = "Your PrestigeRentals Account Has Been Reactivated";
 
             string body = $@"
-    <div style='font-family: Arial, sans-serif; padding: 20px;'>
-        <h2>Account Reactivated</h2>
-        <p>Good news! Your account on <strong>PrestigeRentals</strong> has been <span style='color: green; font-weight: bold;'>reinstated</span> and is now active again.</p>
-        <p>You can now log in and continue using our platform as usual. If you experience any issues, feel free to reach out to our support team.</p>
-        <p style='color: gray; font-size: 12px;'>Please do not reply to this email. This mailbox is not monitored.</p>
-    </div>";
+<div style='
+  background-color: #1e1e1e;
+  padding: 30px;
+  font-family: Arial, sans-serif;
+  color: #f1f1f1;
+  max-width: 600px;
+  margin: auto;
+  border-radius: 10px;'>
+
+  <div style='text-align: center; margin-bottom: 30px;'>
+    <img src='https://i.imgur.com/F3bdvC8.png' alt='Prestige Rentals Logo' style='max-width: 150px; height: auto;' />
+  </div>
+
+  <h2 style='text-align: center; font-size: 24px;'>Account Reactivated</h2>
+
+  <p style='font-size: 16px; line-height: 1.6;'>
+    Good news! Your account on <strong>PrestigeRentals</strong> has been 
+    <span style='color: #A5D6A7; font-weight: bold;'>successfully reinstated</span> and is now active again.
+  </p>
+
+  <p style='font-size: 16px; line-height: 1.6;'>
+    You can now log in and continue using our platform as usual. If you experience any issues, feel free to contact our support team.
+  </p>
+
+  <hr style='margin: 30px 0; border-color: #f7c566;' />
+
+  <p style='font-size: 12px; color: #f1f1f1; text-align: center;'>
+    Please do not reply to this email. This mailbox is not monitored.
+  </p>
+</div>";
 
             await SendEmailAsync(userEmail, subject, body);
         }
