@@ -96,6 +96,9 @@ namespace PrestigeRentals.Application.Services.Services
                 throw new Exception("Invalid credentials.");
             }
 
+            if (user.Banned)
+                throw new UserIsBannedException();
+
             var token = _jwtTokenGenerator.GenerateToken(user);
 
             return token;

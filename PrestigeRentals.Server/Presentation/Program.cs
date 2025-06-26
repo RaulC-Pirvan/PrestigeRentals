@@ -117,6 +117,9 @@ namespace Presentation
             // Use Logging Middleware
             app.UseMiddleware<LoggingMiddleware>();
 
+            // Use Banned Middleware
+            app.UseMiddleware<BannedMiddleware>();
+
             app.UseStaticFiles(); // enables wwwroot to serve images
 
             // Enable Swagger UI in development

@@ -89,4 +89,16 @@ namespace PrestigeRentals.Application.Exceptions
         /// </summary>
         public UserAlreadyUserException() : base($"User is already a user.") { }
     }
+
+    /// <summary>
+    /// Exception thrown when a banned user attempts to authenticate or access the system.
+    /// </summary>
+    public class UserIsBannedException : Exception
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserIsBannedException"/> class
+        /// with a default error message indicating the user is banned.
+        /// </summary>
+        public UserIsBannedException() : base($"User is banned.") { }
+    }
 }

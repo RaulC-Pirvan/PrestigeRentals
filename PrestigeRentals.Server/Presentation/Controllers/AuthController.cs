@@ -204,6 +204,10 @@ namespace PrestigeRentals.Presentation.Controllers
             {
                 return Unauthorized(ex.Message);
             }
+            catch(UserIsBannedException ex)
+            {
+                return Forbid();
+            }
             catch (UserNotFoundException ex)
             {
                 return NotFound(ex.Message);

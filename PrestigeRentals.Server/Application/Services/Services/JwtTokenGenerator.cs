@@ -43,6 +43,7 @@ namespace PrestigeRentals.Application.Services.Services
             {
                 new System.Security.Claims.Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new System.Security.Claims.Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new System.Security.Claims.Claim("banned", user.Banned.ToString().ToLower()),
                 new System.Security.Claims.Claim(System.Security.Claims.ClaimTypes.Role, user.Role),
                 new System.Security.Claims.Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
