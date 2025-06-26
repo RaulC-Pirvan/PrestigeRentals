@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { CommonModule } from '@angular/common';
+import { BannedAccountDialogComponent } from '../../shared/banned-account-dialog/banned-account-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login-form',
@@ -41,7 +43,8 @@ export class LoginFormComponent {
     private http: HttpClient,
     private router: Router,
     private authService: AuthService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required]],
@@ -79,9 +82,16 @@ export class LoginFormComponent {
               this.router.navigate(['/']);
             }, 1000);
           },
-          error: () => {
-            this.notificationService.show('Invalid credentials', 'error');
-          },
+          error: (err) => {
+            if (err.status === 403)
+            {
+              this.dialog.open(BannedAccountDialogComponent);
+            } else if(err.status === 401 || err.status === 404) {
+              this.notificationService.show('Invalid credentials', 'error');
+            } else {
+              this.notificationService.show('Unexpected error occured', 'error');
+            }
+          }
         });
     }
   }
