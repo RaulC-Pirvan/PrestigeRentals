@@ -1,0 +1,40 @@
+<div class="user-card">
+  <div class="info-container">
+    <div class="image-container">
+      <img
+        [src]="user.photoUrl || 'assets/default-avatar.jpg'"
+        alt="User Photo"
+        class="image-preview"
+      />
+    </div>
+
+    <div class="user-info">
+      <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+      <p><span class="accent">Email:</span> {{ user.email }}</p>
+      <p><span class="accent">Role:</span> {{ user.role }}</p>
+      <p><span class="accent">Banned:</span> {{ user.banned }}</p>
+    </div>
+  </div>
+
+  <div class="user-actions">
+    <app-button
+      *ngIf="!user.banned && user.role === 'User'"
+      buttonText="Promote"
+      buttonType="accent"
+      (buttonClick)="onPromote()"
+    ></app-button>
+
+    <app-button
+      *ngIf="user.role === 'Admin'"
+      buttonText="Demote"
+      buttonType="accent"
+      (buttonClick)="onDemote()"
+    ></app-button>
+
+    <app-button
+      buttonText="{{ user.banned ? 'Unban' : 'Ban' }}"
+      buttonType="red"
+      (buttonClick)="onBan()"
+    ></app-button>
+  </div>
+</div>

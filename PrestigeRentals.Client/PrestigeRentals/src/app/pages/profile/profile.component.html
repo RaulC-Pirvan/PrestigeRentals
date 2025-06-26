@@ -1,0 +1,61 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <div class="title-container">
+    <h1>
+      WELCOME BACK, <span class="accent">{{ firstName.toUpperCase() }}</span
+      >!
+    </h1>
+  </div>
+
+  <div class="card-container">
+    <div class="header-container">
+      <div class="profile-photo-container">
+        <img [src]="photoUrl" alt="Profile Photo" class="profile-photo" />
+      </div>
+      <div class="profile-name-container">
+        <h3 class="accent">{{ firstName }}</h3>
+        <h3>{{ lastName }}</h3>
+      </div>
+    </div>
+
+    <hr class="hr-accent" />
+
+    <div class="buttons-container">
+      <button class="list" (click)="switchView('orders')">My Orders</button>
+      <button class="list" (click)="switchView('reviews')">My Reviews</button>
+    </div>
+
+    <div class="info-container">
+      <!-- Orders -->
+      <ng-container *ngIf="currentView === 'orders'">
+        <app-order-preview
+          *ngFor="let order of displayedOrders; let i = index"
+          [order]="order"
+          [orderNumber]="(currentPage - 1) * itemsPerPage + i + 1"
+        ></app-order-preview>
+      </ng-container>
+
+      <ng-container *ngIf="currentView === 'reviews'">
+        <app-review-preview
+          *ngFor="let review of displayedReviews; let i = index"
+          [review]="review"
+          [reviewNumber]="(currentPage - 1) * itemsPerPage + i + 1"
+        ></app-review-preview>
+      </ng-container>
+
+      <!-- Pagination -->
+      <div class="pagination-controls">
+        <button (click)="changePage(-1)" [disabled]="currentPage === 1">
+          &lt;
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+        <button
+          (click)="changePage(1)"
+          [disabled]="currentPage === totalPages()"
+        >
+          &gt;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

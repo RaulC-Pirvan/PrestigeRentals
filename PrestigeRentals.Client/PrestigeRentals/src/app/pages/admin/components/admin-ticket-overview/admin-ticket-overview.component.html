@@ -1,0 +1,34 @@
+<div class="ticket-preview">
+  <div class="info-container">
+    <div class="title-container">
+      <div class="data-item-container">
+        <p><strong>Ticket ID</strong></p>
+        <hr />
+        <p>{{ ticket.id }}</p>
+      </div>
+      <div class="data-item-container">
+        <p><strong>Name</strong></p>
+        <hr />
+        <p>{{ ticket.firstName }} {{ ticket.lastName }}</p>
+      </div>
+      <div class="data-item-container">
+        <p><strong>Email</strong></p>
+        <hr />
+        <p>{{ ticket.email }}</p>
+      </div>
+      <div class="data-item-container">
+        <p><strong>Phone</strong></p>
+        <hr />
+        <p>{{ ticket.phone }}</p>
+      </div>
+    </div>
+
+    <div class="data-container">
+      <div class="data-description-item-container">
+        <p><strong>Description</strong></p>
+        <hr />
+        <p>{{ ticket.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>

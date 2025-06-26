@@ -1,0 +1,126 @@
+@import '../../../styles.scss';
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    padding: 50px 100px;
+    flex-direction: column;
+    background-color: $primary-colour;
+}
+
+.card-container{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: row;
+    margin: 50px 0;
+    width: 100%;
+    height: auto;
+    flex-wrap: wrap;
+}
+
+.card-entry {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    width: 20%;
+    height: auto;
+    padding: 20px;
+    margin: 25px 50px;
+    background-color: $secondary-colour;
+}
+
+.picture-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 25%;
+    padding: 20px;
+}
+
+.first-name-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    padding: 10px;
+    padding-bottom: 0;
+}
+
+.last-name-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    padding: 10px;
+    padding-top: 0;
+}
+
+.accent {
+    width: 100%;
+    border: none;
+    height: 2px;
+    background-color: $accent-colour;
+}
+
+.job-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    padding: 20px;
+}
+
+.email-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    padding: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 10%;
+    padding: 20px;
+}
+
+.profile {
+    height: 128px;
+}
+
+.accent-text {
+    color: $accent-colour;
+}
+
+.slim-text {
+    font-weight: 300;
+}
+
+.contact-button {
+    border: 2px solid $accent-colour;
+    background-color: transparent;
+    color: $accent-colour;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.contact-button:hover {
+    background-color: $accent-colour;
+    color: $text-colour;
+}

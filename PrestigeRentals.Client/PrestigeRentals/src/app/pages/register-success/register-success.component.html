@@ -1,0 +1,26 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <app-title text="ACCOUNT CREATED SUCCESSFULLY!"></app-title>
+
+  <div class="card-container">
+    <div class="text-container">
+      <h2 class="headline">Welcome to Prestige Rentals!</h2>
+      <p class="subtext">
+        Your account has been successfully created. Now you're ready to explore
+        our premium vehicle catalog and make your first reservation.
+      </p>
+    </div>
+
+    <div class="checkmark-container">
+      <span class="checkmark">&#10004;</span>
+    </div>
+
+    <div class="button-container">
+      <app-button
+        buttonText="LOGIN >"
+        buttonType="accent"
+        (buttonClick)="goToLogin()"
+      ></app-button>
+    </div>
+  </div>
+</div>

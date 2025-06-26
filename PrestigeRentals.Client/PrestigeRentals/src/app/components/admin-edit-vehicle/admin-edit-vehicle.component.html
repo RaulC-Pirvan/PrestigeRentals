@@ -1,0 +1,97 @@
+<app-title text="EDIT VEHICLE"></app-title>
+
+<div class="wrapper">
+  <div class="main-image-preview" *ngIf="mainImagePreview">
+    <img [src]="mainImagePreview" alt="Main Vehicle Image" />
+  </div>
+  <div class="container">
+    <form [formGroup]="modifyForm" (ngSubmit)="submit()">
+      <div class="entries-container">
+        <div class="input-container">
+          <label for="">Make</label>
+          <input type="text" id="make" formControlName="make" />
+        </div>
+        <div class="input-container">
+          <label for="">Model</label>
+          <input type="text" id="model" formControlName="model" />
+        </div>
+        <div class="input-container">
+          <label for="">Chassis</label>
+          <input type="text" id="chassis" formControlName="chassis" />
+        </div>
+        <div class="input-container">
+          <label for="">Horsepower</label>
+          <input type="text" id="horsepower" formControlName="horsepower" />
+        </div>
+        <div class="input-container">
+          <label for="">Engine Size (cc)</label>
+          <input type="text" id="engineSize" formControlName="engineSize" />
+        </div>
+        <div class="input-container">
+          <label for="">Fuel Type</label>
+          <input type="text" id="fuelType" formControlName="fuelType" />
+        </div>
+        <div class="input-container">
+          <label for="">Transmission</label>
+          <input type="text" id="transmission" formControlName="transmission" />
+        </div>
+        <div class="input-container">
+          <label for="">Price/Day</label>
+          <input type="text" id="pricePerDay" formControlName="pricePerDay" />
+        </div>
+        <div class="checkbox-container">
+          <div class="checkbox-input-container">
+            <label for="">Navigation</label>
+            <input
+              type="checkbox"
+              id="navigation"
+              formControlName="navigation"
+            />
+          </div>
+
+          <div class="checkbox-input-container">
+            <label for="">Heads-up Display</label>
+            <input
+              type="checkbox"
+              id="headsUpDisplay"
+              formControlName="headsUpDisplay"
+            />
+          </div>
+          <div class="checkbox-input-container">
+            <label for="">Hill Assist</label>
+            <input
+              type="checkbox"
+              id="hillAssist"
+              formControlName="hillAssist"
+            />
+          </div>
+          <div class="checkbox-input-container">
+            <label for="">Cruise Control</label>
+            <input
+              type="checkbox"
+              id="cruiseControl"
+              formControlName="cruiseControl"
+            />
+          </div>
+        </div>
+      </div>
+
+      <br />
+
+      <div class="buttons-container">
+        <app-button
+          buttonText="Edit Vehicle"
+          buttonType="accent"
+          [disabled]="!modifyForm.valid"
+          (buttonClick)="(null)"
+        ></app-button>
+
+        <app-button
+          buttonText="Cancel"
+          buttonType="transparent"
+          (buttonClick)="onCancel()"
+        ></app-button>
+      </div>
+    </form>
+  </div>
+</div>

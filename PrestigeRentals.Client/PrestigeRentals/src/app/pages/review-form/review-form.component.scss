@@ -1,0 +1,115 @@
+@import '../../../styles.scss';
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    padding: 50px 100px;
+    flex-direction: column;
+    background-color: $primary-colour;
+}
+
+.card-container{
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    margin: 50px 0;
+    width: 1000px;
+    height: 800px;
+    background-color: $secondary-colour;
+}
+
+.image-container {
+    width: 1000px;
+    height: 300px;
+
+    img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    font-size: 24px;
+}
+
+.accent {
+    width: 90%;
+    height: 3px;
+    background-color: $accent-colour;
+    border: none;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+    flex-direction: column;
+    gap: 100px;
+    height: 100%;
+}
+
+select {
+    width: 100%;
+    height: 30px;
+    border: none;
+    background-color: $primary-colour;
+    color: $text-colour;
+    padding: 0 10px;
+}
+
+.big-input {
+    flex: 1;
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    text-align: start;
+    padding: 5px;
+    resize: none;
+    width: 900px;
+    background-color: $primary-colour;
+    border: none;
+    color: $text-colour;
+    height: 200px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.big-input-container {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    flex-direction: column;
+    width: 100%;
+    flex: 1;
+    height: 200px;
+    gap: 5px;
+}
+
+.review-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+    gap: 20px;
+}

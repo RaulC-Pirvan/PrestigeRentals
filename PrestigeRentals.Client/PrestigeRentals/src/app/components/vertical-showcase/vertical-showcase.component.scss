@@ -1,0 +1,81 @@
+@import '../../../styles.scss';
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    flex-direction: column;
+}
+
+.info-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    height: 530px;
+    padding: 50px 100px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 50px;
+}
+
+.left-side-container {
+    justify-content: start;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 49%;
+    gap: 180px;
+    padding: 20px 0;
+    flex-direction: column;
+}
+
+.right-side-container {
+    justify-content: end;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 49%;
+    gap: 180px;
+    padding: 20px 0;
+    flex-direction: column;
+}
+
+hr {
+    height: 100%;
+    background-color: $accent-colour;
+    border: none;
+    width: 5px;
+}
+
+.right-item {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 0 10px;
+}
+
+.left-item {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+    gap: 10px;
+    padding: 0 10px;
+}
+
+.item-info-container h1{
+    font-weight: 300;
+}
+
+img {
+    height: 50px;
+}

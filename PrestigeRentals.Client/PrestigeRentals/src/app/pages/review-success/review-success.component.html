@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <app-title text="REVIEW"></app-title>
+  <div class="card-container">
+    <div class="confirmation-wrapper">
+      <div class="header-container">
+        <div class="title-container">
+          <h1>THANK YOU!</h1>
+        </div>
+        <div class="description-container">
+          <p>
+            Thank you for using Prestige Rentals and for taking the time to
+            leave a review!
+            <br />
+            Your feedback helps us improve our service and continue delivering
+            premium experiences. We truly appreciate your input.
+          </p>
+        </div>
+        <div class="checkmark-container">
+          <span class="checkmark">&#10004;</span>
+        </div>
+      </div>
+    </div>
+    <div class="button-container">
+      <app-button
+        buttonText="HOME >"
+        buttonType="accent"
+        (buttonClick)="goHome()"
+      ></app-button>
+    </div>
+    <ng-template #noData>
+      <h2>No booking data found.</h2>
+      <p>Please return to the checkout page to complete your order.</p>
+      <button (click)="router.navigate(['/order-checkout'])">
+        Go to Checkout
+      </button>
+    </ng-template>
+  </div>
+</div>

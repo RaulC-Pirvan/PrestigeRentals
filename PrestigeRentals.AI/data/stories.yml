@@ -1,0 +1,24 @@
+version: "3.1"
+
+stories:
+- story: greet and ask for cars
+  steps:
+    - intent: greet
+    - action: utter_greet
+    - intent: ask_available_cars
+    - action: action_ask_available_vehicles
+
+- story: show available cars
+  steps:
+    - intent: ask_available_cars
+    - action: action_ask_available_vehicles
+
+- story: recommend by features
+  steps:
+    - intent: ask_by_features
+    - action: action_recommend_by_feature
+
+- story: filter by vehicle spec
+  steps:
+    - intent: ask_by_specs
+    - action: action_filter_by_specs

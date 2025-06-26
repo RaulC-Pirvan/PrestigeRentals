@@ -1,0 +1,121 @@
+<div class="container">
+  <form [formGroup]="addVehicleForm" (ngSubmit)="submit()">
+    <div class="photo-grid">
+      <div class="upload-box main" (click)="mainImageInput.click()">
+        <ng-container *ngIf="mainImagePreview; else mainPlaceholder">
+          <img [src]="mainImagePreview" alt="Main preview" />
+        </ng-container>
+        <ng-template #mainPlaceholder>
+          <span>+</span>
+        </ng-template>
+        <input
+          type="file"
+          hidden
+          accept="image/*"
+          #mainImageInput
+          (change)="onMainImageSelected($event)"
+        />
+      </div>
+
+      <ng-container *ngFor="let _ of totalSlots; let i = index">
+        <div
+          class="upload-box"
+          (click)="secondaryImageInputs.get(i)?.nativeElement.click()"
+        >
+          <ng-container *ngIf="secondaryImagesPreview[i]; else emptySlot">
+            <img [src]="secondaryImagesPreview[i]" alt="Secondary preview" />
+          </ng-container>
+          <ng-template #emptySlot>
+            <span>+</span>
+          </ng-template>
+          <input
+            type="file"
+            hidden
+            accept="image/*"
+            #secondaryImageInput
+            (change)="onSecondaryImageSelected($event, i)"
+          />
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="entries-container">
+      <div class="input-container">
+        <label for="">Make</label>
+        <input type="text" id="make" formControlName="make" />
+      </div>
+      <div class="input-container">
+        <label for="">Model</label>
+        <input type="text" id="model" formControlName="model" />
+      </div>
+      <div class="input-container">
+        <label for="">Chassis</label>
+        <input type="text" id="chassis" formControlName="chassis" />
+      </div>
+      <div class="input-container">
+        <label for="">Horsepower</label>
+        <input type="text" id="horsepower" formControlName="horsepower" />
+      </div>
+      <div class="input-container">
+        <label for="">Engine Size (cc)</label>
+        <input type="text" id="engineSize" formControlName="engineSize" />
+      </div>
+      <div class="input-container">
+        <label for="">Fuel Type</label>
+        <input type="text" id="fuelType" formControlName="fuelType" />
+      </div>
+      <div class="input-container">
+        <label for="">Transmission</label>
+        <input type="text" id="transmission" formControlName="transmission" />
+      </div>
+      <div class="input-container">
+        <label for="">Price/Day</label>
+        <input type="text" id="pricePerDay" formControlName="pricePerDay" />
+      </div>
+      <div class="checkbox-container">
+        <div class="checkbox-input-container">
+          <label for="">Navigation</label>
+          <input type="checkbox" id="navigation" formControlName="navigation" />
+        </div>
+
+        <div class="checkbox-input-container">
+          <label for="">Heads-up Display</label>
+          <input
+            type="checkbox"
+            id="headsUpDisplay"
+            formControlName="headsUpDisplay"
+          />
+        </div>
+        <div class="checkbox-input-container">
+          <label for="">Hill Assist</label>
+          <input type="checkbox" id="hillAssist" formControlName="hillAssist" />
+        </div>
+        <div class="checkbox-input-container">
+          <label for="">Cruise Control</label>
+          <input
+            type="checkbox"
+            id="cruiseControl"
+            formControlName="cruiseControl"
+          />
+        </div>
+      </div>
+    </div>
+
+    <br />
+
+    <div class="buttons-container">
+      <app-button
+        buttonText="Add Vehicle"
+        buttonType="accent"
+        [disabled]="!addVehicleForm.valid"
+        (buttonClick)="submit()"
+      ></app-button>
+
+      <app-button
+        buttonText="Cancel"
+        buttonType="secondary"
+        (buttonClick)="onCancel()"
+      ></app-button>
+    </div>
+  </form>
+</div>

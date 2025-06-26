@@ -1,0 +1,24 @@
+Terminal 1 pentru serverul Rasa (NLU + core)
+
+Terminal 2 pentru serverul de acțiuni (actions.py)
+
+📁 PAS 2: Navighează în folderul proiectului
+
+În ambele terminale, dă comanda:
+
+cd calea/catre/folderul-cu-proiectul
+
+🧠 PAS 3: Activează mediul virtual
+
+În ambele terminale:
+🔹 Pe Windows:
+
+venv\Scripts\activate
+
+🚀 PAS 4: Pornește serverul de acțiuni (Terminal 2)
+
+rasa run actions
+
+🤖 PAS 5: Pornește serverul Rasa principal (Terminal 1)
+
+rasa run --enable-api --cors "*" --debug

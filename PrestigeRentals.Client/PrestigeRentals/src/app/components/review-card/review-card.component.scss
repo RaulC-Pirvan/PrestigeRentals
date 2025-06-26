@@ -1,0 +1,61 @@
+@import "../../../styles.scss";
+
+.review-card {
+    display: flex;
+    width: 1680px;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.review-user {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.user-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.75rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.review-date {
+  font-size: 0.85rem;
+  color: gray;
+}
+
+.review-rating {
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+
+.review-description {
+  font-style: italic;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.stars {
+  font-size: 1.2rem;
+  margin-top: 4px;
+}
+
+.star-filled {
+  color: $accent-colour;
+}
+
+.star-empty {
+  color: #ccc;
+}
