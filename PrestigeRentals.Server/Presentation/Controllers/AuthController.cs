@@ -450,6 +450,7 @@ namespace PrestigeRentals.Presentation.Controllers
             await _dbContext.SaveChangesAsync();
 
             await _emailService.SendUserStatusChangeNotificationToAdminAsync(user.Email, "banned");
+            await _emailService.SendUserBannedEmailAsync(user.Email);
 
             return Ok();
         }

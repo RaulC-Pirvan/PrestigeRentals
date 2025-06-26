@@ -269,5 +269,24 @@ namespace PrestigeRentals.Application.Services.Services
 
             await SendEmailAsync(userEmail, "We'd love your feedback!", body);
         }
+
+        /// <summary>
+        /// Sends an HTML email to a user notifying them that their account has been banned.
+        /// </summary>
+        /// <param name="userEmail">The recipient's email address.</param>
+        public async Task SendUserBannedEmailAsync(string userEmail)
+        {
+            var subject = "Your PrestigeRentals Account Has Been Suspended";
+
+            string body = $@"
+    <div style='font-family: Arial, sans-serif; padding: 20px;'>
+        <h2>Account Suspended</h2>
+        <p>We regret to inform you that your account on <strong>PrestigeRentals</strong> has been <span style='color: red; font-weight: bold;'>permanently suspended</span> due to a violation of our Terms of Service.</p>
+        <p>If you believe this action was made in error or wish to appeal the suspension, please contact our support team as soon as possible.</p>
+        <p style='color: gray; font-size: 12px;'>Do not reply directly to this email. This mailbox is not monitored.</p>
+    </div>";
+
+            await SendEmailAsync(userEmail, subject, body);
+        }
     }
 }

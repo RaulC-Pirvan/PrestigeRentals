@@ -66,5 +66,12 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <param name="vehicleName">The name of the vehicle rented.</param>
         /// <param name="orderId">The ID of the completed order.</param>
         Task SendReviewRequestEmailAsync(string userEmail, string vehicleName, long orderId);
+
+        /// <summary>
+        /// Sends a notification email to a user informing them that their account has been banned.
+        /// </summary>
+        /// <param name="userEmail">The email address of the banned user.</param>
+        /// <returns>A task representing the asynchronous email sending operation.</returns>
+        Task SendUserBannedEmailAsync(string userEmail);
     }
 }
