@@ -471,6 +471,7 @@ namespace PrestigeRentals.Presentation.Controllers
             await _dbContext.SaveChangesAsync();
 
             await _emailService.SendUserStatusChangeNotificationToAdminAsync(user.Email, "unbanned");
+            await _emailService.SendUserUnbannedEmailAsync(user.Email);
 
             return Ok();
         }

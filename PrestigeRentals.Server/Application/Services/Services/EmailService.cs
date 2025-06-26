@@ -288,5 +288,25 @@ namespace PrestigeRentals.Application.Services.Services
 
             await SendEmailAsync(userEmail, subject, body);
         }
+
+
+        /// <summary>
+        /// Sends an HTML email to a user notifying them that their account has been reactivated (unbanned).
+        /// </summary>
+        /// <param name="userEmail">The recipient's email address.</param>
+        public async Task SendUserUnbannedEmailAsync(string userEmail)
+        {
+            var subject = "Your PrestigeRentals Account Has Been Reactivated";
+
+            string body = $@"
+    <div style='font-family: Arial, sans-serif; padding: 20px;'>
+        <h2>Account Reactivated</h2>
+        <p>Good news! Your account on <strong>PrestigeRentals</strong> has been <span style='color: green; font-weight: bold;'>reinstated</span> and is now active again.</p>
+        <p>You can now log in and continue using our platform as usual. If you experience any issues, feel free to reach out to our support team.</p>
+        <p style='color: gray; font-size: 12px;'>Please do not reply to this email. This mailbox is not monitored.</p>
+    </div>";
+
+            await SendEmailAsync(userEmail, subject, body);
+        }
     }
 }

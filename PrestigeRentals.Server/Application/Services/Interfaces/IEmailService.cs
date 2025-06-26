@@ -73,5 +73,12 @@ namespace PrestigeRentals.Application.Services.Interfaces
         /// <param name="userEmail">The email address of the banned user.</param>
         /// <returns>A task representing the asynchronous email sending operation.</returns>
         Task SendUserBannedEmailAsync(string userEmail);
+
+        /// <summary>
+        /// Sends a notification email to a user informing them that their account has been unbanned.
+        /// </summary>
+        /// <param name="userEmail">The email address of the unbanned user.</param>
+        /// <returns>A task representing the asynchronous email sending operation.</returns>
+        Task SendUserUnbannedEmailAsync(string userEmail);
     }
 }
