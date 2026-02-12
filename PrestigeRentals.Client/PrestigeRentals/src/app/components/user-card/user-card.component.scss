@@ -1,0 +1,49 @@
+@import "../../../styles.scss";
+
+.user-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 2px solid $accent-colour;
+    width: 900px;
+    height: 200px;
+    background-color: $primary-colour;
+}
+
+.image-container {
+    height: 128px;
+    margin: 20px;
+
+    img {
+        height: 128px;
+        width: 128px;
+        border-radius: 50%;
+        border: 2px solid $accent-colour;
+        object-fit: cover;
+    }
+}
+
+.info-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 50%;
+    flex-direction: row;
+    height: 100%;
+}
+
+.user-actions {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    width: 50%;
+    flex-direction: column;
+    height: 100%;
+    padding: 20px;
+    gap: 10px;
+}
+
+.accent {
+    font-weight: 600;
+    color: $accent-colour;
+}

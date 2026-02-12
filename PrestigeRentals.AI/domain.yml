@@ -1,0 +1,72 @@
+version: "3.1"
+
+intents:
+  - greet
+  - ask_available_cars
+  - recommend_vehicle
+  - ask_by_features
+  - ask_by_specs
+  
+responses:
+  utter_greet:
+    - text: "Hey! How can I help you with your car rental?"
+
+  utter_ask_available_cars:
+    - text: "Sure! Are you looking for a specific date or car type?"
+
+  utter_recommend_vehicle:
+    - text: "Tell me a bit more: how many people, what kind of trip?"
+
+  utter_goodbye:
+    - text: "Goodbye! Let me know if you need help renting a car."
+
+  utter_faq_payment:
+    - text: Payment is handled safely and securely by card only.
+
+  utter_faq_keys:
+    - text: You will use the generated QR code at the specified pickup location to access your car.
+
+  utter_faq_availability:
+    - text: The vehicle is unavailable during that period (already rented).
+
+  utter_faq_review:
+    - text: After your rental ends, you’ll receive an email with a review form.
+
+  utter_faq_contact:
+    - text: You can contact us via the email addresses listed on our "Contact Us" page.
+
+  utter_faq_age:
+    - text: The minimum age to rent a vehicle is 18 years.
+
+  utter_faq_fuel:
+    - text: Fuel is not included. Please return the car with a full tank.
+
+  utter_faq_cancel:
+    - text: You can cancel your booking from your account dashboard, subject to our cancellation policy.
+
+  utter_faq_creditcard:
+    - text: A valid card (credit or debit) is required to make a booking.
+
+  utter_faq_idscan:
+    - text: We need to validate your age and identity before continuing, so a scan of your ID is required.
+
+  utter_faq_international:
+    - text: Yes, international travel is allowed with our vehicles.
+
+  utter_faq_early_return:
+    - text: You can return the car early, but no refund will be issued for unused time.
+
+  utter_faq_late_return:
+    - text: A late return will incur an extra fee, based on how long the delay is.
+
+  utter_faq_stolen:
+    - text: If a car is not returned, it is treated as theft and reported to the authorities.
+
+actions:
+    - action_ask_available_vehicles
+    - action_recommend_by_feature
+    - action_filter_by_specs
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

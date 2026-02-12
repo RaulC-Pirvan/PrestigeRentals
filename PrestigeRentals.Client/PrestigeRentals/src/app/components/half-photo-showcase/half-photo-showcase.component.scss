@@ -1,0 +1,65 @@
+@import '../../../styles.scss';
+
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    flex-direction: row;
+    background-color: $secondary-colour;
+}
+
+.left-side-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+    height: 100%;
+    flex-direction: column;
+}
+
+.right-side-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50%;
+    height: 400px;
+    background-image: url('../../../assets/Right Frame.png');
+    background-position: center;
+    background-size: cover;
+}
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    text-align: center;
+}
+
+.info-container {
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    width: 30%;
+    flex-direction: column;
+    padding: 50px 0;
+}
+
+h3 {
+    font-weight: 200;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding-bottom: 50px;
+}
+
+.accent {
+    color: $accent-colour;
+    font-weight: 600;
+}

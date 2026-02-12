@@ -1,0 +1,472 @@
+@import "../../../styles.scss";
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+  height: auto;
+  padding: 100px;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+.main-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+  background-color: $secondary-colour;
+  margin-bottom: 50px;
+}
+
+.image-container {
+  height: 500px;
+  width: 100%;
+}
+
+.info-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  padding: 0 10px;
+}
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100px;
+}
+
+.details-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  padding: 0 10px;
+  gap: 5px;
+}
+
+.text-container {
+  display: flex;
+  align-items: start;
+  flex-direction: row;
+  width: 100%;
+  padding: 10px 0;
+}
+
+.left-side-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  gap: 30px;
+}
+
+.right-side-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 50%;
+  padding: 0 10px;
+}
+
+.inner-main-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.inner-left-container {
+  width: 50%;
+}
+
+.inner-right-container {
+  width: 50%;
+}
+
+.features-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  padding: 0 10px;
+  gap: 5px;
+}
+
+hr {
+  width: 100%;
+  height: 2px;
+  border: none;
+  background-color: $accent-colour;
+}
+
+.middle-hr {
+  height: 100%;
+  width: 2px;
+}
+
+.time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+}
+
+.start-time-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.time-selector {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+  background-color: $primary-colour;
+  color: $text-colour;
+  padding: 0 10px;
+  border: none;
+}
+
+.end-time-container {
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.total-time-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  flex-direction: column;
+  height: 100px;
+}
+
+.cost-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+  flex-direction: column;
+  height: 100px;
+}
+
+.terms-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+}
+
+.similar-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  background-color: $secondary-colour;
+  margin-bottom: 50px;
+  padding: 0 20px;
+}
+
+.similar-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.cards-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.review-container {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  background-color: $secondary-colour;
+  margin-bottom: 50px;
+  padding: 0 20px;
+  padding-bottom: 20px;
+}
+
+.review-title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+}
+
+.rating-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+.review-stack-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.info-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  width: 80%;
+}
+
+.info-key {
+  width: 50%;
+}
+
+.info-value {
+  width: 50%;
+}
+
+.carousel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  padding: 20px;
+  font-weight: 600;
+  font-size: 24px;
+  color: $accent-colour;
+  z-index: 9999;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  border: none;
+}
+
+button.left-btn {
+  left: 10px;
+}
+
+button.right-btn {
+  right: 10px;
+}
+
+.carousel-bullets {
+  text-align: center;
+  margin-top: 10px;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+}
+
+.bullet {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  border-radius: 50%;
+  background-color: $text-colour;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.bullet.active {
+  background-color: $accent-colour;
+}
+
+h2 {
+  font-weight: 300;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.terms-popup-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.terms-popup {
+  background: $primary-colour;
+  color: $text-colour;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.popup-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.features-details-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.pagination-controls {
+  width: 100%;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 10px;
+}
+
+.reviewsButton {
+  background: transparent;
+  padding: 20px;
+  font-weight: 600;
+  font-size: 24px;
+  color: $accent-colour;
+  z-index: 9999;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  border: none;
+}
+
+.stars-container {
+  display: flex;
+  gap: 4px;
+}
+
+.stars-container span {
+  font-size: 48px;
+  color: lightgray;
+}
+
+.stars-container span.full-star {
+  color: $accent-colour;
+}
+
+.half-star {
+  color: $accent-colour;
+  position: relative;
+}
+
+.half-star::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  width: 50%;
+  overflow: hidden;
+  color: $accent-colour;
+}
+
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.cards-container {
+  display: flex;
+  gap: 1rem;
+  overflow: hidden;
+}
+
+.carousel-arrow {
+  padding: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: $accent-colour;
+  cursor: pointer;
+}
+
+.carousel-arrow:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.custom-datepicker {
+  width: 100%;
+
+  .mat-input-element {
+    background-color: $primary-colour;
+  }
+}

@@ -1,0 +1,49 @@
+@import "../../../styles.scss";
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  width: 300px;
+
+  &.transparent {
+    background-color: transparent;
+    color: $accent-colour;
+    border: 2px solid $accent-colour;
+  }
+
+  &.transparent:hover {
+    background-color: $accent-colour;
+    color: $text-colour;
+  }
+
+  &.accent {
+    background-color: $accent-colour;
+    color: $text-colour;
+    border: 2px solid $accent-colour;
+  }
+
+  &.accent:hover {
+    background-color: transparent;
+    color: $accent-colour;
+  }
+
+  &.red {
+    background-color: #dc3545;
+    color: $text-colour;
+    border: 2px solid #dc3545;
+  }
+
+  &.red:hover {
+    background-color: transparent;
+    color: $text-colour;
+  }
+}
+
+button:disabled, button.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

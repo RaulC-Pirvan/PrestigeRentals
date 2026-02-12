@@ -1,0 +1,10 @@
+<div class="toast" *ngIf="notificationMessage" [ngClass]="notificationType">
+  {{ notificationMessage }}
+</div>
+
+<div class="content">
+  <router-outlet></router-outlet>
+</div>
+
+  <app-chat-widget></app-chat-widget>
+<app-footer></app-footer>

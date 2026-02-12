@@ -1,0 +1,352 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <div class="main-container">
+    <div class="image-container">
+      <div class="carousel" *ngIf="imageUrls.length > 0">
+        <button
+          (click)="prevImage()"
+          [disabled]="imageUrls.length <= 1"
+          class="carousel-btn left-btn"
+        >
+          &#10094;
+        </button>
+
+        <img
+          [src]="imageUrls[currentImageIndex]"
+          alt="Vehicle image"
+          class="carousel-image"
+        />
+
+        <button
+          (click)="nextImage()"
+          [disabled]="imageUrls.length <= 1"
+          class="carousel-btn right-btn"
+        >
+          &#10095;
+        </button>
+
+        <div class="carousel-bullets">
+          <span
+            *ngFor="let img of imageUrls; let i = index"
+            (click)="goToImage(i)"
+            [class.active]="i === currentImageIndex"
+            class="bullet"
+          >
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="info-container">
+      <div class="title-container">
+        <h1>{{ vehicleData?.make }} {{ vehicleData?.model }}</h1>
+      </div>
+      <div class="text-container">
+        <div class="left-side-container">
+          <div class="details-container">
+            <h3>DETAILS</h3>
+            <hr />
+            <div class="inner-main-container">
+              <div class="inner-left-container">
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>MAKE:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.make }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>MODEL:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.model }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>SIZE:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.chassis }}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="inner-right-container">
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>FUEL:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.fuelType }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>TRANSMISSION:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.transmission }}</p>
+                  </div>
+                </div>
+                <div class="info-entry">
+                  <div class="info-key">
+                    <p>HORSEPOWER:</p>
+                  </div>
+                  <div class="info-value">
+                    <p>{{ vehicleData?.horsepower }} HP</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="features-container">
+            <h3>FEATURES</h3>
+            <hr />
+            <div class="features-details-container">
+              <ul *ngIf="trueFeatures.length > 0; else noFeatures">
+                <li *ngFor="let feature of trueFeatures">
+                  {{ feature }}
+                </li>
+              </ul>
+              <ng-template #noFeatures>
+                <p>No available features listed for this vehicle.</p>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+        <hr class="middle-hr" />
+        <div class="right-side-container">
+          <div class="time-container">
+            <mat-form-field class="custom-datepicker" appearance="fill">
+              <mat-label>Start Date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker1"
+                [(ngModel)]="startTime"
+                [matDatepickerFilter]="disableBookedDates"
+                (dateChange)="calculateCostAndDuration()"
+                name="startDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker1"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="custom-datepicker" appearance="fill">
+              <mat-label>End Date</mat-label>
+              <input
+                matInput
+                [matDatepicker]="picker2"
+                [(ngModel)]="endTime"
+                [matDatepickerFilter]="disableBookedDates"
+                (dateChange)="calculateCostAndDuration()"
+                name="endDate"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="picker2"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <hr />
+          <div class="total-time-container">
+            <h1>TIME</h1>
+            <h2>{{ totalDays }} Day{{ totalDays > 1 ? "s" : "" }}</h2>
+          </div>
+          <hr />
+          <div class="cost-container">
+            <h1>COST</h1>
+            <h2>
+              <span class="bold">{{ totalCost | currency }}</span> ({{
+                vehicleData?.pricePerDay | currency
+              }}/day)
+            </h2>
+          </div>
+          <hr />
+          <div class="terms-container">
+            <div class="terms-checkbox-container">
+              <label>
+                <input type="checkbox" [(ngModel)]="termsAccepted" />
+                I have read and accept the
+                <b
+                  class="terms-link"
+                  (click)="openTermsPopup()"
+                  style="cursor: pointer"
+                  >terms of this agreement</b
+                >.
+              </label>
+            </div>
+            <div
+              *ngIf="showTermsPopup"
+              class="terms-popup-backdrop"
+              (click)="closeTermsPopup()"
+            >
+              <div class="terms-popup" (click)="$event.stopPropagation()">
+                <h2>Terms and Conditions</h2>
+                <p>
+                  By using this service, you agree to the following terms and
+                  conditions. Please read them carefully before proceeding with
+                  your booking.
+                </p>
+
+                <h3>1. Agreement to Terms</h3>
+                <p>
+                  These Terms and Conditions constitute a legally binding
+                  agreement made between you and [Your Company Name], concerning
+                  your access to and use of our vehicle rental services.
+                </p>
+
+                <h3>2. Rental Eligibility</h3>
+                <p>
+                  You must be at least 21 years old and hold a valid driver’s
+                  license. The license must be valid for the entire rental
+                  period.
+                </p>
+
+                <h3>3. Booking and Payment</h3>
+                <p>
+                  Full payment must be made at the time of booking. Prices are
+                  subject to change without prior notice, but once booked and
+                  paid, the cost is fixed.
+                </p>
+
+                <h3>4. Vehicle Use</h3>
+                <p>
+                  The vehicle must only be driven by the individual(s) named in
+                  the rental agreement. The renter agrees to operate the vehicle
+                  in a safe and lawful manner at all times.
+                </p>
+
+                <h3>5. Cancellations and Refunds</h3>
+                <p>
+                  Cancellations made more than 48 hours before the rental period
+                  will receive a full refund. No refunds will be issued for
+                  cancellations made within 48 hours of the rental start time.
+                </p>
+
+                <h3>6. Damages and Liability</h3>
+                <p>
+                  The renter is responsible for any damage to the vehicle during
+                  the rental period. Insurance may cover certain damages, but
+                  deductibles and exclusions apply.
+                </p>
+
+                <h3>7. Privacy</h3>
+                <p>
+                  Your personal data will be handled in accordance with our
+                  Privacy Policy. We do not share your information with third
+                  parties without your consent, except as required by law.
+                </p>
+
+                <h3>8. Modifications</h3>
+                <p>
+                  We reserve the right to modify these terms at any time.
+                  Continued use of the service after changes constitutes your
+                  acceptance of the new terms.
+                </p>
+
+                <p>
+                  If you do not agree with any of these terms, you should not
+                  proceed with the booking.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="button-container">
+            <app-button
+              buttonText="CONTINUE >"
+              buttonType="accent"
+              [disabled]="!canContinue()"
+              (buttonClick)="proceedToCheckout()"
+            ></app-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="similar-container">
+    <div class="similar-title-container">
+      <h1>SIMILAR CARS</h1>
+    </div>
+    <hr class="padded" />
+
+    <div class="carousel-wrapper">
+      <button
+        class="carousel-arrow left"
+        (click)="prevSlide()"
+        [disabled]="visibleStartIndex === 0"
+      >
+        &#10094;
+      </button>
+
+      <div class="cards-container">
+        <app-vehicle-suggestion
+          *ngFor="let id of visibleVehicles"
+          [vehicleId]="id"
+          (click)="reload()"
+        ></app-vehicle-suggestion>
+      </div>
+
+      <button
+        class="carousel-arrow right"
+        (click)="nextSlide()"
+        [disabled]="visibleStartIndex + visibleCount >= similarVehicles.length"
+      >
+        &#10095;
+      </button>
+    </div>
+  </div>
+  <div class="review-container">
+    <div class="review-title-container">
+      <h1>REVIEWS</h1>
+    </div>
+    <div class="rating-container">
+      <div class="stars-container">
+        <ng-container
+          *ngFor="let star of getStarArray(averageRating); let i = index"
+        >
+          <span
+            [ngClass]="{
+              'full-star': star === 2,
+              'half-star': star === 1,
+              'empty-star': star === 0
+            }"
+            >&#9733;</span
+          >
+        </ng-container>
+      </div>
+      <div class="score-container">{{ averageRating.toFixed(1) }} / 5</div>
+    </div>
+    <hr />
+    <div *ngFor="let review of pagedReviews">
+      <app-review-card [review]="review"></app-review-card>
+    </div>
+    <div class="pagination-controls" *ngIf="totalPages > 1">
+      <button
+        (click)="currentPage = currentPage - 1"
+        [disabled]="currentPage === 1"
+        class="reviewsButton"
+      >
+        &#10094;
+      </button>
+
+      <span>Page {{ currentPage }} of {{ totalPages }}</span>
+
+      <button
+        (click)="currentPage = currentPage + 1"
+        [disabled]="currentPage === totalPages"
+        class="reviewsButton"
+      >
+        &#10095;
+      </button>
+    </div>
+
+    <ng-template #noReviews>
+      <div class="review-stack-container">No reviews yet for this vehicle.</div>
+    </ng-template>
+  </div>
+</div>

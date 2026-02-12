@@ -1,0 +1,48 @@
+<div class="navbar">
+  <div class="logo-container">
+    <img src="assets/logo.png" alt="logo" />
+  </div>
+  <div class="navbar-buttons-container">
+    <button (click)="navigateTo('')">HOME</button>
+    <button (click)="navigateTo('/inventory')">INVENTORY</button>
+    <button (click)="navigateTo('/about-us')">ABOUT US</button>
+    <button (click)="navigateTo('/contact')">CONTACT US</button>
+  </div>
+  <div class="auth-container">
+    <ng-container *ngIf="!(isLoggedIn$ | async); else loggedInButtons">
+      <button (click)="navigateTo('/login')" class="accent-button">
+        LOG IN
+      </button>
+      <button (click)="navigateTo('/register')">SIGN UP</button>
+    </ng-container>
+
+    <ng-template #loggedInButtons>
+      <div
+        class="user-menu-container"
+        (mouseenter)="openMenu()"
+        (mouseleave)="closeMenu()"
+        (click)="toggleMenu()"
+        (document:click)="handleDocumentClick($event)"
+      >
+        <button class="user-button" (click)="navigateTo('/profile')">
+          <img
+            [src]="(user$ | async)?.photo || 'assets/default-avatar.png'"
+            class="user-photo"
+          />
+          <span class="user-name">{{ (user$ | async)?.name || "User" }}</span>
+        </button>
+        <div class="dropdown-menu" *ngIf="menuOpen">
+          <button (click)="navigateTo('/profile')">Profile</button>
+          <button
+            *ngIf="(user$ | async)?.role === 'Admin'"
+            (click)="navigateTo('/admin-dashboard')"
+          >
+            Dashboard
+          </button>
+          <button (click)="navigateTo('/settings')">Settings</button>
+          <button (click)="logout()">Log Out</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="wrapper">
+  <div class="title-container">
+    <app-title text="TICKETS"></app-title>
+  </div>
+
+  <div class="pagination-controls">
+    <button (click)="changePage(-1)" [disabled]="currentPage === 1">
+      &lt;
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+    <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">
+      &gt;
+    </button>
+  </div>
+
+  <app-admin-ticket-overview
+    *ngFor="let ticket of displayedTickets"
+    [ticket]="ticket"
+  ></app-admin-ticket-overview>
+
+  <div class="pagination-controls">
+    <button (click)="changePage(-1)" [disabled]="currentPage === 1">
+      &lt;
+    </button>
+    <span>Page {{ currentPage }} of {{ totalPages() }}</span>
+    <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">
+      &gt;
+    </button>
+  </div>
+</div>

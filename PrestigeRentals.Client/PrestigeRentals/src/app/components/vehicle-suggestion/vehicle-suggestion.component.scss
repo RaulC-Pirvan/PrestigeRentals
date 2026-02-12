@@ -1,0 +1,85 @@
+@import "../../../styles.scss";
+
+.wrapper {
+    width: 400px;
+    height: 600px;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    border: 2px solid $accent-colour;
+    flex-direction: column;
+    background-color: $primary-colour;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 2px solid $accent-colour;
+    height: 35%;
+    width: 100%;
+
+    img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+}
+
+
+
+.text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 24px;
+}
+
+hr {
+    width: 90%;
+    height: 3px;
+    background-color: $accent-colour;
+    border: none;
+}
+
+.info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 90%;
+    height: 40%;
+}
+
+.info-element {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    width: 50%;
+}
+
+.picture-element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.details-element {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    height: 15%;
+}

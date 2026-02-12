@@ -1,0 +1,51 @@
+<app-navbar></app-navbar>
+<div class="wrapper">
+  <app-title text="ORDER"></app-title>
+  <div class="card-container">
+    <div
+      class="confirmation-wrapper"
+      *ngIf="bookingReference && qrCodeData; else noData"
+    >
+      <div class="header-container">
+        <div class="title-container">
+          <h1>Order Complete!</h1>
+        </div>
+        <div class="description-container">
+          <p>
+            You will recieve an email with further instructions. Please check
+            your spam folder if you don't see it in your inbox.
+          </p>
+        </div>
+      </div>
+
+      <div class="qr-big-container">
+        <div class="qr-code-container">
+          <qrcode
+            [qrdata]="qrCodeData"
+            [width]="200"
+            [errorCorrectionLevel]="'M'"
+          ></qrcode>
+        </div>
+        <div class="booking-reference-container">
+          <p>
+            Your booking reference is: <strong>{{ bookingReference }}</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="button-container">
+      <app-button
+        buttonText="HOME >"
+        buttonType="accent"
+        (buttonClick)="goHome()"
+      ></app-button>
+    </div>
+    <ng-template #noData>
+      <h2>No booking data found.</h2>
+      <p>Please return to the checkout page to complete your order.</p>
+      <button (click)="router.navigate(['/order-checkout'])">
+        Go to Checkout
+      </button>
+    </ng-template>
+  </div>
+</div>
